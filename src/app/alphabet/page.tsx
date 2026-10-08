@@ -1,10 +1,10 @@
 export const instant = false
 
-import { getOrCreateMockUser, getUserProgress } from "@/lib/actions"
+import { getCurrentUser, getUserProgress } from "@/lib/actions"
 import { AlphabetClient } from "./AlphabetClient"
 
 export default async function AlphabetPage() {
-  const user = await getOrCreateMockUser()
+  const user = await getCurrentUser()
   const progress = await getUserProgress(user.id)
 
   const completedIds = progress.map(p => p.item_id)

@@ -1,13 +1,14 @@
 export const instant = false
 
-import { getOrCreateMockUser, getUserProgress } from "@/lib/actions"
+import { getCurrentUser, getUserProgress } from "@/lib/actions"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { signOut } from "@/auth"
 import Link from "next/link"
-import { BookA, Trophy, Flame, PlayCircle } from "lucide-react"
+import { BookA, Trophy, Flame, PlayCircle, Mic } from "lucide-react"
 
 export default async function Dashboard() {
-  const user = await getOrCreateMockUser()
+  const user = await getCurrentUser()
   const progress = await getUserProgress(user.id)
   
   const hiraganaLearned = progress.filter(p => p.item_type === 'hiragana').length
@@ -24,9 +25,19 @@ export default async function Dashboard() {
           <h1 className="text-4xl font-extrabold tracking-tight">Welcome back, {user.name}!</h1>
           <p className="text-muted-foreground text-lg mt-2">Ready to continue your Japanese journey?</p>
         </div>
-        <div className="flex items-center gap-4 bg-orange-100 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400 px-4 py-2 rounded-lg font-bold">
-          <Flame className="w-6 h-6" />
-          <span>{user.streak} Day Streak</span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 bg-orange-100 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400 px-4 py-2 rounded-lg font-bold">
+            <Flame className="w-6 h-6" />
+            <span>{user.streak} Day Streak</span>
+          </div>
+          <form action={async () => {
+            "use server"
+            await signOut()
+          }}>
+            <button type="submit" className="px-4 py-2 bg-red-100 text-red-600 hover:bg-red-200 rounded-md font-medium text-sm transition-colors">
+              Logout
+            </button>
+          </form>
         </div>
       </header>
 
@@ -91,6 +102,34 @@ export default async function Dashboard() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">Multiple-choice quizzes for character recognition and reading practice.</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/alphabet-speech" className="block group">
+          <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                <Mic className="w-6 h-6" /> Alphabet Speaking
+              </CardTitle>
+              <CardDescription>Speak Hiragana and Katakana out loud.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Practice alphabet pronunciation with real-time speech recognition.</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/reading" className="block group">
+          <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                <Mic className="w-6 h-6" /> Word Reading Practice
+              </CardTitle>
+              <CardDescription>Practice reading Japanese words aloud.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Uses speech recognition to verify if you are reading the characters correctly.</p>
             </CardContent>
           </Card>
         </Link>

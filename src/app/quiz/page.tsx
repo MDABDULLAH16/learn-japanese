@@ -1,10 +1,10 @@
 export const instant = false
 
-import { getOrCreateMockUser } from "@/lib/actions"
+import { getCurrentUser } from "@/lib/actions"
 import { QuizClient } from "./QuizClient"
 
 export default async function QuizPage() {
-  const user = await getOrCreateMockUser()
+  const user = await getCurrentUser()
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 p-6">

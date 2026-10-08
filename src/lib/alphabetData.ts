@@ -13,6 +13,7 @@ export type AlphabetData = {
   basic: AlphabetCategory
   dakuten: AlphabetCategory // tenten/maru
   yoon: AlphabetCategory // combined
+  modern?: AlphabetCategory // modern foreign combinations (katakana only)
 }
 
 // Basic mnemonics for Hiragana
@@ -183,6 +184,16 @@ export const KATAKANA_DATA: AlphabetData = {
       { romaji: 'bya', char: 'ビャ' }, { romaji: 'byu', char: 'ビュ' }, { romaji: 'byo', char: 'ビョ' },
       { romaji: 'pya', char: 'ピャ' }, { romaji: 'pyu', char: 'ピュ' }, { romaji: 'pyo', char: 'ピョ' },
     ]
+  },
+  modern: {
+    title: 'Modern (Foreign Sounds)',
+    items: [
+      { romaji: 'fa', char: 'ファ' }, { romaji: 'fi', char: 'フィ' }, { romaji: 'fe', char: 'フェ' }, { romaji: 'fo', char: 'フォ' },
+      { romaji: 'va', char: 'ヴァ' }, { romaji: 'vi', char: 'ヴィ' }, { romaji: 'vu', char: 'ヴ' }, { romaji: 've', char: 'ヴェ' }, { romaji: 'vo', char: 'ヴォ' },
+      { romaji: 'wi', char: 'ウィ' }, { romaji: 'we', char: 'ウェ' }, { romaji: 'wo', char: 'ウォ' },
+      { romaji: 'ti', char: 'ティ' }, { romaji: 'di', char: 'ディ' },
+      { romaji: 'she', char: 'シェ' }, { romaji: 'je', char: 'ジェ' }, { romaji: 'che', char: 'チェ' },
+    ]
   }
 }
 
@@ -194,5 +205,6 @@ export const getAllItemsFlat = () => {
     ...KATAKANA_DATA.basic.items,
     ...KATAKANA_DATA.dakuten.items,
     ...KATAKANA_DATA.yoon.items,
+    ...(KATAKANA_DATA.modern?.items || []),
   ].filter(i => i.char !== '')
 }

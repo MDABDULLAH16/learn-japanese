@@ -3,37 +3,36 @@
 import prisma from './prisma'
 import { revalidatePath } from 'next/cache'
 
-// Mock a user for MVP
-export const getOrCreateMockUser = async () => {
-  let user = await prisma.user.findFirst({
-    where: { email: 'student@example.com' }
+import { auth } from "@/auth"
+
+export const getCurrentUser = async () => {
+  const session = await auth()
+  if (!session?.user?.email) {
+    throw new Error("Not authenticated")
+  }
+
+  let user = await prisma.user.findUnique({
+    where: { email: session.user.email }
   })
   
   if (!user) {
-    user = await prisma.user.create({
-      data: {
-        name: 'JLPT N5 Student',
-        email: 'student@example.com',
-        streak: 1,
-        totalScore: 0
-      }
+    throw new Error("User not found")
+  }
+
+  const now = new Date()
+  const lastLogin = new Date(user.lastLoginAt)
+  const diffDays = Math.floor((now.getTime() - lastLogin.getTime()) / (1000 * 3600 * 24))
+  
+  if (diffDays === 1) {
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: { streak: user.streak + 1, lastLoginAt: now }
     })
-  } else {
-    const now = new Date()
-    const lastLogin = new Date(user.lastLoginAt)
-    const diffDays = Math.floor((now.getTime() - lastLogin.getTime()) / (1000 * 3600 * 24))
-    
-    if (diffDays === 1) {
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: { streak: user.streak + 1, lastLoginAt: now }
-      })
-    } else if (diffDays > 1) {
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: { streak: 1, lastLoginAt: now }
-      })
-    }
+  } else if (diffDays > 1) {
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: { streak: 1, lastLoginAt: now }
+    })
   }
   return user
 }
