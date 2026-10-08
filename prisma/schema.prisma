@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String         @id @default(uuid())
+  name        String?
+  email       String         @unique
+  streak      Int            @default(0)
+  totalScore  Int            @default(0)
+  lastLoginAt DateTime       @default(now())
+  progress    UserProgress[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model UserProgress {
+  id          String   @id @default(uuid())
+  user_id     String
+  item_id     String   // Can be 'hiragana-a', 'katakana-ka', or lesson ID
+  item_type   String   // 'alphabet', 'lesson', etc.
+  completedAt DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, item_id])
+}
