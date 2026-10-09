@@ -8,7 +8,7 @@ import { Mic, MicOff, Check, X, ArrowRight, RotateCcw, ArrowLeft, Lightbulb, Vol
 import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
 import { convertToRomaji } from "@/lib/actions"
-
+import confetti from "canvas-confetti"
 interface ReadingClientProps {
   userId: string
 }
@@ -109,6 +109,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           setTranscript(bestTranscript)
           if (isMatch) {
             setResult("success")
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
             if (recognitionRef.current) {
               try { recognitionRef.current.stop() } catch (e) { }
             }
@@ -127,6 +128,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
 
                 if (rLower && rLower.replace(/\s+/g, '') === targetRomaji) {
                   setResult("success")
+                  confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
                   if (recognitionRef.current) {
                     try { recognitionRef.current.stop() } catch (e) { }
                   }
@@ -202,6 +204,45 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
       setAttempts(0)
       setSpokenRomaji(null)
     }
+  }
+
+  const prevWord = () => {
+    if (currentCategory && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1)
+      setTranscript("")
+      setSpokenRomaji(null)
+      setResult(null)
+      setShowHint(false)
+      setAttempts(0)
+    }
+  }
+
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const diff = touchStartX.current - touchEndX.current;
+    
+    // Swipe left (next word)
+    if (diff > 50) {
+      nextWord();
+    }
+    // Swipe right (prev word)
+    if (diff < -50) {
+      prevWord();
+    }
+    
+    touchStartX.current = null;
+    touchEndX.current = null;
   }
 
   const restart = () => {
@@ -308,7 +349,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
   const progress = ((currentIndex) / (currentCategory?.items.length || 1)) * 100
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto mt-12">
+    <div className="space-y-6 max-w-2xl mx-auto mt-4 md:mt-12 mb-28 md:mb-0">
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={backToMenu} className="text-muted-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" /> Back
@@ -322,7 +363,12 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
       </div>
       <Progress value={progress} className="h-2" />
 
-      <Card className="overflow-hidden border-2 transition-all duration-300">
+      <Card 
+        className="overflow-hidden border-2 transition-all duration-300"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <CardHeader className="text-center pb-2 bg-muted/30">
           <CardTitle className="text-muted-foreground font-normal text-sm uppercase tracking-wider">
             Read this out loud
@@ -380,7 +426,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
             </div>
           )}
         </CardContent>
-        <CardFooter className="flex flex-col sm:flex-row gap-4 bg-muted/10 pt-6">
+        <CardFooter className="flex flex-row sm:flex-row gap-3 sm:gap-4 fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-md border-t z-50 md:relative md:p-6 md:pt-6 md:bg-muted/10 md:border-t-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none">
           <Button
             variant={isListening ? "destructive" : "default"}
             size="lg"
