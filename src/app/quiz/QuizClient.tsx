@@ -315,8 +315,14 @@ export function QuizClient({ userId }: { userId: string }) {
             </h2>
             
             <div className="absolute right-0 top-0">
-               {!showHint && !hasAnswered && (
-                  <Button variant="ghost" size="icon" onClick={() => setShowHint(true)} className="text-amber-500 hover:text-amber-600 hover:bg-amber-100/50 rounded-full h-12 w-12" title="Need a hint?">
+               {!hasAnswered && (
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => setShowHint(h => !h)} 
+                    className={`rounded-full h-12 w-12 transition-colors ${showHint ? 'text-amber-600 bg-amber-100/80' : 'text-amber-500 hover:text-amber-600 hover:bg-amber-100/50'}`} 
+                    title="Toggle hint"
+                  >
                     <Lightbulb className="w-7 h-7" />
                   </Button>
                )}
@@ -332,7 +338,7 @@ export function QuizClient({ userId }: { userId: string }) {
 
           <p className="text-sm md:text-lg text-foreground font-medium w-full text-left md:text-center mt-2 px-1">Select the correct Romaji reading:</p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 w-full">
+          <div className="grid grid-cols-2 gap-3 md:gap-4 w-full">
             {question.options.map((option, index) => {
               const isSelected = selectedAnswer === index
               const isCorrect = question.romajiStr === option
