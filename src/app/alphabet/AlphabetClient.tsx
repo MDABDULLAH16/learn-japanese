@@ -359,7 +359,7 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
             {isMobilePlayerExpanded && (
               <div className="fixed inset-0 z-[60] bg-background flex flex-col animate-in slide-in-from-bottom-full duration-300">
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b">
+                <div className="flex items-center justify-between p-4 border-b flex-none">
                   <Button variant="ghost" size="icon" onClick={() => setIsMobilePlayerExpanded(false)}>
                     <ChevronDown className="w-6 h-6" />
                   </Button>
@@ -370,7 +370,7 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 flex flex-col p-6 overflow-y-auto overflow-x-hidden relative">
+                <div className="flex-1 flex flex-col px-6 pt-6 pb-0 overflow-hidden relative">
                   
                   {/* Big Character + Inline Controls */}
                   <div className="flex-none flex flex-col items-center justify-center pt-2 pb-2">
@@ -406,17 +406,17 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
 
                   {/* Hint Text Area */}
                   {showHint && (
-                    <div className="flex-none flex items-start justify-center pt-2 pb-4">
+                    <div className="flex-none flex items-start justify-center pt-2 pb-2">
                       <p className="text-sm text-amber-600 dark:text-amber-400 text-center animate-in fade-in slide-in-from-bottom-2 font-medium px-4">
                         {selectedChar.hint || "No visual hint available. Try breaking it down!"}
                       </p>
                     </div>
                   )}
 
-                  {/* 2-Line Grid Carousel (Middle/Bottom) */}
-                  <div className="flex-1 flex flex-col justify-end w-full mt-4 -mx-6 px-6 w-[calc(100%+3rem)] relative pb-2">
-                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-2">Slide to change</div>
-                    <div className="grid grid-rows-2 grid-flow-col gap-3 overflow-x-auto scrollbar-hide snap-x pb-2 px-2">
+                  {/* Vertical 5-Col Grid (Scrollable area) */}
+                  <div className="flex-1 flex flex-col w-full mt-4 -mx-2 px-2 overflow-hidden">
+                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-1 flex-none">Up Next</div>
+                    <div className="grid grid-cols-5 gap-2 overflow-y-auto scrollbar-hide pb-4 flex-1 content-start">
                       {categoryData.items.filter(i => i.char !== '').map((item, idx) => {
                         const itemId = `${activeScript}-${item.romaji}-${item.char}`
                         const isLearned = completedIds.includes(itemId)
@@ -431,21 +431,21 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                               playPronunciation(item.char)
                             }}
                             className={`
-                              flex-shrink-0 snap-center w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-medium transition-all
-                              ${isSelected ? 'bg-primary text-primary-foreground scale-110 shadow-xl ring-4 ring-primary/30 z-10' : 'bg-card border shadow-sm hover:border-primary'}
+                              relative aspect-square rounded-xl flex items-center justify-center text-2xl font-medium transition-all
+                              ${isSelected ? 'bg-primary text-primary-foreground scale-110 shadow-lg ring-2 ring-primary/30 z-10' : 'bg-card border shadow-sm hover:border-primary'}
                               ${isLearned && !isSelected ? 'opacity-70 text-green-600 dark:text-green-400 bg-green-50/50 dark:bg-green-900/20' : ''}
                             `}
                           >
                             <span className="relative z-10">{item.char}</span>
-                            {isLearned && !isSelected && <CheckCircle2 className="absolute top-1 right-1 w-3.5 h-3.5 text-green-500" />}
+                            {isLearned && !isSelected && <CheckCircle2 className="absolute top-1 right-1 w-3 h-3 text-green-500" />}
                           </button>
                         )
                       })}
                     </div>
                   </div>
 
-                  {/* Mark as Learned (Bottom) */}
-                  <div className="flex-none pt-4 pb-4 mt-2">
+                  {/* Mark as Learned (Bottom Fixed) */}
+                  <div className="flex-none pt-4 pb-6 mt-2">
                     {(() => {
                       const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
                       const isLearned = completedIds.includes(itemId)
