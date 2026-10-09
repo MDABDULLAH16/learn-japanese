@@ -106,7 +106,19 @@ export default async function Dashboard() {
           </Card>
         </Link>
 
-
+        <Link href="/vocabulary" className="block group">
+          <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                <BookA className="w-6 h-6" /> Vocabulary Practice
+              </CardTitle>
+              <CardDescription>Learn new words and practice with flashcards.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Expand your vocabulary by learning new words and practicing them using interactive flashcards.</p>
+            </CardContent>
+          </Card>
+        </Link>
 
         <Link href="/reading" className="block group">
           <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
