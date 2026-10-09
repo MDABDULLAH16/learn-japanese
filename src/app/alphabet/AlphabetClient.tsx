@@ -416,8 +416,10 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                   {/* Vertical 5-Col Grid (Scrollable area) */}
                   <div className="flex-1 flex flex-col w-full mt-4 -mx-2 px-2 overflow-hidden">
                     <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-1 flex-none">Up Next</div>
-                    <div className="grid grid-cols-5 gap-2 overflow-y-auto scrollbar-hide pb-4 flex-1 content-start">
-                      {categoryData.items.filter(i => i.char !== '').map((item, idx) => {
+                    <div className={`grid gap-2 overflow-y-auto scrollbar-hide pb-4 flex-1 content-start ${activeCategory === 'yoon' ? 'grid-cols-3' : 'grid-cols-5'}`}>
+                      {categoryData.items.map((item, idx) => {
+                        if (!item.char) return <div key={idx} className="aspect-square"></div>
+                        
                         const itemId = `${activeScript}-${item.romaji}-${item.char}`
                         const isLearned = completedIds.includes(itemId)
                         const isSelected = selectedChar?.char === item.char
