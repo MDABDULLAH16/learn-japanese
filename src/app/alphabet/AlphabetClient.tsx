@@ -208,66 +208,66 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
           </div>
         </div>
 
-        {/* DESKTOP PANEL */}
+        {/* DESKTOP PANEL (Compact) */}
         {selectedChar && (
-          <div className="hidden md:block w-80">
-            <Card className="sticky top-6 bg-card border shadow-sm">
-              <CardHeader className="text-center pb-2 relative">
-                <Button variant="ghost" size="icon" className="absolute right-2 top-2 hover:bg-muted" onClick={() => setSelectedChar(null)}>
-                  <X className="w-5 h-5 text-muted-foreground" />
+          <div className="hidden md:block w-72 lg:w-80">
+            <Card className="sticky top-6 bg-card border shadow-sm max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
+              <CardHeader className="text-center pb-0 pt-4 relative">
+                <Button variant="ghost" size="icon" className="absolute right-2 top-2 hover:bg-muted h-8 w-8" onClick={() => setSelectedChar(null)}>
+                  <X className="w-4 h-4 text-muted-foreground" />
                 </Button>
-                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                <CardTitle className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                   Character Detail
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-col items-center space-y-6">
-                <div className="text-8xl font-bold py-6 text-primary">
+              <CardContent className="flex flex-col items-center space-y-3 pt-3 pb-5">
+                <div className="text-7xl font-bold text-primary">
                   {selectedChar.char}
                 </div>
-                <div className="text-4xl font-light text-muted-foreground lowercase">
+                <div className="text-2xl font-light text-muted-foreground lowercase">
                   {selectedChar.romaji}
                 </div>
                 
                 {/* Hint System */}
-                <div className="w-full bg-slate-100 dark:bg-slate-900 rounded-lg p-4 relative overflow-hidden group">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Lightbulb className="w-5 h-5 text-amber-500" />
-                    <span className="font-semibold text-sm">Memorization Hint</span>
+                <div className="w-full bg-slate-100 dark:bg-slate-900 rounded-lg p-3 relative overflow-hidden group">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Lightbulb className="w-4 h-4 text-amber-500" />
+                    <span className="font-semibold text-xs">Memorization Hint</span>
                   </div>
                   {showHint || !selectedChar.hint ? (
-                    <p className="text-sm text-muted-foreground animate-in fade-in slide-in-from-top-2">
+                    <p className="text-xs text-muted-foreground animate-in fade-in slide-in-from-top-2">
                       {selectedChar.hint || "No visual hint available for this combined character yet. Try breaking it down!"}
                     </p>
                   ) : (
-                    <Button variant="secondary" size="sm" className="w-full mt-2" onClick={() => setShowHint(true)}>
+                    <Button variant="secondary" size="sm" className="w-full mt-1 h-7 text-xs" onClick={() => setShowHint(true)}>
                       Reveal Hint
                     </Button>
                   )}
                 </div>
 
-                <div className="w-full pt-6 border-t space-y-4">
-                  <details className="group border border-border/50 bg-slate-50/50 dark:bg-slate-900/50 rounded-xl p-3 w-full [&_summary::-webkit-details-marker]:hidden">
-                    <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-muted-foreground outline-none uppercase tracking-wider hover:text-foreground transition-colors">
-                      <span className="flex items-center gap-2">
-                        <Settings2 className="w-4 h-4" />
+                <div className="w-full pt-3 border-t space-y-3">
+                  <details className="group border border-border/50 bg-slate-50/50 dark:bg-slate-900/50 rounded-lg p-2 w-full [&_summary::-webkit-details-marker]:hidden">
+                    <summary className="flex cursor-pointer items-center justify-between text-xs font-medium text-muted-foreground outline-none uppercase tracking-wider hover:text-foreground transition-colors">
+                      <span className="flex items-center gap-1.5">
+                        <Settings2 className="w-3.5 h-3.5" />
                         Voice Settings
                       </span>
-                      <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                      <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
                     </summary>
-                    <div className="pt-4 space-y-4">
-                      <div className="space-y-2">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Voice Type</label>
+                    <div className="pt-3 space-y-3">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Voice Type</label>
                         <div className="flex gap-2">
-                          <Button size="sm" variant={voiceType === 'female' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('female'); setSelectedVoiceName(''); }}>Female</Button>
-                          <Button size="sm" variant={voiceType === 'male' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('male'); setSelectedVoiceName(''); }}>Male</Button>
+                          <Button size="sm" variant={voiceType === 'female' ? 'default' : 'outline'} className="flex-1 h-7 text-xs" onClick={() => { setVoiceType('female'); setSelectedVoiceName(''); }}>Female</Button>
+                          <Button size="sm" variant={voiceType === 'male' ? 'default' : 'outline'} className="flex-1 h-7 text-xs" onClick={() => { setVoiceType('male'); setSelectedVoiceName(''); }}>Male</Button>
                         </div>
                       </div>
 
                       {voices.length > 0 && (
-                        <div className="space-y-2">
-                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Device Voices</label>
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Device Voices</label>
                           <select 
-                            className="w-full text-sm border rounded-md p-2 bg-background text-foreground"
+                            className="w-full text-xs border rounded-md p-1.5 bg-background text-foreground"
                             value={selectedVoiceName}
                             onChange={(e) => setSelectedVoiceName(e.target.value)}
                           >
@@ -279,60 +279,63 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                         </div>
                       )}
 
-                      <div className="space-y-2">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Speed</label>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Speed</label>
                         <div className="flex gap-2">
-                          <Button size="sm" variant={speechRate === 0.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(0.5)}>Slow</Button>
-                          <Button size="sm" variant={speechRate === 1 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1)}>Normal</Button>
-                          <Button size="sm" variant={speechRate === 1.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1.5)}>Fast</Button>
+                          <Button size="sm" variant={speechRate === 0.5 ? 'default' : 'outline'} className="flex-1 h-7 text-xs" onClick={() => setSpeechRate(0.5)}>Slow</Button>
+                          <Button size="sm" variant={speechRate === 1 ? 'default' : 'outline'} className="flex-1 h-7 text-xs" onClick={() => setSpeechRate(1)}>Normal</Button>
+                          <Button size="sm" variant={speechRate === 1.5 ? 'default' : 'outline'} className="flex-1 h-7 text-xs" onClick={() => setSpeechRate(1.5)}>Fast</Button>
                         </div>
                       </div>
 
-                      <div className="space-y-2 pb-1">
+                      <div className="space-y-1.5 pb-1">
                         <div className="flex justify-between items-center">
-                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Volume</label>
-                          <span className="text-xs text-muted-foreground">{Math.round(volume * 100)}%</span>
+                          <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Volume</label>
+                          <span className="text-[10px] text-muted-foreground">{Math.round(volume * 100)}%</span>
                         </div>
                         <input 
                           type="range" 
                           min="0" max="1" step="0.1" 
                           value={volume} 
                           onChange={(e) => setVolume(parseFloat(e.target.value))}
-                          className="w-full accent-primary cursor-pointer"
+                          className="w-full accent-primary cursor-pointer h-1.5"
                         />
                       </div>
                     </div>
                   </details>
 
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-center text-lg h-14"
-                    onClick={() => playPronunciation(selectedChar.char)}
-                  >
-                    <Volume2 className="mr-2 h-5 w-5" /> Play Pronunciation
-                  </Button>
-                  
-                  {(() => {
-                    const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
-                    const isLearned = completedIds.includes(itemId)
+                  <div className="flex gap-2 w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-12 h-10 px-0 flex-shrink-0"
+                      onClick={() => playPronunciation(selectedChar.char)}
+                      title="Play Pronunciation"
+                    >
+                      <Volume2 className="h-5 w-5 text-primary" />
+                    </Button>
                     
-                    return (
-                      <Button 
-                        variant={isLearned ? "secondary" : "default"}
-                        className={`w-full justify-center h-16 text-lg font-bold transition-all duration-300 ${isLearned ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400' : ''}`}
-                        onClick={markLearned}
-                        disabled={isPending || isLearned}
-                      >
-                        {isPending ? (
-                           <><Loader2 className="w-5 h-5 animate-spin mr-2" /> Saving...</>
-                        ) : isLearned ? (
-                          <><CheckCircle2 className="mr-2 h-6 w-6 text-green-600 dark:text-green-500" /> Learned!</>
-                        ) : (
-                          'Mark as Learned'
-                        )}
-                      </Button>
-                    )
-                  })()}
+                    {(() => {
+                      const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
+                      const isLearned = completedIds.includes(itemId)
+                      
+                      return (
+                        <Button 
+                          variant={isLearned ? "secondary" : "default"}
+                          className={`flex-1 h-10 text-sm font-bold transition-all duration-300 ${isLearned ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400' : ''}`}
+                          onClick={markLearned}
+                          disabled={isPending || isLearned}
+                        >
+                          {isPending ? (
+                             <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Saving...</>
+                          ) : isLearned ? (
+                            <><CheckCircle2 className="mr-2 h-4 w-4 text-green-600 dark:text-green-500" /> Learned!</>
+                          ) : (
+                            'Mark as Learned'
+                          )}
+                        </Button>
+                      )
+                    })()}
+                  </div>
                 </div>
               </CardContent>
             </Card>
