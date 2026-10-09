@@ -372,20 +372,51 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col p-6 overflow-hidden relative">
                   
-                  {/* Big Character */}
-                  <div className="flex-1 flex flex-col items-center justify-center min-h-[25vh]">
-                    <div className="text-[140px] font-black text-primary drop-shadow-sm leading-none mb-2">
+                  {/* Big Character + Inline Controls */}
+                  <div className="flex-none flex flex-col items-center justify-center pt-8 pb-4">
+                    <div className="text-[140px] font-black text-primary drop-shadow-sm leading-none mb-6">
                       {selectedChar.char}
                     </div>
-                    <div className="text-4xl font-light text-muted-foreground lowercase">
-                      {selectedChar.romaji}
+                    
+                    {/* Inline Actions Row (Hint, Romaji, Play) */}
+                    <div className="flex items-center justify-center gap-6">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className={`w-12 h-12 rounded-full transition-colors ${showHint ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/40' : 'text-muted-foreground hover:bg-muted'}`}
+                        onClick={() => setShowHint(!showHint)}
+                      >
+                        <Lightbulb className="w-6 h-6" />
+                      </Button>
+
+                      <div className="text-5xl font-light text-muted-foreground lowercase min-w-[4rem] text-center">
+                        {selectedChar.romaji}
+                      </div>
+
+                      <Button 
+                        variant="default" 
+                        size="icon" 
+                        className="w-12 h-12 rounded-full shadow-lg shadow-primary/40 hover:scale-105 transition-transform"
+                        onClick={() => playPronunciation(selectedChar.char)}
+                      >
+                        <Volume2 className="w-6 h-6" />
+                      </Button>
                     </div>
                   </div>
 
-                  {/* Carousel (Middle) */}
-                  <div className="w-full py-2 -mx-6 px-6 w-[calc(100%+3rem)] relative">
+                  {/* Hint Text Area */}
+                  <div className="h-16 flex items-start justify-center pt-2">
+                    {showHint && (
+                      <p className="text-sm text-amber-600 dark:text-amber-400 text-center animate-in fade-in slide-in-from-bottom-2 font-medium px-4">
+                        {selectedChar.hint || "No visual hint available. Try breaking it down!"}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Carousel (Middle/Bottom) */}
+                  <div className="w-full mt-auto mb-6 -mx-6 px-6 w-[calc(100%+3rem)] relative">
                     <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-2">Slide to change</div>
-                    <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x pb-4 px-2">
+                    <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x pb-4 px-2">
                       {categoryData.items.filter(i => i.char !== '').map((item, idx) => {
                         const itemId = `${activeScript}-${item.romaji}-${item.char}`
                         const isLearned = completedIds.includes(itemId)
@@ -400,54 +431,21 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                               playPronunciation(item.char)
                             }}
                             className={`
-                              flex-shrink-0 snap-center w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-medium transition-all
+                              flex-shrink-0 snap-center w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-medium transition-all
                               ${isSelected ? 'bg-primary text-primary-foreground scale-110 shadow-xl ring-4 ring-primary/30 z-10' : 'bg-card border shadow-sm hover:border-primary'}
                               ${isLearned && !isSelected ? 'opacity-70 text-green-600 dark:text-green-400 bg-green-50/50 dark:bg-green-900/20' : ''}
                             `}
                           >
                             <span className="relative z-10">{item.char}</span>
-                            {isLearned && !isSelected && <CheckCircle2 className="absolute top-2 right-2 w-4 h-4 text-green-500" />}
+                            {isLearned && !isSelected && <CheckCircle2 className="absolute top-1 right-1 w-3.5 h-3.5 text-green-500" />}
                           </button>
                         )
                       })}
                     </div>
                   </div>
 
-                  {/* Play & Hint Controls */}
-                  <div className="flex items-center justify-center gap-12 py-6">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className={`w-14 h-14 rounded-full transition-colors ${showHint ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/40' : 'text-muted-foreground hover:bg-muted'}`}
-                      onClick={() => setShowHint(!showHint)}
-                    >
-                      <Lightbulb className="w-7 h-7" />
-                    </Button>
-
-                    <Button 
-                      variant="default" 
-                      size="icon" 
-                      className="w-24 h-24 rounded-full shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
-                      onClick={() => playPronunciation(selectedChar.char)}
-                    >
-                      <Volume2 className="w-12 h-12 ml-1" />
-                    </Button>
-
-                    {/* Empty div for balancing flex layout */}
-                    <div className="w-14 h-14" />
-                  </div>
-
-                  {/* Hint Text Area */}
-                  <div className="h-12 flex items-center justify-center">
-                    {showHint && (
-                      <p className="text-sm text-amber-600 dark:text-amber-400 text-center animate-in fade-in slide-in-from-bottom-2 font-medium px-4">
-                        {selectedChar.hint || "No visual hint available. Try breaking it down!"}
-                      </p>
-                    )}
-                  </div>
-
                   {/* Mark as Learned (Bottom) */}
-                  <div className="pt-4 mt-auto">
+                  <div className="flex-none pb-2">
                     {(() => {
                       const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
                       const isLearned = completedIds.includes(itemId)
