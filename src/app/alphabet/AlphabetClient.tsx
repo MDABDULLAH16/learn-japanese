@@ -370,11 +370,11 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 flex flex-col p-6 overflow-hidden relative">
+                <div className="flex-1 flex flex-col p-6 overflow-y-auto overflow-x-hidden relative">
                   
                   {/* Big Character + Inline Controls */}
-                  <div className="flex-none flex flex-col items-center justify-center pt-8 pb-4">
-                    <div className="text-[140px] font-black text-primary drop-shadow-sm leading-none mb-6">
+                  <div className="flex-none flex flex-col items-center justify-center pt-2 pb-2">
+                    <div className="text-[120px] font-black text-primary drop-shadow-sm leading-none mb-6">
                       {selectedChar.char}
                     </div>
                     
@@ -399,24 +399,24 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                         className="w-12 h-12 rounded-full shadow-lg shadow-primary/40 hover:scale-105 transition-transform"
                         onClick={() => playPronunciation(selectedChar.char)}
                       >
-                        <Volume2 className="w-6 h-6" />
+                        <Volume2 className="w-6 h-6 ml-0.5" />
                       </Button>
                     </div>
                   </div>
 
                   {/* Hint Text Area */}
-                  <div className="h-16 flex items-start justify-center pt-2">
-                    {showHint && (
+                  {showHint && (
+                    <div className="flex-none flex items-start justify-center pt-2 pb-4">
                       <p className="text-sm text-amber-600 dark:text-amber-400 text-center animate-in fade-in slide-in-from-bottom-2 font-medium px-4">
                         {selectedChar.hint || "No visual hint available. Try breaking it down!"}
                       </p>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
-                  {/* Carousel (Middle/Bottom) */}
-                  <div className="w-full mt-auto mb-6 -mx-6 px-6 w-[calc(100%+3rem)] relative">
+                  {/* 2-Line Grid Carousel (Middle/Bottom) */}
+                  <div className="flex-1 flex flex-col justify-end w-full mt-4 -mx-6 px-6 w-[calc(100%+3rem)] relative pb-2">
                     <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-2">Slide to change</div>
-                    <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x pb-4 px-2">
+                    <div className="grid grid-rows-2 grid-flow-col gap-3 overflow-x-auto scrollbar-hide snap-x pb-2 px-2">
                       {categoryData.items.filter(i => i.char !== '').map((item, idx) => {
                         const itemId = `${activeScript}-${item.romaji}-${item.char}`
                         const isLearned = completedIds.includes(itemId)
@@ -445,7 +445,7 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                   </div>
 
                   {/* Mark as Learned (Bottom) */}
-                  <div className="flex-none pb-2">
+                  <div className="flex-none pt-4 pb-4 mt-2">
                     {(() => {
                       const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
                       const isLearned = completedIds.includes(itemId)
@@ -475,7 +475,7 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                 {showVoiceSettings && (
                   <div className="absolute inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-end animate-in fade-in" onClick={() => setShowVoiceSettings(false)}>
                     <div 
-                      className="bg-card w-full rounded-t-3xl border-t shadow-[0_-20px_60px_rgba(0,0,0,0.5)] p-6 pb-safe animate-in slide-in-from-bottom-full duration-300"
+                      className="bg-card w-full rounded-t-3xl border-t shadow-[0_-20px_60px_rgba(0,0,0,0.5)] p-6 pb-8 animate-in slide-in-from-bottom-full duration-300"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <div className="flex justify-between items-center mb-6">
