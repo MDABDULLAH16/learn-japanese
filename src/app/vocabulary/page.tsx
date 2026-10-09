@@ -1,3 +1,5 @@
+export const instant = false
+
 import { getCurrentUser } from "@/lib/actions"
 import { redirect } from "next/navigation"
 import { VocabularyClient } from "./VocabularyClient"
