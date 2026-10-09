@@ -70,7 +70,7 @@ export function QuizClient({ userId }: { userId: string }) {
     const sourceData = getSourceData(alphabetType!, level)
 
     if (level === 'normal' || level === 'medium') {
-      const selected = shuffle(sourceData).slice(0, 10)
+      const selected = shuffle(sourceData) // Use ALL available characters
       generatedQuestions = selected.map(charObj => {
         // Find 3 wrong options from the SAME alphabet type if possible, or mixed
         const wrongChars = shuffle(sourceData.filter(c => c.romaji !== charObj.romaji)).slice(0, 3)
@@ -84,30 +84,27 @@ export function QuizClient({ userId }: { userId: string }) {
       })
     } 
     else if (level === 'hard') {
-      for (let i = 0; i < 10; i++) {
-        const wordLength = Math.floor(Math.random() * 2) + 2 // 2 or 3 chars
+      // Group ALL characters into 2-character words so every character is tested once
+      const allChars = shuffle(sourceData)
+      
+      for (let i = 0; i < allChars.length; i += 2) {
+        const char1 = allChars[i]
+        const char2 = allChars[i+1]
         
-        // Pick whether this specific word will be Hiragana or Katakana (if mixed)
-        const isKatakanaWord = alphabetType === 'katakana' || (alphabetType === 'mix' && Math.random() > 0.5)
+        let wordChar = char1.char
+        let wordRomaji = char1.romaji
+        let isKatakanaWord = /[ア-ン]/.test(char1.char)
         
-        const wordSource = isKatakanaWord 
-          ? [...KATAKANA_DATA.basic.items, ...KATAKANA_DATA.dakuten.items, ...KATAKANA_DATA.yoon.items].filter(i => i.char)
-          : [...HIRAGANA_DATA.basic.items, ...HIRAGANA_DATA.dakuten.items, ...HIRAGANA_DATA.yoon.items].filter(i => i.char)
-
-        let wordChar = ''
-        let wordRomaji = ''
-        for (let j = 0; j < wordLength; j++) {
-          const randomChar = wordSource[Math.floor(Math.random() * wordSource.length)]
-          wordChar += randomChar.char
-          wordRomaji += randomChar.romaji
+        if (char2) {
+          wordChar += char2.char
+          wordRomaji += char2.romaji
         }
-
+        
         const options = [wordRomaji]
         while (options.length < 4) {
-          let wrongRomaji = ''
-          for (let j = 0; j < wordLength; j++) {
-            wrongRomaji += wordSource[Math.floor(Math.random() * wordSource.length)].romaji
-          }
+          let wrongRomaji = sourceData[Math.floor(Math.random() * sourceData.length)].romaji
+          if (char2) wrongRomaji += sourceData[Math.floor(Math.random() * sourceData.length)].romaji
+          
           if (!options.includes(wrongRomaji)) options.push(wrongRomaji)
         }
 
@@ -308,7 +305,7 @@ export function QuizClient({ userId }: { userId: string }) {
             <span className="text-sm font-bold tracking-wider text-muted-foreground bg-secondary px-3 py-1 rounded">
               {question.isKatakana ? 'KATAKANA' : 'HIRAGANA'}
             </span>
-            <h2 className="text-[90px] sm:text-[120px] font-bold text-primary leading-tight my-4 tracking-widest break-all">
+            <h2 className="text-5xl sm:text-7xl md:text-[120px] font-black text-primary leading-tight my-4 tracking-tight break-words break-keep px-2 max-w-full text-center">
               {question.charStr}
             </h2>
             <p className="text-lg text-foreground font-medium">Select the correct Romaji reading:</p>
@@ -332,13 +329,13 @@ export function QuizClient({ userId }: { userId: string }) {
                 <Button 
                   key={index} 
                   variant={variant}
-                  className="h-auto py-6 text-2xl sm:text-3xl font-normal relative lowercase transition-all hover:bg-primary/10 break-all"
+                  className="h-auto py-4 sm:py-6 text-xl sm:text-2xl md:text-3xl font-medium relative lowercase transition-all hover:bg-primary/10"
                   onClick={() => handleAnswer(index)}
                   disabled={hasAnswered}
                 >
-                  <span className="truncate pr-8">{option}</span>
-                  {hasAnswered && isCorrect && <CheckCircle2 className="absolute right-4 h-6 w-6 text-green-500 bg-white rounded-full flex-shrink-0" />}
-                  {hasAnswered && isSelected && !isCorrect && <XCircle className="absolute right-4 h-6 w-6 text-red-500 bg-white rounded-full flex-shrink-0" />}
+                  <span className="whitespace-normal break-words pr-8 w-full text-center">{option}</span>
+                  {hasAnswered && isCorrect && <CheckCircle2 className="absolute right-2 sm:right-4 h-6 w-6 text-green-500 bg-white rounded-full flex-shrink-0" />}
+                  {hasAnswered && isSelected && !isCorrect && <XCircle className="absolute right-2 sm:right-4 h-6 w-6 text-red-500 bg-white rounded-full flex-shrink-0" />}
                 </Button>
               )
             })}

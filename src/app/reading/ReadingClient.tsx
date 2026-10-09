@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Mic, MicOff, Check, X, ArrowRight, RotateCcw, ArrowLeft, Lightbulb, Volume2 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
+import { convertToRomaji } from "@/lib/actions"
 
 interface ReadingClientProps {
   userId: string
@@ -20,9 +21,16 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
   const [result, setResult] = useState<"success" | "error" | null>(null)
   const [hasSupport, setHasSupport] = useState(true)
   const [showHint, setShowHint] = useState(false)
+  const [attempts, setAttempts] = useState(0)
+  const [spokenRomaji, setSpokenRomaji] = useState<string | null>(null)
   
   const currentCategory = selectedLevel ? readingData[selectedLevel] : null
   const currentItem = currentCategory?.items[currentIndex]
+  
+  const currentItemRef = useRef(currentItem)
+  useEffect(() => {
+    currentItemRef.current = currentItem
+  }, [currentItem])
   
   const recognitionRef = useRef<any>(null)
 
@@ -32,25 +40,10 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
       if (SpeechRecognition) {
         recognitionRef.current = new SpeechRecognition()
-        recognitionRef.current.continuous = false
+        recognitionRef.current.continuous = false // Stop automatically after one utterance
         recognitionRef.current.lang = "ja-JP"
         recognitionRef.current.interimResults = false
-
-        recognitionRef.current.onresult = (event: any) => {
-          const current = event.resultIndex
-          const transcriptText = event.results[current][0].transcript
-          setTranscript(transcriptText)
-          verifyReading(transcriptText)
-        }
-
-        recognitionRef.current.onerror = (event: any) => {
-          console.error("Speech recognition error", event.error)
-          setIsListening(false)
-        }
-
-        recognitionRef.current.onend = () => {
-          setIsListening(false)
-        }
+        recognitionRef.current.maxAlternatives = 10
       } else {
         setHasSupport(false)
       }
@@ -65,25 +58,124 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
 
   const toggleListening = () => {
     if (isListening) {
-      recognitionRef.current?.stop()
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop() } catch (e) {}
+      }
       setIsListening(false)
     } else {
       setTranscript("")
       setResult(null)
-      recognitionRef.current?.start()
-      setIsListening(true)
-    }
-  }
+      
+      if (recognitionRef.current) {
+        recognitionRef.current.onresult = (event: any) => {
+          const current = event.resultIndex
+          const results = event.results[current]
+          
+          let bestTranscript = results[0].transcript
+          let isMatch = false
+          const item = currentItemRef.current
 
-  const verifyReading = (spokenText: string) => {
-    if (!currentItem) return
-    const normalizedSpoken = spokenText.replace(/\s+/g, '')
-    const normalizedTarget = currentItem.japanese.replace(/\s+/g, '')
-    
-    if (normalizedSpoken.includes(normalizedTarget) || normalizedTarget.includes(normalizedSpoken) || spokenText.includes(currentItem.japanese)) {
-      setResult("success")
-    } else {
-      setResult("error")
+          if (!item) return
+          
+          if (!bestTranscript.trim()) {
+            bestTranscript = "(could not recognize)"
+          }
+
+          const targetRomaji = item.romaji.replace(/\s+/g, '').toLowerCase()
+
+          // Loop through all alternatives
+          for (let i = 0; i < results.length; i++) {
+            const text = results[i].transcript
+            
+            const normalizedSpoken = text.replace(/\s+/g, '')
+            const normalizedTarget = item.japanese.replace(/\s+/g, '')
+            const spokenLower = normalizedSpoken.toLowerCase()
+            const isDigitMatch = /^\d+$/.test(normalizedSpoken) && item.meaning.includes(normalizedSpoken)
+            
+            if (
+              normalizedSpoken.includes(normalizedTarget) || 
+              normalizedTarget.includes(normalizedSpoken) || 
+              text.includes(item.japanese) ||
+              spokenLower === targetRomaji ||
+              spokenLower.includes(targetRomaji) ||
+              isDigitMatch
+            ) {
+              bestTranscript = text
+              isMatch = true
+              break
+            }
+          }
+          
+          setTranscript(bestTranscript)
+          if (isMatch) {
+            setResult("success")
+            if (recognitionRef.current) {
+               try { recognitionRef.current.stop() } catch (e) {}
+            }
+            // Fetch Romaji for the correct answer to display in the UI
+            if (!/^\d+$/.test(bestTranscript) && !bestTranscript.startsWith("(")) {
+              convertToRomaji(bestTranscript).then(r => {
+                if (r) setSpokenRomaji(r.toLowerCase())
+              })
+            }
+          } else {
+            // Check Romaji asynchronously to handle Kanji conversions (e.g., spoken 'mizu' -> Chrome returns '水' -> target is 'みず')
+            if (!/^\d+$/.test(bestTranscript) && !bestTranscript.startsWith("(")) {
+              convertToRomaji(bestTranscript).then(r => {
+                const rLower = r ? r.toLowerCase() : null
+                if (rLower) setSpokenRomaji(rLower)
+                
+                if (rLower && rLower.replace(/\s+/g, '') === targetRomaji) {
+                  setResult("success")
+                  if (recognitionRef.current) {
+                    try { recognitionRef.current.stop() } catch (e) {}
+                  }
+                } else {
+                  setResult("error")
+                  setAttempts(a => a + 1)
+                }
+              })
+            } else {
+              setResult("error")
+              setAttempts(a => a + 1)
+            }
+          }
+        }
+
+        recognitionRef.current.onnomatch = () => {
+          setTranscript("(could not recognize)")
+          setResult("error")
+          setAttempts(a => a + 1)
+        }
+
+        recognitionRef.current.onerror = (event: any) => {
+          console.error("Speech recognition error", event.error)
+          if (event.error === 'no-speech') {
+            setTranscript("(no speech detected)")
+            setResult("error")
+            setAttempts(a => a + 1)
+          } else {
+            setTranscript(`(Error: ${event.error})`)
+            setResult("error")
+            setIsListening(false)
+          }
+          if (event.error === 'not-allowed') {
+            alert("Microphone access denied. Please check your browser permissions.")
+          }
+        }
+
+        recognitionRef.current.onend = () => {
+          setIsListening(false)
+        }
+
+        try {
+          recognitionRef.current.start()
+          setIsListening(true)
+        } catch (error) {
+          console.error("Failed to start speech recognition:", error)
+          setIsListening(false)
+        }
+      }
     }
   }
 
@@ -100,27 +192,35 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
     if (currentCategory && currentIndex < currentCategory.items.length - 1) {
       setCurrentIndex(currentIndex + 1)
       setTranscript("")
+      setSpokenRomaji(null)
       setResult(null)
       setShowHint(false)
+      setAttempts(0)
     } else if (currentCategory && currentIndex >= currentCategory.items.length - 1) {
       setCurrentIndex(currentIndex + 1) // to trigger completion screen
       setShowHint(false)
+      setAttempts(0)
+      setSpokenRomaji(null)
     }
   }
 
   const restart = () => {
     setCurrentIndex(0)
     setTranscript("")
+    setSpokenRomaji(null)
     setResult(null)
     setShowHint(false)
+    setAttempts(0)
   }
 
   const backToMenu = () => {
     setSelectedLevel(null)
     setCurrentIndex(0)
     setTranscript("")
+    setSpokenRomaji(null)
     setResult(null)
     setShowHint(false)
+    setAttempts(0)
   }
 
   if (!hasSupport) {
@@ -187,6 +287,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
                 setSelectedLevel(nextLevelKey)
                 setCurrentIndex(0)
                 setTranscript("")
+                setSpokenRomaji(null)
                 setResult(null)
                 setShowHint(false)
               }} size="lg">
@@ -228,7 +329,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-10 pb-8 flex flex-col items-center justify-center min-h-[250px] relative">
-          <div className="text-6xl md:text-8xl font-black mb-6 tracking-tight text-primary">
+          <div className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight text-primary break-words break-keep px-2 max-w-full text-center leading-tight">
             {currentItem?.japanese}
           </div>
           
@@ -260,14 +361,23 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
             </Button>
           </div>
 
-          {transcript && (
-            <div className={`mt-8 px-6 py-3 rounded-2xl w-full text-center text-lg font-medium transition-colors ${
-              result === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' :
-              result === 'error' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-              'bg-muted text-foreground'
+          {(isListening || transcript || result) && (
+            <div key={attempts + (result === 'success' ? 's' : 'e')} className={`mt-8 px-6 py-3 rounded-2xl w-full text-center text-lg font-medium transition-all duration-300 animate-in fade-in zoom-in-95 ${
+              result === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 shadow-sm shadow-green-500/20' :
+              result === 'error' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 shadow-sm shadow-red-500/20' :
+              'bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 animate-pulse'
             }`}>
-              <span className="text-xs uppercase tracking-wider block opacity-70 mb-1">You said</span>
-              "{transcript}"
+              <span className="text-xs uppercase tracking-wider block opacity-70 mb-1">
+                {result === 'error' || result === 'success' ? "You said" : transcript ? "Listening..." : "Listening to your voice..."}
+              </span>
+              <span className={!transcript ? "opacity-50 italic" : ""}>
+                {transcript ? `"${transcript}"` : "(Speak now)"}
+              </span>
+              {result && spokenRomaji && (
+                <span className={`block mt-2 text-sm font-bold opacity-90 animate-in slide-in-from-top-1 ${result === 'success' ? 'text-green-700 dark:text-green-500' : 'text-red-700 dark:text-red-400'}`}>
+                  Pronounced: <span className={result === 'success' ? 'underline decoration-green-500' : 'underline decoration-red-400'}>{spokenRomaji}</span>
+                </span>
+              )}
             </div>
           )}
         </CardContent>
@@ -309,8 +419,8 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
         </div>
       )}
       {result === 'error' && (
-        <div className="flex items-center justify-center text-red-500 font-bold text-lg animate-in fade-in slide-in-from-bottom-4">
-          <X className="w-6 h-6 mr-2" /> Not quite right. Try again!
+        <div key={`err-${attempts}`} className="flex items-center justify-center text-red-500 font-bold text-lg animate-in fade-in slide-in-from-bottom-4 zoom-in-95">
+          <X className="w-6 h-6 mr-2" /> Not quite right. Try again! {attempts > 0 ? `(${attempts})` : ''}
         </div>
       )}
     </div>

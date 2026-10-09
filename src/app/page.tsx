@@ -106,19 +106,7 @@ export default async function Dashboard() {
           </Card>
         </Link>
 
-        <Link href="/alphabet-speech" className="block group">
-          <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
-                <Mic className="w-6 h-6" /> Alphabet Speaking
-              </CardTitle>
-              <CardDescription>Speak Hiragana and Katakana out loud.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Practice alphabet pronunciation with real-time speech recognition.</p>
-            </CardContent>
-          </Card>
-        </Link>
+
 
         <Link href="/reading" className="block group">
           <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">

@@ -41,42 +41,47 @@ export default function AlphabetSpeechClient({ userId }: AlphabetSpeechClientPro
   const [showResults, setShowResults] = useState(false)
   const [wrongQuestions, setWrongQuestions] = useState<SpeechQuestion[]>([])
   const [isPending, startTransition] = useTransition()
+  const [attempts, setAttempts] = useState(0)
+  const [hasScored, setHasScored] = useState(false)
 
   const currentItem = questions[currentIndex]
+  const currentItemRef = useRef(currentItem)
+  useEffect(() => {
+    currentItemRef.current = currentItem
+  }, [currentItem])
+
+  const showHintRef = useRef(showHint)
+  useEffect(() => {
+    showHintRef.current = showHint
+  }, [showHint])
+
   const recognitionRef = useRef<any>(null)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
       if (SpeechRecognition) {
-        recognitionRef.current = new SpeechRecognition()
-        recognitionRef.current.continuous = false
-        recognitionRef.current.lang = "ja-JP"
-        recognitionRef.current.interimResults = false
-
-        recognitionRef.current.onresult = (event: any) => {
-          const current = event.resultIndex
-          const transcriptText = event.results[current][0].transcript
-          setTranscript(transcriptText)
-          verifyReading(transcriptText)
-        }
-
-        recognitionRef.current.onerror = (event: any) => {
-          console.error("Speech recognition error", event.error)
-          setIsListening(false)
-        }
-
-        recognitionRef.current.onend = () => {
-          setIsListening(false)
-        }
+        const recognition = new SpeechRecognition()
+        recognition.continuous = false // Stop automatically after one utterance
+        recognition.lang = "ja-JP"
+        recognition.interimResults = false // Don't use interim to avoid rapid state overwriting
+        recognition.maxAlternatives = 10
+        recognitionRef.current = recognition
       } else {
         setHasSupport(false)
       }
     }
+    
     return () => {
-      if (recognitionRef.current) recognitionRef.current.abort()
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.abort()
+        } catch (e) {
+          // ignore
+        }
+      }
     }
-  }, [currentIndex, questions])
+  }, [])
 
   const getSourceData = (type: AlphabetType, level: Difficulty) => {
     let source: Character[] = []
@@ -149,6 +154,8 @@ export default function AlphabetSpeechClient({ userId }: AlphabetSpeechClientPro
     setTranscript("")
     setResult(null)
     setShowHint(false)
+    setAttempts(0)
+    setHasScored(false)
   }
 
   const handleBackToStart = () => {
@@ -158,29 +165,114 @@ export default function AlphabetSpeechClient({ userId }: AlphabetSpeechClientPro
 
   const toggleListening = () => {
     if (isListening) {
-      recognitionRef.current?.stop()
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop() } catch (e) {}
+      }
       setIsListening(false)
     } else {
       setTranscript("")
       setResult(null)
-      recognitionRef.current?.start()
-      setIsListening(true)
+      
+      if (recognitionRef.current) {
+        recognitionRef.current.onresult = (event: any) => {
+          const current = event.resultIndex
+          const results = event.results[current]
+          
+          let bestTranscript = results[0].transcript.trim()
+          let isMatch = false
+          const item = currentItemRef.current
+          const hint = showHintRef.current
+
+          if (!item) return
+          
+          // If the speech engine picked up noise but couldn't transcribe any words, explicitly show that
+          if (!bestTranscript) {
+            bestTranscript = "(could not recognize)"
+          }
+
+          // Loop through all alternatives provided by the speech engine
+          for (let i = 0; i < results.length; i++) {
+            const text = results[i].transcript
+            
+            // Normalize and check the text
+            const normalizedSpoken = text.replace(/\s+/g, '').toLowerCase()
+            const targetRomaji = item.romajiStr.toLowerCase()
+            const targetChar = item.charStr
+            
+            const spokenHiragana = toHiragana(normalizedSpoken)
+            const spokenKatakana = toKatakana(normalizedSpoken)
+            
+            if (
+              normalizedSpoken.includes(targetChar) || 
+              spokenHiragana.includes(targetChar) ||
+              spokenKatakana.includes(targetChar) ||
+              normalizedSpoken === targetRomaji || 
+              text.toLowerCase().includes(targetRomaji)
+            ) {
+              bestTranscript = text // Use the matched one for UI display
+              isMatch = true
+              break
+            }
+          }
+          
+          setTranscript(bestTranscript)
+          if (isMatch) {
+            setResult("success")
+            setHasScored(prevScored => {
+              if (!prevScored) setScore(s => s + (hint ? 5 : 10))
+              return true
+            })
+            // Stop listening explicitly on match
+            if (recognitionRef.current) {
+               try { recognitionRef.current.stop() } catch (e) {}
+            }
+          } else {
+            setResult("error")
+            setAttempts(a => a + 1)
+            setWrongQuestions(prev => {
+              if (prev.find(p => p.charStr === item.charStr)) return prev // Avoid duplicates
+              return [...prev, item]
+            })
+          }
+        }
+        
+        recognitionRef.current.onerror = (event: any) => {
+          console.error("Speech recognition error", event.error)
+          if (event.error !== 'no-speech') {
+            setIsListening(false)
+          }
+          if (event.error === 'not-allowed') {
+            alert("Microphone access denied. Please check your browser permissions.")
+          }
+        }
+        
+        recognitionRef.current.onend = () => {
+          setIsListening(false)
+        }
+        
+        try {
+          recognitionRef.current.start()
+          setIsListening(true)
+        } catch (error) {
+          console.error("Failed to start speech recognition:", error)
+          setIsListening(false)
+        }
+      }
     }
   }
 
-  const verifyReading = (spokenText: string) => {
-    if (!currentItem) return
-    const normalizedSpoken = spokenText.replace(/\s+/g, '').toLowerCase()
-    const targetRomaji = currentItem.romajiStr.toLowerCase()
-    const targetChar = currentItem.charStr
-    
-    if (normalizedSpoken.includes(targetChar) || normalizedSpoken === targetRomaji || spokenText.includes(targetChar) || targetChar.includes(normalizedSpoken)) {
-      setResult("success")
-      setScore(s => s + (showHint ? 5 : 10))
-    } else {
-      setResult("error")
-      setWrongQuestions(prev => [...prev, currentItem])
-    }
+  const toKatakana = (str: string) => {
+    return str.replace(/[\u3041-\u3096]/g, (match) => {
+      const chr = match.charCodeAt(0) + 0x60
+      return String.fromCharCode(chr)
+    })
+  }
+
+  const toHiragana = (str: string) => {
+    return str.replace(/[\u30A1-\u30F6]/g, (match) => {
+      const chr = match.charCodeAt(0) - 0x60
+      return String.fromCharCode(chr)
+    })
   }
 
   const playAudio = (text: string) => {
@@ -198,6 +290,8 @@ export default function AlphabetSpeechClient({ userId }: AlphabetSpeechClientPro
       setTranscript("")
       setResult(null)
       setShowHint(false)
+      setAttempts(0)
+      setHasScored(false)
     } else {
       startTransition(async () => {
         if (score > 0) await saveQuizScore(userId, score)
@@ -360,14 +454,18 @@ export default function AlphabetSpeechClient({ userId }: AlphabetSpeechClientPro
             </Button>
           </div>
 
-          {transcript && (
-            <div className={`mt-8 px-6 py-3 rounded-2xl w-full text-center text-lg font-medium transition-colors ${
-              result === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' :
-              result === 'error' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-              'bg-muted text-foreground'
+          {(isListening || transcript || result) && (
+            <div key={attempts + (result === 'success' ? 's' : 'e')} className={`mt-8 px-6 py-3 rounded-2xl w-full text-center text-lg font-medium transition-all duration-300 animate-in fade-in zoom-in-95 ${
+              result === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 shadow-sm shadow-green-500/20' :
+              result === 'error' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 shadow-sm shadow-red-500/20' :
+              'bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 animate-pulse'
             }`}>
-              <span className="text-xs uppercase tracking-wider block opacity-70 mb-1">You said</span>
-              "{transcript}"
+              <span className="text-xs uppercase tracking-wider block opacity-70 mb-1">
+                {result === 'error' || result === 'success' ? "You said" : transcript ? "Listening..." : "Listening to your voice..."}
+              </span>
+              <span className={!transcript ? "opacity-50 italic" : ""}>
+                {transcript ? `"${transcript}"` : "(Speak now)"}
+              </span>
             </div>
           )}
         </CardContent>
@@ -411,8 +509,8 @@ export default function AlphabetSpeechClient({ userId }: AlphabetSpeechClientPro
         </div>
       )}
       {result === 'error' && (
-        <div className="flex items-center justify-center text-red-500 font-bold text-lg animate-in fade-in slide-in-from-bottom-4">
-          <X className="w-6 h-6 mr-2" /> Not quite right. Try again!
+        <div key={`err-${attempts}`} className="flex items-center justify-center text-red-500 font-bold text-lg animate-in fade-in slide-in-from-bottom-4 zoom-in-95">
+          <X className="w-6 h-6 mr-2" /> Not quite right. Try again! ({attempts})
         </div>
       )}
     </div>

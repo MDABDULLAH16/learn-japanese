@@ -99,3 +99,24 @@ export const saveQuizScore = async (userId: string, newScore: number) => {
   revalidatePath('/')
   revalidatePath('/quiz')
 }
+
+let kuroshiroInstance: any = null
+
+export const convertToRomaji = async (japaneseText: string) => {
+  try {
+    if (!kuroshiroInstance) {
+      // Lazy load to avoid affecting startup performance
+      // @ts-ignore
+      const Kuroshiro = (await import("kuroshiro")).default
+      // @ts-ignore
+      const KuromojiAnalyzer = (await import("kuroshiro-analyzer-kuromoji")).default
+      kuroshiroInstance = new Kuroshiro()
+      await kuroshiroInstance.init(new KuromojiAnalyzer())
+    }
+    const romaji = await kuroshiroInstance.convert(japaneseText, { to: "romaji", mode: "spaced" })
+    return romaji
+  } catch (error) {
+    console.error("Romaji conversion error:", error)
+    return null
+  }
+}
