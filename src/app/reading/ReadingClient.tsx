@@ -23,15 +23,15 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
   const [showHint, setShowHint] = useState(false)
   const [attempts, setAttempts] = useState(0)
   const [spokenRomaji, setSpokenRomaji] = useState<string | null>(null)
-  
+
   const currentCategory = selectedLevel ? readingData[selectedLevel] : null
   const currentItem = currentCategory?.items[currentIndex]
-  
+
   const currentItemRef = useRef(currentItem)
   useEffect(() => {
     currentItemRef.current = currentItem
   }, [currentItem])
-  
+
   const recognitionRef = useRef<any>(null)
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
         setHasSupport(false)
       }
     }
-    
+
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.abort()
@@ -59,24 +59,24 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
   const toggleListening = () => {
     if (isListening) {
       if (recognitionRef.current) {
-        try { recognitionRef.current.stop() } catch (e) {}
+        try { recognitionRef.current.stop() } catch (e) { }
       }
       setIsListening(false)
     } else {
       setTranscript("")
       setResult(null)
-      
+
       if (recognitionRef.current) {
         recognitionRef.current.onresult = (event: any) => {
           const current = event.resultIndex
           const results = event.results[current]
-          
+
           let bestTranscript = results[0].transcript
           let isMatch = false
           const item = currentItemRef.current
 
           if (!item) return
-          
+
           if (!bestTranscript.trim()) {
             bestTranscript = "(could not recognize)"
           }
@@ -86,15 +86,15 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           // Loop through all alternatives
           for (let i = 0; i < results.length; i++) {
             const text = results[i].transcript
-            
+
             const normalizedSpoken = text.replace(/\s+/g, '')
             const normalizedTarget = item.japanese.replace(/\s+/g, '')
             const spokenLower = normalizedSpoken.toLowerCase()
             const isDigitMatch = /^\d+$/.test(normalizedSpoken) && item.meaning.includes(normalizedSpoken)
-            
+
             if (
-              normalizedSpoken.includes(normalizedTarget) || 
-              normalizedTarget.includes(normalizedSpoken) || 
+              normalizedSpoken.includes(normalizedTarget) ||
+              normalizedTarget.includes(normalizedSpoken) ||
               text.includes(item.japanese) ||
               spokenLower === targetRomaji ||
               spokenLower.includes(targetRomaji) ||
@@ -105,12 +105,12 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
               break
             }
           }
-          
+
           setTranscript(bestTranscript)
           if (isMatch) {
             setResult("success")
             if (recognitionRef.current) {
-               try { recognitionRef.current.stop() } catch (e) {}
+              try { recognitionRef.current.stop() } catch (e) { }
             }
             // Fetch Romaji for the correct answer to display in the UI
             if (!/^\d+$/.test(bestTranscript) && !bestTranscript.startsWith("(")) {
@@ -124,11 +124,11 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
               convertToRomaji(bestTranscript).then(r => {
                 const rLower = r ? r.toLowerCase() : null
                 if (rLower) setSpokenRomaji(rLower)
-                
+
                 if (rLower && rLower.replace(/\s+/g, '') === targetRomaji) {
                   setResult("success")
                   if (recognitionRef.current) {
-                    try { recognitionRef.current.stop() } catch (e) {}
+                    try { recognitionRef.current.stop() } catch (e) { }
                   }
                 } else {
                   setResult("error")
@@ -247,10 +247,10 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           <p className="text-muted-foreground mb-8">Choose a level to start practicing your pronunciation.</p>
           <div className="grid gap-4 md:grid-cols-3">
             {(Object.entries(readingData) as [ReadingLevel, typeof readingData[ReadingLevel]][]).map(([levelKey, levelData]) => (
-              <Button 
+              <Button
                 key={levelKey}
-                variant="outline" 
-                className="h-auto py-6 flex flex-col gap-2 hover:bg-primary/5 transition-colors" 
+                variant="outline"
+                className="h-auto py-6 flex flex-col gap-2 hover:bg-primary/5 transition-colors"
                 onClick={() => setSelectedLevel(levelKey)}
               >
                 <span className="text-xl font-bold capitalize text-primary">{levelKey}</span>
@@ -332,11 +332,11 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           <div className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight text-primary break-words break-keep px-2 max-w-full text-center leading-tight">
             {currentItem?.japanese}
           </div>
-          
+
           <div className="text-xl text-muted-foreground font-medium mb-4">
             {currentItem?.meaning}
           </div>
-          
+
           <div className="flex items-center gap-3">
             {showHint ? (
               <div className="animate-in fade-in flex items-center bg-muted/30 px-6 py-2 rounded-full">
@@ -350,11 +350,11 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
               </Button>
             )}
 
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={() => playAudio(currentItem?.japanese || "")} 
-              className="rounded-full w-10 h-10 border-primary/20 hover:bg-primary/10" 
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => playAudio(currentItem?.japanese || "")}
+              className="rounded-full w-10 h-10 border-primary/20 hover:bg-primary/10"
               title="Listen to pronunciation"
             >
               <Volume2 className="w-5 h-5 text-primary" />
@@ -362,11 +362,10 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           </div>
 
           {(isListening || transcript || result) && (
-            <div key={attempts + (result === 'success' ? 's' : 'e')} className={`mt-8 px-6 py-3 rounded-2xl w-full text-center text-lg font-medium transition-all duration-300 animate-in fade-in zoom-in-95 ${
-              result === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 shadow-sm shadow-green-500/20' :
-              result === 'error' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 shadow-sm shadow-red-500/20' :
-              'bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 animate-pulse'
-            }`}>
+            <div key={attempts + (result === 'success' ? 's' : 'e')} className={`mt-8 px-6 py-3 rounded-2xl w-full text-center text-lg font-medium transition-all duration-300 animate-in fade-in zoom-in-95 ${result === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 shadow-sm shadow-green-500/20' :
+                result === 'error' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 shadow-sm shadow-red-500/20' :
+                  'bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 animate-pulse'
+              }`}>
               <span className="text-xs uppercase tracking-wider block opacity-70 mb-1">
                 {result === 'error' || result === 'success' ? "You said" : transcript ? "Listening..." : "Listening to your voice..."}
               </span>
@@ -382,29 +381,29 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           )}
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row gap-4 bg-muted/10 pt-6">
-          <Button 
-            variant={isListening ? "destructive" : "default"} 
-            size="lg" 
+          <Button
+            variant={isListening ? "destructive" : "default"}
+            size="lg"
             className="flex-1 w-full sm:w-auto h-16 text-lg relative overflow-hidden group"
             onClick={toggleListening}
           >
             {isListening ? (
               <>
                 <span className="absolute inset-0 bg-red-500/20 animate-pulse"></span>
-                <MicOff className="w-6 h-6 mr-3 z-10" /> 
+                <MicOff className="w-6 h-6 mr-3 z-10" />
                 <span className="z-10">Stop Listening</span>
               </>
             ) : (
               <>
-                <Mic className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" /> 
+                <Mic className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
                 Tap to Speak
               </>
             )}
           </Button>
 
-          <Button 
-            variant={result === 'success' ? 'default' : 'secondary'} 
-            size="lg" 
+          <Button
+            variant={result === 'success' ? 'default' : 'secondary'}
+            size="lg"
             className="flex-1 w-full sm:w-auto h-16 text-lg"
             onClick={nextWord}
           >
@@ -412,7 +411,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           </Button>
         </CardFooter>
       </Card>
-      
+
       {result === 'success' && (
         <div className="flex items-center justify-center text-green-600 font-bold text-lg animate-in fade-in slide-in-from-bottom-4">
           <Check className="w-6 h-6 mr-2" /> Perfect pronunciation!
