@@ -310,7 +310,7 @@ export function QuizClient({ userId }: { userId: string }) {
             <span className="absolute top-0 text-xs font-bold tracking-wider text-muted-foreground bg-secondary px-4 py-1.5 rounded-full uppercase">
               {question.isKatakana ? 'KATAKANA' : 'HIRAGANA'}
             </span>
-            <h2 className="text-8xl sm:text-[140px] font-black text-primary leading-tight mt-10 mb-4 tracking-tight break-words max-w-full text-center">
+            <h2 className="text-6xl sm:text-8xl md:text-[110px] font-black text-primary leading-tight mt-10 mb-4 tracking-tight whitespace-nowrap max-w-full text-center">
               {question.charStr}
             </h2>
             
