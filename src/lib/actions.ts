@@ -117,8 +117,8 @@ export const convertToRomaji = async (japaneseText: string) => {
     }
     const romaji = await kuroshiroInstance.convert(japaneseText, { to: "romaji", mode: "spaced" })
     return romaji
-  } catch (error) {
+  } catch (error: any) {
     console.error("Romaji conversion error:", error)
-    return null
+    return "[ERROR: " + (error.message || String(error)) + "]"
   }
 }
