@@ -8,6 +8,8 @@ import { saveQuizScore } from '@/lib/actions'
 import Link from 'next/link'
 import { ArrowLeft, CheckCircle2, XCircle, Loader2, Lightbulb, RotateCcw } from 'lucide-react'
 import { getAllItemsFlat, Character, HIRAGANA_DATA, KATAKANA_DATA } from '@/lib/alphabetData'
+import confetti from 'canvas-confetti'
+import { Progress } from '@/components/ui/progress'
 
 // Helper to shuffle array
 const shuffle = (array: any[]) => [...array].sort(() => Math.random() - 0.5)
@@ -163,7 +165,8 @@ export function QuizClient({ userId }: { userId: string }) {
 
     const q = questions[currentQuestion]
     if (q.options[index] === q.romajiStr) {
-      setScore(s => s + (showHint ? 5 : 10)) 
+      setScore(s => s + (showHint ? 5 : 10))
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
     } else {
       setWrongQuestions(prev => [...prev, q])
     }
@@ -283,35 +286,53 @@ export function QuizClient({ userId }: { userId: string }) {
   const question = questions[currentQuestion]
 
   // SCREEN 4: Active Quiz
+  const progress = ((currentQuestion) / questions.length) * 100
+
   return (
-    <div className="max-w-2xl mx-auto mt-12 space-y-6">
+    <div className="max-w-2xl mx-auto mt-4 md:mt-12 mb-28 md:mb-0 space-y-5">
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={handleBackToStart} className="text-muted-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" /> Quit
         </Button>
+        <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full">{alphabetType} - {difficulty}</span>
       </div>
 
-      <Card>
-        <CardHeader className="flex flex-row justify-between items-center pb-2">
-          <Badge variant="outline">Question {currentQuestion + 1} of {questions.length}</Badge>
-          <Badge variant={difficulty === 'hard' ? 'destructive' : difficulty === 'medium' ? 'default' : 'secondary'} className="uppercase">
-            {alphabetType} - {difficulty}
-          </Badge>
-          <span className="text-sm font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">XP: {score}</span>
-        </CardHeader>
-        <CardContent className="space-y-8 flex flex-col items-center pt-2">
+      <div className="flex items-center justify-between text-sm font-medium text-muted-foreground px-1">
+        <span>Question {currentQuestion + 1} of {questions.length}</span>
+        <span className="text-amber-500 font-bold bg-amber-500/10 px-3 py-1 rounded-full">XP: {score}</span>
+      </div>
+      <Progress value={progress} className="h-2" />
+
+      <Card className="overflow-hidden border-2 shadow-sm transition-all duration-300">
+        <CardContent className="space-y-6 flex flex-col items-center pt-8">
           
-          <div className="text-center space-y-2">
-            <span className="text-sm font-bold tracking-wider text-muted-foreground bg-secondary px-3 py-1 rounded">
+          <div className="text-center relative w-full flex flex-col items-center justify-center min-h-[220px]">
+            <span className="absolute top-0 text-xs font-bold tracking-wider text-muted-foreground bg-secondary px-4 py-1.5 rounded-full uppercase">
               {question.isKatakana ? 'KATAKANA' : 'HIRAGANA'}
             </span>
-            <h2 className="text-5xl sm:text-7xl md:text-[120px] font-black text-primary leading-tight my-4 tracking-tight break-words break-keep px-2 max-w-full text-center">
+            <h2 className="text-8xl sm:text-[140px] font-black text-primary leading-tight mt-10 mb-4 tracking-tight break-words max-w-full text-center">
               {question.charStr}
             </h2>
-            <p className="text-lg text-foreground font-medium">Select the correct Romaji reading:</p>
+            
+            <div className="absolute right-0 top-0">
+               {!showHint && !hasAnswered && (
+                  <Button variant="ghost" size="icon" onClick={() => setShowHint(true)} className="text-amber-500 hover:text-amber-600 hover:bg-amber-100/50 rounded-full h-12 w-12" title="Need a hint?">
+                    <Lightbulb className="w-7 h-7" />
+                  </Button>
+               )}
+            </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-4 w-full">
+          {(showHint || hasAnswered) && (
+            <p className="text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 px-5 py-3 rounded-lg animate-in fade-in text-center max-w-md border border-amber-100 dark:border-amber-900/50">
+              {showHint && <Lightbulb className="w-4 h-4 inline-block mr-2 -mt-0.5" />}
+              {question.hint || "This combined character doesn't have a direct visual hint. Break it down into its root characters!"}
+            </p>
+          )}
+
+          <p className="text-sm md:text-lg text-foreground font-medium w-full text-left md:text-center mt-2 px-1">Select the correct Romaji reading:</p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 w-full">
             {question.options.map((option, index) => {
               const isSelected = selectedAnswer === index
               const isCorrect = question.romajiStr === option
@@ -329,41 +350,21 @@ export function QuizClient({ userId }: { userId: string }) {
                 <Button 
                   key={index} 
                   variant={variant}
-                  className="h-auto py-4 sm:py-6 text-xl sm:text-2xl md:text-3xl font-medium relative lowercase transition-all hover:bg-primary/10"
+                  className={`h-auto py-5 sm:py-6 text-xl sm:text-2xl font-medium relative lowercase transition-all active:scale-[0.98] ${hasAnswered && isSelected && !isCorrect ? 'animate-in slide-in-from-left-1 slide-in-from-right-1 duration-100' : ''} ${variant === 'outline' ? 'hover:bg-primary/5 hover:border-primary/50' : ''}`}
                   onClick={() => handleAnswer(index)}
                   disabled={hasAnswered}
                 >
                   <span className="whitespace-normal break-words pr-8 w-full text-center">{option}</span>
-                  {hasAnswered && isCorrect && <CheckCircle2 className="absolute right-2 sm:right-4 h-6 w-6 text-green-500 bg-white rounded-full flex-shrink-0" />}
-                  {hasAnswered && isSelected && !isCorrect && <XCircle className="absolute right-2 sm:right-4 h-6 w-6 text-red-500 bg-white rounded-full flex-shrink-0" />}
+                  {hasAnswered && isCorrect && <CheckCircle2 className="absolute right-4 h-6 w-6 text-green-500 bg-white rounded-full flex-shrink-0 animate-in zoom-in" />}
+                  {hasAnswered && isSelected && !isCorrect && <XCircle className="absolute right-4 h-6 w-6 text-red-500 bg-white rounded-full flex-shrink-0 animate-in zoom-in" />}
                 </Button>
               )
             })}
           </div>
 
-          {/* Hint Area */}
-          <div className="w-full mt-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
-                <Lightbulb className="w-5 h-5" />
-                <span className="font-semibold text-sm">Need a hint? (Halves XP for this question)</span>
-              </div>
-              {!showHint && !hasAnswered && (
-                <Button variant="outline" size="sm" onClick={() => setShowHint(true)} className="text-amber-600 border-amber-200 hover:bg-amber-100">
-                  Show Hint
-                </Button>
-              )}
-            </div>
-            {(showHint || hasAnswered) && (
-              <p className="mt-2 text-sm text-muted-foreground animate-in fade-in">
-                {question.hint || "This combined character doesn't have a direct visual hint. Break it down into its root characters!"}
-              </p>
-            )}
-          </div>
-
         </CardContent>
-        <CardFooter className="flex justify-end border-t pt-6 bg-slate-50 dark:bg-slate-900/50 rounded-b-xl">
-          <Button onClick={nextQuestion} disabled={!hasAnswered || isPending} size="lg" className="w-full sm:w-auto font-bold text-lg h-14 px-8">
+        <CardFooter className="flex justify-end border-t bg-slate-50 dark:bg-slate-900/50 rounded-b-xl p-4 fixed bottom-0 left-0 right-0 z-50 md:relative shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none">
+          <Button onClick={nextQuestion} disabled={!hasAnswered || isPending} size="lg" className="w-full md:w-auto font-bold text-lg h-14 md:px-12 transition-all">
             {isPending ? (
               <><Loader2 className="mr-2 h-6 w-6 animate-spin" /> Saving Score...</>
             ) : currentQuestion + 1 === questions.length ? (
