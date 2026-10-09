@@ -15,6 +15,7 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
   const [selectedChar, setSelectedChar] = useState<Character | null>(null)
   const [showHint, setShowHint] = useState(false)
   const [isMobilePlayerExpanded, setIsMobilePlayerExpanded] = useState(false)
+  const [showVoiceSettings, setShowVoiceSettings] = useState(false)
   
   const [isPending, startTransition] = useTransition()
   const [voiceType, setVoiceType] = useState<'female' | 'male'>('female')
@@ -110,6 +111,7 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
   const handleClose = () => {
     setSelectedChar(null)
     setIsMobilePlayerExpanded(false)
+    setShowVoiceSettings(false)
   }
 
   const markLearned = () => {
@@ -355,83 +357,97 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
           <>
             {/* FULL SCREEN PLAYER */}
             {isMobilePlayerExpanded && (
-              <div className="fixed inset-0 z-50 bg-background flex flex-col animate-in slide-in-from-bottom-full duration-300">
+              <div className="fixed inset-0 z-[60] bg-background flex flex-col animate-in slide-in-from-bottom-full duration-300">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b">
                   <Button variant="ghost" size="icon" onClick={() => setIsMobilePlayerExpanded(false)}>
                     <ChevronDown className="w-6 h-6" />
                   </Button>
                   <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Now Learning</span>
-                  <Button variant="ghost" size="icon" onClick={handleClose}>
-                    <X className="w-6 h-6" />
+                  <Button variant="ghost" size="icon" onClick={() => setShowVoiceSettings(true)}>
+                    <Settings2 className="w-5 h-5 text-muted-foreground" />
                   </Button>
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center space-y-6 pb-[200px]">
-                  <div className="text-[150px] font-black text-primary drop-shadow-sm leading-none">
-                    {selectedChar.char}
-                  </div>
-                  <div className="text-5xl font-light text-muted-foreground lowercase">
-                    {selectedChar.romaji}
-                  </div>
-
-                  <div className="w-full max-w-sm pt-6 space-y-4">
-                    {/* Hint System */}
-                    <div className="w-full bg-slate-100 dark:bg-slate-900 rounded-xl p-4 relative overflow-hidden group">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Lightbulb className="w-5 h-5 text-amber-500" />
-                        <span className="font-semibold text-sm">Memorization Hint</span>
-                      </div>
-                      {showHint || !selectedChar.hint ? (
-                        <p className="text-sm text-muted-foreground animate-in fade-in slide-in-from-top-2">
-                          {selectedChar.hint || "No visual hint available for this combined character yet. Try breaking it down!"}
-                        </p>
-                      ) : (
-                        <Button variant="secondary" className="w-full mt-2" onClick={() => setShowHint(true)}>
-                          Reveal Hint
-                        </Button>
-                      )}
+                <div className="flex-1 flex flex-col p-6 overflow-hidden relative">
+                  
+                  {/* Big Character */}
+                  <div className="flex-1 flex flex-col items-center justify-center min-h-[25vh]">
+                    <div className="text-[140px] font-black text-primary drop-shadow-sm leading-none mb-2">
+                      {selectedChar.char}
                     </div>
-
-                    <div className="flex gap-2 w-full">
-                      <details className="flex-1 group border border-border/50 bg-slate-50/50 dark:bg-slate-900/50 rounded-xl p-3 [&_summary::-webkit-details-marker]:hidden">
-                        <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-muted-foreground outline-none uppercase tracking-wider hover:text-foreground transition-colors">
-                          <span className="flex items-center gap-2">
-                            <Settings2 className="w-4 h-4" />
-                            Voice Setup
-                          </span>
-                          <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
-                        </summary>
-                        <div className="pt-4 space-y-4">
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Voice Type</label>
-                            <div className="flex gap-2">
-                              <Button size="sm" variant={voiceType === 'female' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('female'); setSelectedVoiceName(''); }}>Female</Button>
-                              <Button size="sm" variant={voiceType === 'male' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('male'); setSelectedVoiceName(''); }}>Male</Button>
-                            </div>
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Speed</label>
-                            <div className="flex gap-2">
-                              <Button size="sm" variant={speechRate === 0.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(0.5)}>Slow</Button>
-                              <Button size="sm" variant={speechRate === 1 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1)}>Normal</Button>
-                              <Button size="sm" variant={speechRate === 1.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1.5)}>Fast</Button>
-                            </div>
-                          </div>
-                        </div>
-                      </details>
-
-                      <Button 
-                        variant="outline" 
-                        className="w-12 h-[46px] px-0 flex-shrink-0"
-                        onClick={() => playPronunciation(selectedChar.char)}
-                      >
-                        <Volume2 className="h-5 w-5 text-primary" />
-                      </Button>
+                    <div className="text-4xl font-light text-muted-foreground lowercase">
+                      {selectedChar.romaji}
                     </div>
+                  </div>
 
+                  {/* Carousel (Middle) */}
+                  <div className="w-full py-2 -mx-6 px-6 w-[calc(100%+3rem)] relative">
+                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-2">Slide to change</div>
+                    <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x pb-4 px-2">
+                      {categoryData.items.filter(i => i.char !== '').map((item, idx) => {
+                        const itemId = `${activeScript}-${item.romaji}-${item.char}`
+                        const isLearned = completedIds.includes(itemId)
+                        const isSelected = selectedChar?.char === item.char
+
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              setSelectedChar(item)
+                              setShowHint(false)
+                              playPronunciation(item.char)
+                            }}
+                            className={`
+                              flex-shrink-0 snap-center w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-medium transition-all
+                              ${isSelected ? 'bg-primary text-primary-foreground scale-110 shadow-xl ring-4 ring-primary/30 z-10' : 'bg-card border shadow-sm hover:border-primary'}
+                              ${isLearned && !isSelected ? 'opacity-70 text-green-600 dark:text-green-400 bg-green-50/50 dark:bg-green-900/20' : ''}
+                            `}
+                          >
+                            <span className="relative z-10">{item.char}</span>
+                            {isLearned && !isSelected && <CheckCircle2 className="absolute top-2 right-2 w-4 h-4 text-green-500" />}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Play & Hint Controls */}
+                  <div className="flex items-center justify-center gap-12 py-6">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className={`w-14 h-14 rounded-full transition-colors ${showHint ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/40' : 'text-muted-foreground hover:bg-muted'}`}
+                      onClick={() => setShowHint(!showHint)}
+                    >
+                      <Lightbulb className="w-7 h-7" />
+                    </Button>
+
+                    <Button 
+                      variant="default" 
+                      size="icon" 
+                      className="w-24 h-24 rounded-full shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
+                      onClick={() => playPronunciation(selectedChar.char)}
+                    >
+                      <Volume2 className="w-12 h-12 ml-1" />
+                    </Button>
+
+                    {/* Empty div for balancing flex layout */}
+                    <div className="w-14 h-14" />
+                  </div>
+
+                  {/* Hint Text Area */}
+                  <div className="h-12 flex items-center justify-center">
+                    {showHint && (
+                      <p className="text-sm text-amber-600 dark:text-amber-400 text-center animate-in fade-in slide-in-from-bottom-2 font-medium px-4">
+                        {selectedChar.hint || "No visual hint available. Try breaking it down!"}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Mark as Learned (Bottom) */}
+                  <div className="pt-4 mt-auto">
                     {(() => {
                       const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
                       const isLearned = completedIds.includes(itemId)
@@ -440,7 +456,7 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                         <Button 
                           variant={isLearned ? "secondary" : "default"}
                           size="lg"
-                          className={`w-full h-16 text-xl font-bold transition-all duration-300 ${isLearned ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400' : ''}`}
+                          className={`w-full h-16 text-xl font-bold rounded-2xl transition-all duration-300 ${isLearned ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400' : ''}`}
                           onClick={markLearned}
                           disabled={isPending || isLearned}
                         >
@@ -456,37 +472,72 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
                     })()}
                   </div>
                 </div>
+                
+                {/* VOICE SETTINGS POPUP */}
+                {showVoiceSettings && (
+                  <div className="absolute inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-end animate-in fade-in" onClick={() => setShowVoiceSettings(false)}>
+                    <div 
+                      className="bg-card w-full rounded-t-3xl border-t shadow-[0_-20px_60px_rgba(0,0,0,0.5)] p-6 pb-safe animate-in slide-in-from-bottom-full duration-300"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex justify-between items-center mb-6">
+                        <h3 className="font-bold text-lg flex items-center gap-2"><Settings2 className="w-5 h-5"/> Voice Settings</h3>
+                        <Button variant="ghost" size="icon" className="rounded-full bg-muted" onClick={() => setShowVoiceSettings(false)}>
+                          <X className="w-5 h-5" />
+                        </Button>
+                      </div>
+                      
+                      <div className="space-y-6">
+                        <div className="space-y-3">
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Voice Type</label>
+                          <div className="flex gap-2">
+                            <Button size="lg" variant={voiceType === 'female' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('female'); setSelectedVoiceName(''); }}>Female</Button>
+                            <Button size="lg" variant={voiceType === 'male' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('male'); setSelectedVoiceName(''); }}>Male</Button>
+                          </div>
+                        </div>
 
-                {/* Bottom Slider Grid */}
-                <div className="absolute bottom-0 left-0 right-0 bg-card/90 backdrop-blur-md border-t pt-4 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
-                  <div className="px-4 text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Slide to change character</div>
-                  <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x px-4 pb-4">
-                    {categoryData.items.filter(i => i.char !== '').map((item, idx) => {
-                      const itemId = `${activeScript}-${item.romaji}-${item.char}`
-                      const isLearned = completedIds.includes(itemId)
-                      const isSelected = selectedChar?.char === item.char
+                        {voices.length > 0 && (
+                          <div className="space-y-3">
+                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Device Voices</label>
+                            <select 
+                              className="w-full text-sm border rounded-xl p-4 bg-background text-foreground"
+                              value={selectedVoiceName}
+                              onChange={(e) => setSelectedVoiceName(e.target.value)}
+                            >
+                              <option value="">Auto-select (Based on Type)</option>
+                              {voices.map(v => (
+                                <option key={v.name} value={v.name}>{v.name} {v.localService ? '(Local)' : '(Online)'}</option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+                        
+                        <div className="space-y-3">
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Speed</label>
+                          <div className="flex gap-2">
+                            <Button size="lg" variant={speechRate === 0.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(0.5)}>Slow</Button>
+                            <Button size="lg" variant={speechRate === 1 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1)}>Normal</Button>
+                            <Button size="lg" variant={speechRate === 1.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1.5)}>Fast</Button>
+                          </div>
+                        </div>
 
-                      return (
-                        <button
-                          key={idx}
-                          onClick={() => {
-                            setSelectedChar(item)
-                            setShowHint(false)
-                            playPronunciation(item.char)
-                          }}
-                          className={`
-                            flex-shrink-0 snap-center w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-medium transition-all
-                            ${isSelected ? 'bg-primary text-primary-foreground scale-110 shadow-lg ring-4 ring-primary/30 z-10' : 'bg-background border shadow-sm hover:border-primary'}
-                            ${isLearned && !isSelected ? 'opacity-70 text-green-600 dark:text-green-400 bg-green-50/50 dark:bg-green-900/20' : ''}
-                          `}
-                        >
-                          <span className="relative z-10">{item.char}</span>
-                          {isLearned && !isSelected && <CheckCircle2 className="absolute top-2 right-2 w-4 h-4 text-green-500" />}
-                        </button>
-                      )
-                    })}
+                        <div className="space-y-3 pb-4">
+                          <div className="flex justify-between items-center">
+                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Volume</label>
+                            <span className="text-sm font-bold text-muted-foreground">{Math.round(volume * 100)}%</span>
+                          </div>
+                          <input 
+                            type="range" 
+                            min="0" max="1" step="0.1" 
+                            value={volume} 
+                            onChange={(e) => setVolume(parseFloat(e.target.value))}
+                            className="w-full accent-primary cursor-pointer h-2 bg-muted rounded-full"
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             )}
 
