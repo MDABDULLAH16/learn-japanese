@@ -4,28 +4,75 @@ import { useState, useEffect, useRef } from "react"
 import { readingData, ReadingItem, ReadingLevel } from "@/lib/readingData"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Mic, MicOff, Check, X, ArrowRight, RotateCcw, ArrowLeft, Lightbulb, Volume2 } from "lucide-react"
+import { Mic, MicOff, Check, X, ArrowRight, RotateCcw, ArrowLeft, Lightbulb, Volume2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
 import { convertToRomaji } from "@/lib/actions"
 import confetti from "canvas-confetti"
+
 interface ReadingClientProps {
   userId: string
+}
+
+type ReadingHistory = {
+  transcript: string;
+  result: "success" | "error" | null;
+  spokenRomaji: string | null;
+  attempts: number;
 }
 
 export default function ReadingClient({ userId }: ReadingClientProps) {
   const [selectedLevel, setSelectedLevel] = useState<ReadingLevel | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isListening, setIsListening] = useState(false)
-  const [transcript, setTranscript] = useState("")
-  const [result, setResult] = useState<"success" | "error" | null>(null)
   const [hasSupport, setHasSupport] = useState(true)
   const [showHint, setShowHint] = useState(false)
-  const [attempts, setAttempts] = useState(0)
-  const [spokenRomaji, setSpokenRomaji] = useState<string | null>(null)
+  const [readingHistory, setReadingHistory] = useState<Record<number, ReadingHistory>>({})
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const currentCategory = selectedLevel ? readingData[selectedLevel] : null
   const currentItem = currentCategory?.items[currentIndex]
+
+  const currentHistory = readingHistory[currentIndex] || { transcript: "", result: null, spokenRomaji: null, attempts: 0 }
+  const { transcript, result, spokenRomaji, attempts } = currentHistory
+
+  const updateHistory = (update: Partial<ReadingHistory> | ((prev: ReadingHistory) => Partial<ReadingHistory>)) => {
+    setReadingHistory(prev => {
+      const cur = prev[currentIndex] || { transcript: "", result: null, spokenRomaji: null, attempts: 0 }
+      const newValues = typeof update === 'function' ? update(cur) : update
+      return {
+        ...prev,
+        [currentIndex]: { ...cur, ...newValues }
+      }
+    })
+  }
+
+  // Load Session
+  useEffect(() => {
+    const saved = sessionStorage.getItem('readingSession')
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved)
+        if (parsed.selectedLevel) {
+          setSelectedLevel(parsed.selectedLevel)
+          setCurrentIndex(parsed.currentIndex || 0)
+          setReadingHistory(parsed.readingHistory || {})
+        }
+      } catch (e) {}
+    }
+    setIsLoaded(true)
+  }, [])
+
+  // Save Session
+  useEffect(() => {
+    if (isLoaded && selectedLevel && currentCategory && currentIndex < currentCategory.items.length) {
+      sessionStorage.setItem('readingSession', JSON.stringify({
+        selectedLevel, currentIndex, readingHistory
+      }))
+    } else if (isLoaded && currentCategory && currentIndex >= currentCategory.items.length) {
+      sessionStorage.removeItem('readingSession')
+    }
+  }, [selectedLevel, currentIndex, readingHistory, currentCategory, isLoaded])
 
   const currentItemRef = useRef(currentItem)
   useEffect(() => {
@@ -63,8 +110,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
       }
       setIsListening(false)
     } else {
-      setTranscript("")
-      setResult(null)
+      updateHistory({ transcript: "", result: null, spokenRomaji: null })
 
       if (recognitionRef.current) {
         recognitionRef.current.onresult = (event: any) => {
@@ -106,9 +152,10 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
             }
           }
 
-          setTranscript(bestTranscript)
+          updateHistory({ transcript: bestTranscript })
+          
           if (isMatch) {
-            setResult("success")
+            updateHistory({ result: "success" })
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
             if (recognitionRef.current) {
               try { recognitionRef.current.stop() } catch (e) { }
@@ -116,49 +163,42 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
             // Fetch Romaji for the correct answer to display in the UI
             if (!/^\d+$/.test(bestTranscript) && !bestTranscript.startsWith("(")) {
               convertToRomaji(bestTranscript).then(r => {
-                if (r) setSpokenRomaji(r.toLowerCase())
+                if (r) updateHistory({ spokenRomaji: r.toLowerCase() })
               })
             }
           } else {
-            // Check Romaji asynchronously to handle Kanji conversions (e.g., spoken 'mizu' -> Chrome returns '水' -> target is 'みず')
+            // Check Romaji asynchronously to handle Kanji conversions
             if (!/^\d+$/.test(bestTranscript) && !bestTranscript.startsWith("(")) {
               convertToRomaji(bestTranscript).then(r => {
                 const rLower = r ? r.toLowerCase() : null
-                if (rLower) setSpokenRomaji(rLower)
+                if (rLower) updateHistory({ spokenRomaji: rLower })
 
                 if (rLower && rLower.replace(/\s+/g, '') === targetRomaji) {
-                  setResult("success")
+                  updateHistory({ result: "success" })
                   confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
                   if (recognitionRef.current) {
                     try { recognitionRef.current.stop() } catch (e) { }
                   }
                 } else {
-                  setResult("error")
-                  setAttempts(a => a + 1)
+                  updateHistory(cur => ({ result: "error", attempts: cur.attempts + 1 }))
                 }
               })
             } else {
-              setResult("error")
-              setAttempts(a => a + 1)
+              updateHistory(cur => ({ result: "error", attempts: cur.attempts + 1 }))
             }
           }
         }
 
         recognitionRef.current.onnomatch = () => {
-          setTranscript("(could not recognize)")
-          setResult("error")
-          setAttempts(a => a + 1)
+          updateHistory(cur => ({ transcript: "(could not recognize)", result: "error", attempts: cur.attempts + 1 }))
         }
 
         recognitionRef.current.onerror = (event: any) => {
           console.error("Speech recognition error", event.error)
           if (event.error === 'no-speech') {
-            setTranscript("(no speech detected)")
-            setResult("error")
-            setAttempts(a => a + 1)
+            updateHistory(cur => ({ transcript: "(no speech detected)", result: "error", attempts: cur.attempts + 1 }))
           } else {
-            setTranscript(`(Error: ${event.error})`)
-            setResult("error")
+            updateHistory({ transcript: `(Error: ${event.error})`, result: "error" })
             setIsListening(false)
           }
           if (event.error === 'not-allowed') {
@@ -193,27 +233,17 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
   const nextWord = () => {
     if (currentCategory && currentIndex < currentCategory.items.length - 1) {
       setCurrentIndex(currentIndex + 1)
-      setTranscript("")
-      setSpokenRomaji(null)
-      setResult(null)
       setShowHint(false)
-      setAttempts(0)
     } else if (currentCategory && currentIndex >= currentCategory.items.length - 1) {
       setCurrentIndex(currentIndex + 1) // to trigger completion screen
       setShowHint(false)
-      setAttempts(0)
-      setSpokenRomaji(null)
     }
   }
 
   const prevWord = () => {
     if (currentCategory && currentIndex > 0) {
       setCurrentIndex(currentIndex - 1)
-      setTranscript("")
-      setSpokenRomaji(null)
-      setResult(null)
       setShowHint(false)
-      setAttempts(0)
     }
   }
 
@@ -232,11 +262,9 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
     if (!touchStartX.current || !touchEndX.current) return;
     const diff = touchStartX.current - touchEndX.current;
     
-    // Swipe left (next word)
     if (diff > 50) {
       nextWord();
     }
-    // Swipe right (prev word)
     if (diff < -50) {
       prevWord();
     }
@@ -247,21 +275,17 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
 
   const restart = () => {
     setCurrentIndex(0)
-    setTranscript("")
-    setSpokenRomaji(null)
-    setResult(null)
+    setReadingHistory({})
     setShowHint(false)
-    setAttempts(0)
+    sessionStorage.removeItem('readingSession')
   }
 
   const backToMenu = () => {
     setSelectedLevel(null)
     setCurrentIndex(0)
-    setTranscript("")
-    setSpokenRomaji(null)
-    setResult(null)
+    setReadingHistory({})
     setShowHint(false)
-    setAttempts(0)
+    sessionStorage.removeItem('readingSession')
   }
 
   if (!hasSupport) {
@@ -275,6 +299,8 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
       </Card>
     )
   }
+
+  if (!isLoaded) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
 
   // SCREEN 1: Level Selection
   if (!selectedLevel) {
@@ -327,10 +353,9 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
               <Button onClick={() => {
                 setSelectedLevel(nextLevelKey)
                 setCurrentIndex(0)
-                setTranscript("")
-                setSpokenRomaji(null)
-                setResult(null)
+                setReadingHistory({})
                 setShowHint(false)
+                sessionStorage.removeItem('readingSession')
               }} size="lg">
                 Next Level <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -364,7 +389,7 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
       <Progress value={progress} className="h-2" />
 
       <Card 
-        className="overflow-hidden border-2 transition-all duration-300"
+        className="overflow-hidden border-2 transition-all duration-300 shadow-sm"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -426,23 +451,29 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
             </div>
           )}
         </CardContent>
-        <CardFooter className="flex flex-row sm:flex-row gap-3 sm:gap-4 fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-md border-t z-50 md:relative md:p-6 md:pt-6 md:bg-muted/10 md:border-t-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none">
+        <CardFooter className="flex justify-between border-t bg-slate-50 dark:bg-slate-900/50 rounded-b-xl p-4 fixed bottom-0 left-0 right-0 z-50 md:relative shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none gap-2">
+          
+          <Button onClick={prevWord} disabled={currentIndex === 0} variant="outline" size="lg" className="h-14 md:h-16 px-3 md:px-8">
+            <ChevronLeft className="w-5 h-5 md:mr-2" />
+            <span className="hidden md:inline">Previous</span>
+          </Button>
+
           <Button
-            variant={isListening ? "destructive" : "default"}
+            variant={isListening ? "destructive" : "outline"}
             size="lg"
-            className="flex-1 w-full sm:w-auto h-16 text-lg relative overflow-hidden group"
+            className="flex-1 max-w-[200px] h-14 md:h-16 text-sm md:text-base relative overflow-hidden group border-primary/20 hover:bg-primary/5"
             onClick={toggleListening}
           >
             {isListening ? (
               <>
                 <span className="absolute inset-0 bg-red-500/20 animate-pulse"></span>
-                <MicOff className="w-6 h-6 mr-3 z-10" />
-                <span className="z-10">Stop Listening</span>
+                <MicOff className="w-5 h-5 md:w-6 md:h-6 mr-2 z-10" />
+                <span className="z-10">Stop</span>
               </>
             ) : (
               <>
-                <Mic className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
-                Tap to Speak
+                <Mic className="w-5 h-5 md:w-6 md:h-6 mr-2 group-hover:scale-110 transition-transform text-primary" />
+                <span className="text-primary font-semibold">Speak</span>
               </>
             )}
           </Button>
@@ -450,10 +481,12 @@ export default function ReadingClient({ userId }: ReadingClientProps) {
           <Button
             variant={result === 'success' ? 'default' : 'secondary'}
             size="lg"
-            className="flex-1 w-full sm:w-auto h-16 text-lg"
+            className="flex-1 max-w-[200px] h-14 md:h-16 text-sm md:text-base font-bold transition-all"
             onClick={nextWord}
           >
-            {result === 'success' ? 'Next Word' : 'Skip Word'} <ArrowRight className="w-5 h-5 ml-2" />
+            <span className="hidden sm:inline">{result === 'success' ? 'Next Word' : 'Skip Word'}</span>
+            <span className="sm:hidden">{result === 'success' ? 'Next' : 'Skip'}</span> 
+            <ChevronRight className="w-5 h-5 ml-1 md:ml-2" />
           </Button>
         </CardFooter>
       </Card>

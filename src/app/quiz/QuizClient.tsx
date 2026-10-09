@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect, useRef } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { saveQuizScore } from '@/lib/actions'
 import Link from 'next/link'
-import { ArrowLeft, CheckCircle2, XCircle, Loader2, Lightbulb, RotateCcw } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, XCircle, Loader2, Lightbulb, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react'
 import { getAllItemsFlat, Character, HIRAGANA_DATA, KATAKANA_DATA } from '@/lib/alphabetData'
 import confetti from 'canvas-confetti'
 import { Progress } from '@/components/ui/progress'
@@ -32,11 +32,45 @@ export function QuizClient({ userId }: { userId: string }) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [score, setScore] = useState(0)
   const [showResults, setShowResults] = useState(false)
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
-  const [hasAnswered, setHasAnswered] = useState(false)
+  const [answersHistory, setAnswersHistory] = useState<Record<number, number>>({})
   const [showHint, setShowHint] = useState(false)
   const [wrongQuestions, setWrongQuestions] = useState<Question[]>([])
   const [isPending, startTransition] = useTransition()
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  const selectedAnswer = answersHistory[currentQuestion]
+  const hasAnswered = selectedAnswer !== undefined
+
+  // Load from SessionStorage
+  useEffect(() => {
+    const saved = sessionStorage.getItem('quizSession')
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved)
+        if (parsed.questions && parsed.questions.length > 0) {
+          setAlphabetType(parsed.alphabetType)
+          setDifficulty(parsed.difficulty)
+          setQuestions(parsed.questions)
+          setCurrentQuestion(parsed.currentQuestion)
+          setScore(parsed.score)
+          setAnswersHistory(parsed.answersHistory || {})
+          setWrongQuestions(parsed.wrongQuestions || [])
+        }
+      } catch (e) {}
+    }
+    setIsLoaded(true)
+  }, [])
+
+  // Sync to SessionStorage
+  useEffect(() => {
+    if (isLoaded && questions.length > 0 && alphabetType && difficulty && !showResults) {
+      sessionStorage.setItem('quizSession', JSON.stringify({
+        alphabetType, difficulty, questions, currentQuestion, score, answersHistory, wrongQuestions
+      }))
+    } else if (isLoaded && showResults) {
+      sessionStorage.removeItem('quizSession')
+    }
+  }, [questions, currentQuestion, score, answersHistory, wrongQuestions, alphabetType, difficulty, showResults, isLoaded])
 
   const getSourceData = (type: AlphabetType, level: Difficulty) => {
     let source: Character[] = []
@@ -152,44 +186,82 @@ export function QuizClient({ userId }: { userId: string }) {
     setCurrentQuestion(0)
     setScore(0)
     setShowResults(false)
-    setSelectedAnswer(null)
-    setHasAnswered(false)
+    setAnswersHistory({})
     setShowHint(false)
     setWrongQuestions([])
   }
 
   const handleAnswer = (index: number) => {
     if (hasAnswered) return
-    setSelectedAnswer(index)
-    setHasAnswered(true)
+    setAnswersHistory(prev => ({...prev, [currentQuestion]: index}))
 
     const q = questions[currentQuestion]
     if (q.options[index] === q.romajiStr) {
       setScore(s => s + (showHint ? 5 : 10))
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
     } else {
-      setWrongQuestions(prev => [...prev, q])
+      setWrongQuestions(prev => {
+        if (!prev.find(wq => wq.charStr === q.charStr)) {
+          return [...prev, q]
+        }
+        return prev
+      })
     }
   }
 
   const nextQuestion = () => {
     if (currentQuestion + 1 < questions.length) {
       setCurrentQuestion(currentQuestion + 1)
-      setSelectedAnswer(null)
-      setHasAnswered(false)
       setShowHint(false)
     } else {
       startTransition(async () => {
         if (score > 0) await saveQuizScore(userId, score)
+        sessionStorage.removeItem('quizSession')
         setShowResults(true)
       })
+    }
+  }
+
+  const prevQuestion = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1)
+      setShowHint(false)
     }
   }
 
   const handleBackToStart = () => {
     setAlphabetType(null)
     setDifficulty(null)
+    sessionStorage.removeItem('quizSession')
   }
+
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const diff = touchStartX.current - touchEndX.current;
+    
+    if (diff > 50 && hasAnswered) {
+      nextQuestion();
+    }
+    if (diff < -50) {
+      prevQuestion();
+    }
+    
+    touchStartX.current = null;
+    touchEndX.current = null;
+  }
+
+  if (!isLoaded) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
 
   // SCREEN 1: Alphabet Type Selection
   if (!alphabetType) {
@@ -303,7 +375,12 @@ export function QuizClient({ userId }: { userId: string }) {
       </div>
       <Progress value={progress} className="h-2" />
 
-      <Card className="overflow-hidden border-2 shadow-sm transition-all duration-300">
+      <Card 
+        className="overflow-hidden border-2 shadow-sm transition-all duration-300"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <CardContent className="space-y-6 flex flex-col items-center pt-8">
           
           <div className="text-center relative w-full flex flex-col items-center justify-center min-h-[220px]">
@@ -369,14 +446,19 @@ export function QuizClient({ userId }: { userId: string }) {
           </div>
 
         </CardContent>
-        <CardFooter className="flex justify-end border-t bg-slate-50 dark:bg-slate-900/50 rounded-b-xl p-4 fixed bottom-0 left-0 right-0 z-50 md:relative shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none">
-          <Button onClick={nextQuestion} disabled={!hasAnswered || isPending} size="lg" className="w-full md:w-auto font-bold text-lg h-14 md:px-12 transition-all">
+        <CardFooter className="flex justify-between border-t bg-slate-50 dark:bg-slate-900/50 rounded-b-xl p-4 fixed bottom-0 left-0 right-0 z-50 md:relative shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none gap-2">
+          <Button onClick={prevQuestion} disabled={currentQuestion === 0} variant="outline" size="lg" className="h-14 px-4 md:px-8">
+            <ChevronLeft className="w-5 h-5 md:mr-2" />
+            <span className="hidden md:inline">Previous</span>
+          </Button>
+
+          <Button onClick={nextQuestion} disabled={!hasAnswered || isPending} size="lg" className="flex-1 md:flex-none font-bold text-lg h-14 md:px-12 transition-all">
             {isPending ? (
-              <><Loader2 className="mr-2 h-6 w-6 animate-spin" /> Saving Score...</>
+              <><Loader2 className="mr-2 h-6 w-6 animate-spin" /> Saving...</>
             ) : currentQuestion + 1 === questions.length ? (
-              'Finish Quiz & Save Score'
+              'Finish Quiz'
             ) : (
-              'Next Question'
+              <>Next <ChevronRight className="w-5 h-5 ml-2" /></>
             )}
           </Button>
         </CardFooter>
