@@ -4,7 +4,7 @@ import { useState, useTransition, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { markItemLearned, markAllLearned } from '@/lib/actions'
-import { ArrowLeft, CheckCircle2, Volume2, Lightbulb, CheckCheck, ChevronDown, Settings2, X } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Volume2, Lightbulb, CheckCheck, ChevronDown, Settings2, X, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { HIRAGANA_DATA, KATAKANA_DATA, Character, AlphabetCategory } from '@/lib/alphabetData'
 import confetti from 'canvas-confetti'
@@ -208,144 +208,194 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
           </div>
         </div>
 
+        {/* DESKTOP PANEL */}
         {selectedChar && (
-          <>
-            {/* Mobile overlay backdrop to click and close */}
-            <div 
-              className="fixed inset-0 bg-black/40 z-40 md:hidden animate-in fade-in duration-200 backdrop-blur-sm" 
-              onClick={() => setSelectedChar(null)} 
-            />
-            
-            <div className="fixed bottom-0 left-0 right-0 z-50 md:relative md:w-80 md:z-auto animate-in slide-in-from-bottom-full md:animate-none duration-300">
-              <Card className="rounded-b-none md:rounded-xl border-b-0 md:border shadow-[0_-20px_60px_rgba(0,0,0,0.2)] md:shadow-sm max-h-[85vh] overflow-y-auto md:max-h-none md:overflow-visible sticky top-6 bg-background/95 md:bg-card backdrop-blur-md md:backdrop-blur-none">
-                <CardHeader className="text-center pb-2 relative">
-                  <Button variant="ghost" size="icon" className="absolute right-2 top-2 md:hidden hover:bg-muted" onClick={() => setSelectedChar(null)}>
-                    <X className="w-5 h-5 text-muted-foreground" />
-                  </Button>
-                  <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                    Character Detail
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center space-y-6">
-                  <div className="text-8xl sm:text-9xl font-bold py-2 sm:py-6 text-primary">
-                    {selectedChar.char}
+          <div className="hidden md:block w-80">
+            <Card className="sticky top-6 bg-card border shadow-sm">
+              <CardHeader className="text-center pb-2 relative">
+                <Button variant="ghost" size="icon" className="absolute right-2 top-2 hover:bg-muted" onClick={() => setSelectedChar(null)}>
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </Button>
+                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Character Detail
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col items-center space-y-6">
+                <div className="text-8xl font-bold py-6 text-primary">
+                  {selectedChar.char}
+                </div>
+                <div className="text-4xl font-light text-muted-foreground lowercase">
+                  {selectedChar.romaji}
+                </div>
+                
+                {/* Hint System */}
+                <div className="w-full bg-slate-100 dark:bg-slate-900 rounded-lg p-4 relative overflow-hidden group">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Lightbulb className="w-5 h-5 text-amber-500" />
+                    <span className="font-semibold text-sm">Memorization Hint</span>
                   </div>
-                  <div className="text-4xl font-light text-muted-foreground lowercase">
-                    {selectedChar.romaji}
-                  </div>
-                  
-                  {/* Hint System */}
-                  <div className="w-full bg-slate-100 dark:bg-slate-900 rounded-lg p-4 relative overflow-hidden group">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Lightbulb className="w-5 h-5 text-amber-500" />
-                      <span className="font-semibold text-sm">Memorization Hint</span>
-                    </div>
-                    {showHint || !selectedChar.hint ? (
-                      <p className="text-sm text-muted-foreground animate-in fade-in slide-in-from-top-2">
-                        {selectedChar.hint || "No visual hint available for this combined character yet. Try breaking it down!"}
-                      </p>
-                    ) : (
-                      <Button variant="secondary" size="sm" className="w-full mt-2" onClick={() => setShowHint(true)}>
-                        Reveal Hint
-                      </Button>
-                    )}
-                  </div>
+                  {showHint || !selectedChar.hint ? (
+                    <p className="text-sm text-muted-foreground animate-in fade-in slide-in-from-top-2">
+                      {selectedChar.hint || "No visual hint available for this combined character yet. Try breaking it down!"}
+                    </p>
+                  ) : (
+                    <Button variant="secondary" size="sm" className="w-full mt-2" onClick={() => setShowHint(true)}>
+                      Reveal Hint
+                    </Button>
+                  )}
+                </div>
 
-                  <div className="w-full pt-4 md:pt-6 border-t space-y-4">
-                    <details className="group border border-border/50 bg-slate-50/50 dark:bg-slate-900/50 rounded-xl p-3 w-full [&_summary::-webkit-details-marker]:hidden">
-                      <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-muted-foreground outline-none uppercase tracking-wider hover:text-foreground transition-colors">
-                        <span className="flex items-center gap-2">
-                          <Settings2 className="w-4 h-4" />
-                          Voice Settings
-                        </span>
-                        <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
-                      </summary>
-                      <div className="pt-4 space-y-4">
-                        <div className="space-y-2">
-                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Voice Type</label>
-                          <div className="flex gap-2">
-                            <Button size="sm" variant={voiceType === 'female' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('female'); setSelectedVoiceName(''); }}>Female</Button>
-                            <Button size="sm" variant={voiceType === 'male' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('male'); setSelectedVoiceName(''); }}>Male</Button>
-                          </div>
-                        </div>
-
-                        {voices.length > 0 && (
-                          <div className="space-y-2">
-                            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Device Voices</label>
-                            <select 
-                              className="w-full text-sm border rounded-md p-2 bg-background text-foreground"
-                              value={selectedVoiceName}
-                              onChange={(e) => setSelectedVoiceName(e.target.value)}
-                            >
-                              <option value="">Auto-select (Based on Type)</option>
-                              {voices.map(v => (
-                                <option key={v.name} value={v.name}>{v.name} {v.localService ? '(Local)' : '(Online)'}</option>
-                              ))}
-                            </select>
-                          </div>
-                        )}
-
-                        <div className="space-y-2">
-                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Speed</label>
-                          <div className="flex gap-2">
-                            <Button size="sm" variant={speechRate === 0.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(0.5)}>Slow</Button>
-                            <Button size="sm" variant={speechRate === 1 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1)}>Normal</Button>
-                            <Button size="sm" variant={speechRate === 1.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1.5)}>Fast</Button>
-                          </div>
-                        </div>
-
-                        <div className="space-y-2 pb-1">
-                          <div className="flex justify-between items-center">
-                            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Volume</label>
-                            <span className="text-xs text-muted-foreground">{Math.round(volume * 100)}%</span>
-                          </div>
-                          <input 
-                            type="range" 
-                            min="0" max="1" step="0.1" 
-                            value={volume} 
-                            onChange={(e) => setVolume(parseFloat(e.target.value))}
-                            className="w-full accent-primary cursor-pointer"
-                          />
+                <div className="w-full pt-6 border-t space-y-4">
+                  <details className="group border border-border/50 bg-slate-50/50 dark:bg-slate-900/50 rounded-xl p-3 w-full [&_summary::-webkit-details-marker]:hidden">
+                    <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-muted-foreground outline-none uppercase tracking-wider hover:text-foreground transition-colors">
+                      <span className="flex items-center gap-2">
+                        <Settings2 className="w-4 h-4" />
+                        Voice Settings
+                      </span>
+                      <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                    </summary>
+                    <div className="pt-4 space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Voice Type</label>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant={voiceType === 'female' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('female'); setSelectedVoiceName(''); }}>Female</Button>
+                          <Button size="sm" variant={voiceType === 'male' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('male'); setSelectedVoiceName(''); }}>Male</Button>
                         </div>
                       </div>
-                    </details>
 
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-center text-lg h-12 md:h-14"
-                      onClick={() => playPronunciation(selectedChar.char)}
-                    >
-                      <Volume2 className="mr-2 h-5 w-5" /> Play Pronunciation
-                    </Button>
+                      {voices.length > 0 && (
+                        <div className="space-y-2">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Device Voices</label>
+                          <select 
+                            className="w-full text-sm border rounded-md p-2 bg-background text-foreground"
+                            value={selectedVoiceName}
+                            onChange={(e) => setSelectedVoiceName(e.target.value)}
+                          >
+                            <option value="">Auto-select (Based on Type)</option>
+                            {voices.map(v => (
+                              <option key={v.name} value={v.name}>{v.name} {v.localService ? '(Local)' : '(Online)'}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Speed</label>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant={speechRate === 0.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(0.5)}>Slow</Button>
+                          <Button size="sm" variant={speechRate === 1 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1)}>Normal</Button>
+                          <Button size="sm" variant={speechRate === 1.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1.5)}>Fast</Button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 pb-1">
+                        <div className="flex justify-between items-center">
+                          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Volume</label>
+                          <span className="text-xs text-muted-foreground">{Math.round(volume * 100)}%</span>
+                        </div>
+                        <input 
+                          type="range" 
+                          min="0" max="1" step="0.1" 
+                          value={volume} 
+                          onChange={(e) => setVolume(parseFloat(e.target.value))}
+                          className="w-full accent-primary cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                  </details>
+
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-center text-lg h-14"
+                    onClick={() => playPronunciation(selectedChar.char)}
+                  >
+                    <Volume2 className="mr-2 h-5 w-5" /> Play Pronunciation
+                  </Button>
+                  
+                  {(() => {
+                    const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
+                    const isLearned = completedIds.includes(itemId)
                     
-                    {(() => {
-                      const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
-                      const isLearned = completedIds.includes(itemId)
-                      
-                      return (
-                        <Button 
-                          variant={isLearned ? "secondary" : "default"}
-                          className={`w-full justify-center h-14 md:h-16 text-lg font-bold transition-all duration-300 ${isLearned ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400' : ''}`}
-                          onClick={markLearned}
-                          disabled={isPending || isLearned}
-                        >
-                          {isPending ? (
-                             <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary mr-2" /> Saving...</>
-                          ) : isLearned ? (
-                            <><CheckCircle2 className="mr-2 h-6 w-6 text-green-600 dark:text-green-500" /> Learned!</>
-                          ) : (
-                            'Mark as Learned'
-                          )}
-                        </Button>
-                      )
-                    })()}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </>
+                    return (
+                      <Button 
+                        variant={isLearned ? "secondary" : "default"}
+                        className={`w-full justify-center h-16 text-lg font-bold transition-all duration-300 ${isLearned ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400' : ''}`}
+                        onClick={markLearned}
+                        disabled={isPending || isLearned}
+                      >
+                        {isPending ? (
+                           <><Loader2 className="w-5 h-5 animate-spin mr-2" /> Saving...</>
+                        ) : isLearned ? (
+                          <><CheckCircle2 className="mr-2 h-6 w-6 text-green-600 dark:text-green-500" /> Learned!</>
+                        ) : (
+                          'Mark as Learned'
+                        )}
+                      </Button>
+                    )
+                  })()}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
       </div>
+
+      {/* MOBILE MINI-BAR */}
+      <div className="md:hidden">
+        {selectedChar && (
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border shadow-[0_-20px_40px_-10px_rgba(0,0,0,0.15)] pb-safe animate-in slide-in-from-bottom-full duration-300">
+            <div className="p-3 px-4 flex items-center justify-between gap-3">
+              
+              {/* Left: Character Info */}
+              <div className="flex items-center gap-3">
+                <div className="text-4xl font-black text-primary w-12 text-center leading-none">
+                  {selectedChar.char}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-foreground uppercase tracking-wider">{selectedChar.romaji}</span>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{activeScript}</span>
+                </div>
+              </div>
+
+              {/* Right: Actions */}
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="secondary" 
+                  size="icon" 
+                  className="rounded-full w-12 h-12 bg-primary/10 text-primary hover:bg-primary/20 flex-shrink-0"
+                  onClick={() => playPronunciation(selectedChar.char)}
+                >
+                  <Volume2 className="w-5 h-5" />
+                </Button>
+                
+                {(() => {
+                  const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
+                  const isLearned = completedIds.includes(itemId)
+                  
+                  return (
+                    <Button 
+                      variant={isLearned ? "secondary" : "default"}
+                      size="sm"
+                      className={`rounded-full h-12 px-5 font-bold transition-all text-sm flex-shrink-0 ${isLearned ? 'bg-green-100 text-green-700' : ''}`}
+                      onClick={markLearned}
+                      disabled={isPending || isLearned}
+                    >
+                      {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : 
+                       isLearned ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : 
+                       'Mark'}
+                    </Button>
+                  )
+                })()}
+                
+                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full ml-1 flex-shrink-0 text-muted-foreground hover:bg-muted" onClick={() => setSelectedChar(null)}>
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
     </div>
   )
 }
