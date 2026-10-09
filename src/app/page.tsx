@@ -96,7 +96,7 @@ export default async function Dashboard() {
           <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
-                <PlayCircle className="w-6 h-6" /> Practice & Quiz
+                <PlayCircle className="w-6 h-6" /> Alphabet Quiz
               </CardTitle>
               <CardDescription>Test your alphabet knowledge and earn XP.</CardDescription>
             </CardHeader>
@@ -110,12 +110,26 @@ export default async function Dashboard() {
           <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
-                <BookA className="w-6 h-6" /> Vocabulary Practice
+                <BookA className="w-6 h-6" /> Vocabulary Library
               </CardTitle>
-              <CardDescription>Learn new words and practice with flashcards.</CardDescription>
+              <CardDescription>Learn vocabulary for all lessons.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Expand your vocabulary by learning new words and practicing them using interactive flashcards.</p>
+              <p className="text-sm text-muted-foreground">Explore comprehensive word lists with pronunciation, meaning, and Kanji.</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/vocabulary-quiz" className="block group">
+          <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                <Trophy className="w-6 h-6" /> Vocabulary Quiz
+              </CardTitle>
+              <CardDescription>Practice words with multiple-choice questions.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Select a lesson and test your memory by choosing the correct Bangla meaning.</p>
             </CardContent>
           </Card>
         </Link>
