@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { saveQuizScore } from '@/lib/actions'
 import Link from 'next/link'
-import { ArrowLeft, CheckCircle2, XCircle, Loader2, RotateCcw, ChevronLeft, ChevronRight, Trophy } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, XCircle, Loader2, RotateCcw, ChevronLeft, ChevronRight, Trophy, Volume2 } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import confetti from 'canvas-confetti'
 import { VOCABULARY_DATA, VocabularyItem } from '@/lib/vocabularyData'
@@ -217,11 +217,19 @@ export function VocabQuizClient({ userId }: { userId: string }) {
 
   const question = questions[currentQuestion]
 
+  const speakJapanese = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!question) return
+    const utterance = new SpeechSynthesisUtterance(question.vocab.nihongo)
+    utterance.lang = 'ja-JP'
+    window.speechSynthesis.speak(utterance)
+  }
+
   // SCREEN 3: Active Quiz
   const progress = ((currentQuestion) / questions.length) * 100
 
   return (
-    <div className="max-w-2xl mx-auto mt-4 md:mt-12 mb-28 md:mb-0 space-y-5 px-2">
+    <div className="max-w-2xl mx-auto mt-4 md:mt-12 mb-28 md:mb-0 space-y-5 px-2 w-full overflow-x-hidden sm:overflow-x-visible">
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={handleBackToStart} className="text-muted-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" /> Quit
@@ -244,7 +252,17 @@ export function VocabQuizClient({ userId }: { userId: string }) {
         <CardContent className="space-y-6 flex flex-col items-center pt-8">
           
           <div className="text-center relative w-full flex flex-col items-center justify-center min-h-[160px] bg-secondary/10 rounded-xl p-6 border">
-            <h2 className="text-5xl sm:text-7xl font-black text-primary leading-tight drop-shadow-sm mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-3 right-3 text-primary/70 hover:text-primary hover:bg-primary/10 rounded-full h-10 w-10"
+              onClick={speakJapanese}
+              title="Listen to pronunciation"
+            >
+              <Volume2 className="w-5 h-5" />
+            </Button>
+
+            <h2 className="text-4xl sm:text-7xl font-black text-primary leading-tight drop-shadow-sm mb-4 mt-2 break-words whitespace-normal px-2">
               {question.vocab.nihongo}
             </h2>
             {question.vocab.kanji && (

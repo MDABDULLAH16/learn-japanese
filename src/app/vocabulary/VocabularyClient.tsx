@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { ArrowLeft, BookOpen, Eye, EyeOff } from 'lucide-react'
+import { ArrowLeft, BookOpen, Eye, EyeOff, Volume2 } from 'lucide-react'
 
 export function VocabularyClient({ userId }: { userId: string }) {
   const [selectedLesson, setSelectedLesson] = useState<number>(VOCABULARY_DATA.lessons[0].lesson_number)
@@ -14,7 +14,7 @@ export function VocabularyClient({ userId }: { userId: string }) {
   const currentLesson = VOCABULARY_DATA.lessons.find(l => l.lesson_number === selectedLesson) || VOCABULARY_DATA.lessons[0]
 
   return (
-    <div className="max-w-5xl mx-auto mt-6 md:mt-12 mb-28 md:mb-12 space-y-8 px-4">
+    <div className="max-w-5xl mx-auto mt-6 md:mt-12 mb-28 md:mb-12 space-y-8 px-4 w-full overflow-x-hidden sm:overflow-x-visible">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-2">
@@ -25,8 +25,8 @@ export function VocabularyClient({ userId }: { userId: string }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 pt-2 scrollbar-hide snap-x">
-        <span className="text-sm font-medium text-muted-foreground whitespace-nowrap sticky left-0 bg-background pr-2 py-1 z-10">Select Lesson:</span>
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 pt-2 scrollbar-hide snap-x w-full max-w-full px-1">
+        <span className="text-sm font-medium text-muted-foreground whitespace-nowrap pr-2">Select Lesson:</span>
         {VOCABULARY_DATA.lessons.map(lesson => (
           <Button
             key={lesson.lesson_number}
@@ -61,13 +61,30 @@ function LearnCard({ vocab }: { vocab: VocabularyItem }) {
   const [showMeaning, setShowMeaning] = useState(false)
   const [showPronunciation, setShowPronunciation] = useState(false)
 
+  const speakJapanese = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const utterance = new SpeechSynthesisUtterance(vocab.nihongo)
+    utterance.lang = 'ja-JP'
+    window.speechSynthesis.speak(utterance)
+  }
+
   return (
-    <Card className="overflow-hidden border transition-all duration-200 hover:shadow-md hover:border-primary/50 group flex flex-col">
-      <CardContent className="p-0 flex-1 flex flex-col">
-        <div className="p-6 flex flex-col items-center justify-center min-h-[140px] bg-gradient-to-br from-secondary/30 to-secondary/10 relative border-b">
-          <h3 className="text-5xl font-black text-primary mb-2 text-center drop-shadow-sm">{vocab.nihongo}</h3>
+    <Card className="overflow-hidden border transition-all duration-200 hover:shadow-md hover:border-primary/50 group flex flex-col w-full">
+      <CardContent className="p-0 flex-1 flex flex-col w-full">
+        <div className="p-6 flex flex-col items-center justify-center min-h-[140px] bg-gradient-to-br from-secondary/30 to-secondary/10 relative border-b w-full">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-2 right-2 text-primary/70 hover:text-primary hover:bg-primary/10 rounded-full h-8 w-8"
+            onClick={speakJapanese}
+            title="Listen to pronunciation"
+          >
+            <Volume2 className="w-4 h-4" />
+          </Button>
+          
+          <h3 className="text-4xl sm:text-5xl font-black text-primary mb-2 text-center drop-shadow-sm break-words whitespace-normal px-2 leading-tight">{vocab.nihongo}</h3>
           {vocab.kanji && (
-            <Badge variant="secondary" className="absolute top-3 right-3 text-xs bg-background/90 backdrop-blur-md shadow-sm border-primary/20">
+            <Badge variant="secondary" className="absolute top-3 left-3 text-[10px] sm:text-xs bg-background/90 backdrop-blur-md shadow-sm border-primary/20">
               {vocab.kanji}
             </Badge>
           )}
