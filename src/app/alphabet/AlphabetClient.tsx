@@ -4,7 +4,7 @@ import { useState, useTransition, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { markItemLearned, markAllLearned } from '@/lib/actions'
-import { ArrowLeft, CheckCircle2, Volume2, Lightbulb, CheckCheck, ChevronDown, Settings2, X, Loader2 } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Volume2, Lightbulb, CheckCheck, ChevronDown, ChevronUp, Settings2, X, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { HIRAGANA_DATA, KATAKANA_DATA, Character, AlphabetCategory } from '@/lib/alphabetData'
 import confetti from 'canvas-confetti'
@@ -14,6 +14,8 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
   const [activeCategory, setActiveCategory] = useState<'basic' | 'dakuten' | 'yoon'>('basic')
   const [selectedChar, setSelectedChar] = useState<Character | null>(null)
   const [showHint, setShowHint] = useState(false)
+  const [isMobilePlayerExpanded, setIsMobilePlayerExpanded] = useState(false)
+  
   const [isPending, startTransition] = useTransition()
   const [voiceType, setVoiceType] = useState<'female' | 'male'>('female')
   const [speechRate, setSpeechRate] = useState<number>(1)
@@ -102,8 +104,12 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
     if (!charData.char) return
     setSelectedChar(charData)
     setShowHint(false)
-    
     playPronunciation(charData.char)
+  }
+
+  const handleClose = () => {
+    setSelectedChar(null)
+    setIsMobilePlayerExpanded(false)
   }
 
   const markLearned = () => {
@@ -126,7 +132,7 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
         playPronunciation(nextChar.char)
       } else {
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } })
-        setSelectedChar(null)
+        handleClose()
       }
     })
   }
@@ -153,29 +159,29 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
         </Button>
       </div>
       
-      {/* Script Selection (Hiragana vs Katakana) */}
+      {/* Script Selection */}
       <div className="flex gap-4 border-b pb-4">
         <Button 
           variant={activeScript === 'hiragana' ? 'default' : 'secondary'} 
-          onClick={() => { setActiveScript('hiragana'); setSelectedChar(null); }}
+          onClick={() => { setActiveScript('hiragana'); handleClose(); }}
           className="text-lg"
         >
           Hiragana (ひらがな)
         </Button>
         <Button 
           variant={activeScript === 'katakana' ? 'default' : 'secondary'} 
-          onClick={() => { setActiveScript('katakana'); setSelectedChar(null); }}
+          onClick={() => { setActiveScript('katakana'); handleClose(); }}
           className="text-lg"
         >
           Katakana (カタカナ)
         </Button>
       </div>
 
-      {/* Category Selection (Basic, Dakuten, Yoon) */}
+      {/* Category Selection */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
-        <Button size="sm" className="whitespace-nowrap flex-shrink-0" variant={activeCategory === 'basic' ? 'default' : 'outline'} onClick={() => { setActiveCategory('basic'); setSelectedChar(null); }}>Basic</Button>
-        <Button size="sm" className="whitespace-nowrap flex-shrink-0" variant={activeCategory === 'dakuten' ? 'default' : 'outline'} onClick={() => { setActiveCategory('dakuten'); setSelectedChar(null); }}>Dakuten ( ゛゜)</Button>
-        <Button size="sm" className="whitespace-nowrap flex-shrink-0" variant={activeCategory === 'yoon' ? 'default' : 'outline'} onClick={() => { setActiveCategory('yoon'); setSelectedChar(null); }}>Yoon (ゃゅょ)</Button>
+        <Button size="sm" className="whitespace-nowrap flex-shrink-0" variant={activeCategory === 'basic' ? 'default' : 'outline'} onClick={() => { setActiveCategory('basic'); handleClose(); }}>Basic</Button>
+        <Button size="sm" className="whitespace-nowrap flex-shrink-0" variant={activeCategory === 'dakuten' ? 'default' : 'outline'} onClick={() => { setActiveCategory('dakuten'); handleClose(); }}>Dakuten ( ゛゜)</Button>
+        <Button size="sm" className="whitespace-nowrap flex-shrink-0" variant={activeCategory === 'yoon' ? 'default' : 'outline'} onClick={() => { setActiveCategory('yoon'); handleClose(); }}>Yoon (ゃゅょ)</Button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-8 relative">
@@ -208,12 +214,12 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
           </div>
         </div>
 
-        {/* DESKTOP PANEL (Compact) */}
+        {/* DESKTOP PANEL */}
         {selectedChar && (
           <div className="hidden md:block w-72 lg:w-80">
             <Card className="sticky top-6 bg-card border shadow-sm max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
               <CardHeader className="text-center pb-0 pt-4 relative">
-                <Button variant="ghost" size="icon" className="absolute right-2 top-2 hover:bg-muted h-8 w-8" onClick={() => setSelectedChar(null)}>
+                <Button variant="ghost" size="icon" className="absolute right-2 top-2 hover:bg-muted h-8 w-8" onClick={handleClose}>
                   <X className="w-4 h-4 text-muted-foreground" />
                 </Button>
                 <CardTitle className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
@@ -343,59 +349,206 @@ export function AlphabetClient({ userId, completedIds }: { userId: string, compl
         )}
       </div>
 
-      {/* MOBILE MINI-BAR */}
+      {/* MOBILE PLAYER */}
       <div className="md:hidden">
         {selectedChar && (
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border shadow-[0_-20px_40px_-10px_rgba(0,0,0,0.15)] pb-safe animate-in slide-in-from-bottom-full duration-300">
-            <div className="p-3 px-4 flex items-center justify-between gap-3">
-              
-              {/* Left: Character Info */}
-              <div className="flex items-center gap-3">
-                <div className="text-4xl font-black text-primary w-12 text-center leading-none">
-                  {selectedChar.char}
+          <>
+            {/* FULL SCREEN PLAYER */}
+            {isMobilePlayerExpanded && (
+              <div className="fixed inset-0 z-50 bg-background flex flex-col animate-in slide-in-from-bottom-full duration-300">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b">
+                  <Button variant="ghost" size="icon" onClick={() => setIsMobilePlayerExpanded(false)}>
+                    <ChevronDown className="w-6 h-6" />
+                  </Button>
+                  <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Now Learning</span>
+                  <Button variant="ghost" size="icon" onClick={handleClose}>
+                    <X className="w-6 h-6" />
+                  </Button>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-bold text-foreground uppercase tracking-wider">{selectedChar.romaji}</span>
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{activeScript}</span>
-                </div>
-              </div>
 
-              {/* Right: Actions */}
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="secondary" 
-                  size="icon" 
-                  className="rounded-full w-12 h-12 bg-primary/10 text-primary hover:bg-primary/20 flex-shrink-0"
-                  onClick={() => playPronunciation(selectedChar.char)}
-                >
-                  <Volume2 className="w-5 h-5" />
-                </Button>
-                
-                {(() => {
-                  const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
-                  const isLearned = completedIds.includes(itemId)
-                  
-                  return (
-                    <Button 
-                      variant={isLearned ? "secondary" : "default"}
-                      size="sm"
-                      className={`rounded-full h-12 px-5 font-bold transition-all text-sm flex-shrink-0 ${isLearned ? 'bg-green-100 text-green-700' : ''}`}
-                      onClick={markLearned}
-                      disabled={isPending || isLearned}
-                    >
-                      {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : 
-                       isLearned ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : 
-                       'Mark'}
-                    </Button>
-                  )
-                })()}
-                
-                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full ml-1 flex-shrink-0 text-muted-foreground hover:bg-muted" onClick={() => setSelectedChar(null)}>
-                  <X className="w-4 h-4" />
-                </Button>
+                {/* Main Content */}
+                <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center space-y-6 pb-[200px]">
+                  <div className="text-[150px] font-black text-primary drop-shadow-sm leading-none">
+                    {selectedChar.char}
+                  </div>
+                  <div className="text-5xl font-light text-muted-foreground lowercase">
+                    {selectedChar.romaji}
+                  </div>
+
+                  <div className="w-full max-w-sm pt-6 space-y-4">
+                    {/* Hint System */}
+                    <div className="w-full bg-slate-100 dark:bg-slate-900 rounded-xl p-4 relative overflow-hidden group">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Lightbulb className="w-5 h-5 text-amber-500" />
+                        <span className="font-semibold text-sm">Memorization Hint</span>
+                      </div>
+                      {showHint || !selectedChar.hint ? (
+                        <p className="text-sm text-muted-foreground animate-in fade-in slide-in-from-top-2">
+                          {selectedChar.hint || "No visual hint available for this combined character yet. Try breaking it down!"}
+                        </p>
+                      ) : (
+                        <Button variant="secondary" className="w-full mt-2" onClick={() => setShowHint(true)}>
+                          Reveal Hint
+                        </Button>
+                      )}
+                    </div>
+
+                    <div className="flex gap-2 w-full">
+                      <details className="flex-1 group border border-border/50 bg-slate-50/50 dark:bg-slate-900/50 rounded-xl p-3 [&_summary::-webkit-details-marker]:hidden">
+                        <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-muted-foreground outline-none uppercase tracking-wider hover:text-foreground transition-colors">
+                          <span className="flex items-center gap-2">
+                            <Settings2 className="w-4 h-4" />
+                            Voice Setup
+                          </span>
+                          <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                        </summary>
+                        <div className="pt-4 space-y-4">
+                          <div className="space-y-2">
+                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Voice Type</label>
+                            <div className="flex gap-2">
+                              <Button size="sm" variant={voiceType === 'female' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('female'); setSelectedVoiceName(''); }}>Female</Button>
+                              <Button size="sm" variant={voiceType === 'male' ? 'default' : 'outline'} className="flex-1" onClick={() => { setVoiceType('male'); setSelectedVoiceName(''); }}>Male</Button>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Speed</label>
+                            <div className="flex gap-2">
+                              <Button size="sm" variant={speechRate === 0.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(0.5)}>Slow</Button>
+                              <Button size="sm" variant={speechRate === 1 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1)}>Normal</Button>
+                              <Button size="sm" variant={speechRate === 1.5 ? 'default' : 'outline'} className="flex-1" onClick={() => setSpeechRate(1.5)}>Fast</Button>
+                            </div>
+                          </div>
+                        </div>
+                      </details>
+
+                      <Button 
+                        variant="outline" 
+                        className="w-12 h-[46px] px-0 flex-shrink-0"
+                        onClick={() => playPronunciation(selectedChar.char)}
+                      >
+                        <Volume2 className="h-5 w-5 text-primary" />
+                      </Button>
+                    </div>
+
+                    {(() => {
+                      const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
+                      const isLearned = completedIds.includes(itemId)
+                      
+                      return (
+                        <Button 
+                          variant={isLearned ? "secondary" : "default"}
+                          size="lg"
+                          className={`w-full h-16 text-xl font-bold transition-all duration-300 ${isLearned ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400' : ''}`}
+                          onClick={markLearned}
+                          disabled={isPending || isLearned}
+                        >
+                          {isPending ? (
+                             <><Loader2 className="w-6 h-6 animate-spin mr-3" /> Saving...</>
+                          ) : isLearned ? (
+                            <><CheckCircle2 className="mr-3 h-7 w-7 text-green-600 dark:text-green-500" /> Learned!</>
+                          ) : (
+                            'Mark as Learned'
+                          )}
+                        </Button>
+                      )
+                    })()}
+                  </div>
+                </div>
+
+                {/* Bottom Slider Grid */}
+                <div className="absolute bottom-0 left-0 right-0 bg-card/90 backdrop-blur-md border-t pt-4 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                  <div className="px-4 text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Slide to change character</div>
+                  <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x px-4 pb-4">
+                    {categoryData.items.filter(i => i.char !== '').map((item, idx) => {
+                      const itemId = `${activeScript}-${item.romaji}-${item.char}`
+                      const isLearned = completedIds.includes(itemId)
+                      const isSelected = selectedChar?.char === item.char
+
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setSelectedChar(item)
+                            setShowHint(false)
+                            playPronunciation(item.char)
+                          }}
+                          className={`
+                            flex-shrink-0 snap-center w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-medium transition-all
+                            ${isSelected ? 'bg-primary text-primary-foreground scale-110 shadow-lg ring-4 ring-primary/30 z-10' : 'bg-background border shadow-sm hover:border-primary'}
+                            ${isLearned && !isSelected ? 'opacity-70 text-green-600 dark:text-green-400 bg-green-50/50 dark:bg-green-900/20' : ''}
+                          `}
+                        >
+                          <span className="relative z-10">{item.char}</span>
+                          {isLearned && !isSelected && <CheckCircle2 className="absolute top-2 right-2 w-4 h-4 text-green-500" />}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            )}
+
+            {/* COMPACT MINI-BAR */}
+            {!isMobilePlayerExpanded && (
+              <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border shadow-[0_-20px_40px_-10px_rgba(0,0,0,0.15)] pb-safe animate-in slide-in-from-bottom-full duration-300">
+                <div className="p-2 px-4 flex items-center gap-2">
+                  
+                  {/* Clickable Area to Expand */}
+                  <div className="flex-1 flex items-center gap-3 py-2 cursor-pointer" onClick={() => setIsMobilePlayerExpanded(true)}>
+                    <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl relative overflow-hidden group">
+                      <span className="text-3xl font-black text-primary leading-none group-active:scale-95 transition-transform">{selectedChar.char}</span>
+                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center opacity-0 group-active:opacity-100 transition-opacity">
+                        <ChevronUp className="w-5 h-5 text-primary" />
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-foreground uppercase tracking-wider">{selectedChar.romaji}</span>
+                      <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest flex items-center mt-0.5">
+                        Expand <ChevronUp className="w-3 h-3 ml-0.5 opacity-70" />
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Right: Actions */}
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="secondary" 
+                      size="icon" 
+                      className="rounded-full w-12 h-12 bg-primary/10 text-primary hover:bg-primary/20 flex-shrink-0"
+                      onClick={(e) => { e.stopPropagation(); playPronunciation(selectedChar.char); }}
+                    >
+                      <Volume2 className="w-5 h-5" />
+                    </Button>
+                    
+                    {(() => {
+                      const itemId = `${activeScript}-${selectedChar.romaji}-${selectedChar.char}`
+                      const isLearned = completedIds.includes(itemId)
+                      
+                      return (
+                        <Button 
+                          variant={isLearned ? "secondary" : "default"}
+                          size="sm"
+                          className={`rounded-full h-12 px-5 font-bold transition-all text-sm flex-shrink-0 ${isLearned ? 'bg-green-100 text-green-700' : ''}`}
+                          onClick={(e) => { e.stopPropagation(); markLearned(); }}
+                          disabled={isPending || isLearned}
+                        >
+                          {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : 
+                           isLearned ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : 
+                           'Mark'}
+                        </Button>
+                      )
+                    })()}
+                    
+                    <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full ml-1 flex-shrink-0 text-muted-foreground hover:bg-muted" onClick={(e) => { e.stopPropagation(); handleClose(); }}>
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
 
