@@ -1,4 +1,5 @@
 'use server'
+import path from 'path'
 
 import prisma from './prisma'
 import { revalidatePath } from 'next/cache'
@@ -111,7 +112,8 @@ export const convertToRomaji = async (japaneseText: string) => {
       // @ts-ignore
       const KuromojiAnalyzer = (await import("kuroshiro-analyzer-kuromoji")).default
       kuroshiroInstance = new Kuroshiro()
-      await kuroshiroInstance.init(new KuromojiAnalyzer())
+      const dictPath = path.join(process.cwd(), 'node_modules', 'kuromoji', 'dict')
+      await kuroshiroInstance.init(new KuromojiAnalyzer({ dictPath }))
     }
     const romaji = await kuroshiroInstance.convert(japaneseText, { to: "romaji", mode: "spaced" })
     return romaji
