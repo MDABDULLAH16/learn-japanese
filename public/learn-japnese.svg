@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- ব্যাকগ্রাউন্ড সার্কেল -->
+  <circle cx="256" cy="256" r="240" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="16" />
+  
+  <!-- লাল উদীয়মান সূর্য -->
+  <circle cx="256" cy="256" r="140" fill="#BC002D" />
+  
+  <!-- জাপানি 'あ' (A) অথবা মিনিমালিস্ট ব্রাশ স্ট্রোক ফন্ট -->
+  <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="160" fill="#FFFFFF">あ</text>
+</svg>
