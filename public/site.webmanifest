@@ -3,6 +3,7 @@
   "short_name": "Japanese",
   "description": "Interactive Japanese learning application",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
