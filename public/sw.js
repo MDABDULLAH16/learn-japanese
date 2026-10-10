@@ -9,7 +9,10 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // We need a fetch event handler to be installable as a PWA.
-  // This minimal one just passes the request through to the network.
-  // In a real offline app, you'd implement caching strategies here.
+  // A proper fetch handler is required by Chrome for PWA installability.
+  event.respondWith(
+    fetch(event.request).catch(() => {
+      return new Response("Offline Content", { status: 503 });
+    })
+  );
 });
