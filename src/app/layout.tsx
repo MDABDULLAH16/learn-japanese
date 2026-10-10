@@ -29,7 +29,7 @@ export const viewport = {
 export const metadata: Metadata = {
   title: "Learn Japanese - By A R S ABDULLAH",
   description: "Interactive Japanese learning application",
-  manifest: "/manifest.json",
+  manifest: "/site.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

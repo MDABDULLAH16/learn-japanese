@@ -1,4 +1,5 @@
 // A basic service worker to satisfy PWA install requirements
+// Version 2 - Cache Buster
 self.addEventListener('install', (event) => {
   console.log('Service worker installing...');
   self.skipWaiting();
