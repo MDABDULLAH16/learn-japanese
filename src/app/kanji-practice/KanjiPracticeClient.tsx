@@ -113,24 +113,37 @@ export function KanjiPracticeClient({ userId }: { userId: string }) {
                 <h3 className="text-4xl font-black text-primary mb-2">{currentKanji.kanji}</h3>
                 <h4 className="text-xl font-bold text-foreground text-center">{currentKanji.meaning_en}</h4>
                 <h5 className="text-lg font-bold text-blue-600 dark:text-blue-400 text-center mt-1">{currentKanji.meaning_bn}</h5>
+                {currentKanji.mnemonic && (
+                  <p className="text-sm font-medium text-amber-600 dark:text-amber-500 mt-4 text-center px-4 leading-snug">
+                    {currentKanji.mnemonic}
+                  </p>
+                )}
               </div>
               
               <div className="space-y-4 w-full">
-                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-xl border border-border">
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-xl border border-border flex flex-col">
                   <p className="text-[10px] uppercase tracking-wider font-bold text-blue-500/70 mb-2">Kunyomi</p>
                   <div className="flex flex-wrap gap-2">
-                    {currentKanji.kunyomi.length > 0 ? currentKanji.kunyomi.map((k, i) => (
-                      <span key={i} className="font-bold">{k}</span>
-                    )) : <span className="text-muted-foreground text-sm">None</span>}
+                    {currentKanji.kun_yomi_new ? (
+                      <span className="font-bold text-md">{currentKanji.kun_yomi_new.reading || <span className="text-muted-foreground text-sm">None</span>}</span>
+                    ) : (
+                      currentKanji.kunyomi.length > 0 ? currentKanji.kunyomi.map((k, i) => (
+                        <span key={i} className="font-bold">{k}</span>
+                      )) : <span className="text-muted-foreground text-sm">None</span>
+                    )}
                   </div>
                 </div>
                 
-                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-xl border border-border">
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-xl border border-border flex flex-col">
                   <p className="text-[10px] uppercase tracking-wider font-bold text-rose-500/70 mb-2">Onyomi</p>
                   <div className="flex flex-wrap gap-2">
-                    {currentKanji.onyomi.length > 0 ? currentKanji.onyomi.map((o, i) => (
-                      <span key={i} className="font-bold">{o}</span>
-                    )) : <span className="text-muted-foreground text-sm">None</span>}
+                    {currentKanji.on_yomi_new ? (
+                      <span className="font-bold text-md">{currentKanji.on_yomi_new.reading || <span className="text-muted-foreground text-sm">None</span>}</span>
+                    ) : (
+                      currentKanji.onyomi.length > 0 ? currentKanji.onyomi.map((o, i) => (
+                        <span key={i} className="font-bold">{o}</span>
+                      )) : <span className="text-muted-foreground text-sm">None</span>
+                    )}
                   </div>
                 </div>
               </div>

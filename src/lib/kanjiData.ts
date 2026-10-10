@@ -21,6 +21,15 @@ export type KanjiItem = {
   }[];
   level: "N5" | "N4";
   lesson: number;
+  mnemonic?: string;
+  kun_yomi_new?: {
+    reading: string;
+    examples: { word: string; reading: string; meaning_bn: string }[];
+  };
+  on_yomi_new?: {
+    reading: string;
+    examples: { word: string; reading: string; meaning_bn: string }[];
+  };
 }
 
 export const KANJI_DATA: KanjiItem[] = kanjiDataN5 as KanjiItem[];

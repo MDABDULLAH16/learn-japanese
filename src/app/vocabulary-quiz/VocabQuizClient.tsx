@@ -15,10 +15,13 @@ const shuffle = (array: any[]) => [...array].sort(() => Math.random() - 0.5)
 
 type Question = {
   vocab: VocabularyItem
-  options: string[]
+  options: VocabularyItem[]
 }
 
+type QuizMode = 'ja-bn' | 'bn-ja'
+
 export function VocabQuizClient({ userId }: { userId: string }) {
+  const [quizMode, setQuizMode] = useState<QuizMode>('ja-bn')
   const [selectedLesson, setSelectedLesson] = useState<number | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -36,8 +39,9 @@ export function VocabQuizClient({ userId }: { userId: string }) {
     setIsLoaded(true)
   }, [])
 
-  const generateQuiz = (lessonNumber: number) => {
+  const generateQuiz = (lessonNumber: number, mode: QuizMode = quizMode) => {
     setSelectedLesson(lessonNumber)
+    setQuizMode(mode)
     
     const lesson = VOCABULARY_DATA.lessons.find(l => l.lesson_number === lessonNumber)
     if (!lesson) return
@@ -46,15 +50,17 @@ export function VocabQuizClient({ userId }: { userId: string }) {
     // Select up to 20 random words for the quiz
     const selectedVocabs = shuffle(sourceData).slice(0, 20)
     
-    // Create pool of all bangla meanings to use as wrong options
-    const allMeanings = VOCABULARY_DATA.lessons.flatMap(l => l.vocabularies).map(v => v.bangla)
+    // Create pool of all vocabularies to use as wrong options
+    const allVocabs = VOCABULARY_DATA.lessons.flatMap(l => l.vocabularies)
     
     const generatedQuestions = selectedVocabs.map(vocab => {
       // Find 3 wrong options
-      const wrongMeanings = shuffle(allMeanings.filter(m => m !== vocab.bangla)).slice(0, 3)
+      const wrongVocabs = shuffle(allVocabs.filter(v => 
+        mode === 'ja-bn' ? v.bangla !== vocab.bangla : v.nihongo !== vocab.nihongo
+      )).slice(0, 3)
       return {
         vocab: vocab,
-        options: shuffle([vocab.bangla, ...wrongMeanings])
+        options: shuffle([vocab, ...wrongVocabs])
       }
     })
 
@@ -63,13 +69,15 @@ export function VocabQuizClient({ userId }: { userId: string }) {
   }
 
   const startMistakesRetry = () => {
-    const allMeanings = VOCABULARY_DATA.lessons.flatMap(l => l.vocabularies).map(v => v.bangla)
+    const allVocabs = VOCABULARY_DATA.lessons.flatMap(l => l.vocabularies)
     
     const retriedQuestions = wrongQuestions.map(q => {
-      const wrongMeanings = shuffle(allMeanings.filter(m => m !== q.vocab.bangla)).slice(0, 3)
+      const wrongVocabs = shuffle(allVocabs.filter(v => 
+        quizMode === 'ja-bn' ? v.bangla !== q.vocab.bangla : v.nihongo !== q.vocab.nihongo
+      )).slice(0, 3)
       return {
         ...q,
-        options: shuffle([q.vocab.bangla, ...wrongMeanings])
+        options: shuffle([q.vocab, ...wrongVocabs])
       }
     })
 
@@ -90,7 +98,11 @@ export function VocabQuizClient({ userId }: { userId: string }) {
     setAnswersHistory(prev => ({...prev, [currentQuestion]: index}))
 
     const q = questions[currentQuestion]
-    if (q.options[index] === q.vocab.bangla) {
+    const isCorrect = quizMode === 'ja-bn' 
+      ? q.options[index].bangla === q.vocab.bangla 
+      : q.options[index].nihongo === q.vocab.nihongo
+
+    if (isCorrect) {
       setScore(s => s + 10)
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
     } else {
@@ -163,13 +175,31 @@ export function VocabQuizClient({ userId }: { userId: string }) {
           <Trophy className="w-16 h-16 mx-auto mb-4 text-primary/80" />
           <h2 className="text-3xl font-bold mb-4">Vocabulary Quiz</h2>
           <p className="text-muted-foreground mb-8">Select a lesson to test your vocabulary memory.</p>
+          <div className="flex justify-center gap-4 mb-8">
+            <div className="bg-secondary/20 p-1 rounded-lg inline-flex">
+              <Button 
+                variant={quizMode === 'ja-bn' ? 'default' : 'ghost'} 
+                onClick={() => setQuizMode('ja-bn')}
+                className="rounded-md transition-all"
+              >
+                Japanese ➔ Bangla
+              </Button>
+              <Button 
+                variant={quizMode === 'bn-ja' ? 'default' : 'ghost'} 
+                onClick={() => setQuizMode('bn-ja')}
+                className="rounded-md transition-all"
+              >
+                Bangla ➔ Japanese
+              </Button>
+            </div>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {VOCABULARY_DATA.lessons.map(lesson => (
               <Button 
                 key={lesson.lesson_number}
                 variant="outline" 
                 className="h-24 flex flex-col gap-2 hover:bg-primary/10 hover:border-primary/50 transition-colors" 
-                onClick={() => generateQuiz(lesson.lesson_number)}
+                onClick={() => generateQuiz(lesson.lesson_number, quizMode)}
               >
                 <span className="text-2xl font-bold">L{lesson.lesson_number}</span>
                 <span className="text-[10px] text-muted-foreground uppercase">{lesson.vocabularies.length} Words</span>
@@ -252,39 +282,56 @@ export function VocabQuizClient({ userId }: { userId: string }) {
         <CardContent className="space-y-6 flex flex-col items-center pt-8">
           
           <div className="text-center relative w-full flex flex-col items-center justify-center min-h-[160px] bg-secondary/10 rounded-xl p-6 border">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-3 right-3 text-primary/70 hover:text-primary hover:bg-primary/10 rounded-full h-10 w-10"
-              onClick={speakJapanese}
-              title="Listen to pronunciation"
-            >
-              <Volume2 className="w-5 h-5" />
-            </Button>
+            {quizMode === 'ja-bn' && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-3 right-3 text-primary/70 hover:text-primary hover:bg-primary/10 rounded-full h-10 w-10"
+                onClick={speakJapanese}
+                title="Listen to pronunciation"
+              >
+                <Volume2 className="w-5 h-5" />
+              </Button>
+            )}
 
-            <h2 className="text-4xl sm:text-7xl font-black text-primary leading-tight drop-shadow-sm mb-4 mt-2 break-words whitespace-normal px-2">
-              {question.vocab.nihongo}
+            <h2 className={`font-black text-primary leading-tight drop-shadow-sm mb-4 mt-2 break-words whitespace-normal px-2 ${quizMode === 'ja-bn' ? 'text-4xl sm:text-7xl' : 'text-3xl sm:text-5xl'}`}>
+              {quizMode === 'ja-bn' ? question.vocab.nihongo : question.vocab.bangla}
             </h2>
-            {question.vocab.kanji && (
+            {quizMode === 'ja-bn' && question.vocab.kanji && (
               <Badge variant="outline" className="text-lg py-1 px-4 text-muted-foreground bg-background shadow-inner">
                 {question.vocab.kanji}
               </Badge>
             )}
           </div>
           
-          {(hasAnswered) && (
+          {(hasAnswered) && quizMode === 'ja-bn' && (
             <div className="w-full text-center space-y-1 bg-primary/5 border border-primary/10 p-3 rounded-xl animate-in fade-in zoom-in-95">
                <span className="text-xs font-bold text-muted-foreground uppercase">Romaji / Pronunciation</span>
                <p className="text-lg font-bold text-primary">{question.vocab.romaji} <span className="text-muted-foreground font-normal">({question.vocab.uchharon})</span></p>
             </div>
           )}
+          
+          {(hasAnswered) && quizMode === 'bn-ja' && (
+            <div className="w-full flex items-center justify-center gap-2 bg-primary/5 border border-primary/10 p-3 rounded-xl animate-in fade-in zoom-in-95">
+               <Button variant="ghost" size="icon" onClick={speakJapanese} className="h-8 w-8 text-primary/70 hover:text-primary">
+                 <Volume2 className="w-4 h-4" />
+               </Button>
+               <div>
+                 <span className="text-xs font-bold text-muted-foreground uppercase block text-center">Answer</span>
+                 <p className="text-lg font-bold text-primary">{question.vocab.nihongo} {question.vocab.kanji ? `(${question.vocab.kanji})` : ''}</p>
+                 <p className="text-sm text-primary/80">{question.vocab.romaji} <span className="text-muted-foreground font-normal">({question.vocab.uchharon})</span></p>
+               </div>
+            </div>
+          )}
 
-          <p className="text-sm md:text-lg text-foreground font-medium w-full text-left md:text-center mt-2 px-1">Select the correct Bangla meaning:</p>
+          <p className="text-sm md:text-lg text-foreground font-medium w-full text-left md:text-center mt-2 px-1">
+            {quizMode === 'ja-bn' ? 'Select the correct Bangla meaning:' : 'Select the correct Japanese word:'}
+          </p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 w-full">
             {question.options.map((option, index) => {
               const isSelected = selectedAnswer === index
-              const isCorrect = question.vocab.bangla === option
+              const isCorrect = quizMode === 'ja-bn' ? question.vocab.bangla === option.bangla : question.vocab.nihongo === option.nihongo
               
               let variant: "default" | "outline" | "destructive" | "secondary" = "outline"
               if (hasAnswered) {
@@ -299,13 +346,23 @@ export function VocabQuizClient({ userId }: { userId: string }) {
                 <Button 
                   key={index} 
                   variant={variant}
-                  className={`h-auto py-4 sm:py-5 text-lg sm:text-xl font-bold relative transition-all active:scale-[0.98] ${hasAnswered && isSelected && !isCorrect ? 'animate-in slide-in-from-left-1 slide-in-from-right-1 duration-100' : ''} ${variant === 'outline' ? 'hover:bg-primary/5 hover:border-primary/50' : ''}`}
+                  className={`h-auto py-4 sm:py-5 text-lg sm:text-xl font-bold relative transition-all active:scale-[0.98] ${hasAnswered && isSelected && !isCorrect ? 'animate-in slide-in-from-left-1 slide-in-from-right-1 duration-100' : ''} ${variant === 'outline' ? 'hover:bg-primary/5 hover:border-primary/50' : ''} flex flex-col items-center justify-center gap-1 disabled:opacity-100`}
                   onClick={() => handleAnswer(index)}
                   disabled={hasAnswered}
                 >
-                  <span className="whitespace-normal break-words pr-8 w-full text-center">{option}</span>
-                  {hasAnswered && isCorrect && <CheckCircle2 className="absolute right-4 h-5 w-5 text-green-500 bg-white rounded-full flex-shrink-0 animate-in zoom-in" />}
-                  {hasAnswered && isSelected && !isCorrect && <XCircle className="absolute right-4 h-5 w-5 text-red-500 bg-white rounded-full flex-shrink-0 animate-in zoom-in" />}
+                  <span className={`whitespace-normal break-words pr-8 w-full text-center ${hasAnswered && !isCorrect && !isSelected ? 'text-foreground' : ''}`}>
+                    {quizMode === 'ja-bn' ? option.bangla : option.nihongo}
+                  </span>
+                  
+                  {hasAnswered && (
+                    <span className={`text-sm font-normal opacity-100 block mt-1 pr-8 w-full text-center ${isCorrect ? 'text-primary-foreground/90' : isSelected ? 'text-destructive-foreground/90' : 'text-foreground/70'}`}>
+                      {quizMode === 'ja-bn' ? option.nihongo : option.bangla}
+                      {quizMode === 'bn-ja' && option.kanji ? ` (${option.kanji})` : ''}
+                    </span>
+                  )}
+
+                  {hasAnswered && isCorrect && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500 bg-white rounded-full flex-shrink-0 animate-in zoom-in" />}
+                  {hasAnswered && isSelected && !isCorrect && <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500 bg-white rounded-full flex-shrink-0 animate-in zoom-in" />}
                 </Button>
               )
             })}

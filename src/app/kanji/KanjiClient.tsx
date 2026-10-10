@@ -143,35 +143,80 @@ function KanjiCard({ item }: { item: KanjiItem }) {
             </div>
             
             <div className="p-6 overflow-y-auto space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-blue-500/5 p-4 rounded-xl border border-blue-500/20">
+              {item.mnemonic && (
+                <div className="bg-amber-500/5 p-4 rounded-xl border border-amber-500/20">
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-amber-600 dark:text-amber-500 mb-1">Mnemonic / Hint</p>
+                  <p className="text-sm font-bold text-foreground leading-relaxed">{item.mnemonic}</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-blue-500/5 p-4 rounded-xl border border-blue-500/20 flex flex-col">
                   <p className="text-[10px] uppercase tracking-wider font-bold text-blue-500/70 mb-2">Kunyomi (Japanese)</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {item.kunyomi.length > 0 ? item.kunyomi.map((k, i) => (
-                      <Badge 
-                        key={i} 
-                        variant="outline" 
-                        className="bg-background font-bold text-sm px-3 py-1 text-foreground"
-                      >
-                        {k} <span className="text-muted-foreground font-medium ml-1 text-xs">({kanaToRomaji(k)})</span>
-                      </Badge>
-                    )) : <span className="text-muted-foreground text-sm">None</span>}
-                  </div>
+                  {item.kun_yomi_new ? (
+                    <div className="space-y-3">
+                      {item.kun_yomi_new.reading && (
+                        <p className="font-bold text-lg text-foreground">{item.kun_yomi_new.reading}</p>
+                      )}
+                      {item.kun_yomi_new.examples && item.kun_yomi_new.examples.length > 0 && (
+                        <div className="space-y-2 mt-2">
+                          {item.kun_yomi_new.examples.map((ex, i) => (
+                            <div key={i} className="flex flex-col bg-background/50 p-2 rounded-lg border border-border/50">
+                              <span className="font-black text-md text-primary">{ex.word}</span>
+                              <span className="text-xs text-muted-foreground">{ex.reading}</span>
+                              <span className="text-sm font-bold text-blue-600 dark:text-blue-400 mt-1">{ex.meaning_bn}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {item.kunyomi.length > 0 ? item.kunyomi.map((k, i) => (
+                        <Badge 
+                          key={i} 
+                          variant="outline" 
+                          className="bg-background font-bold text-sm px-3 py-1 text-foreground"
+                        >
+                          {k} <span className="text-muted-foreground font-medium ml-1 text-xs">({kanaToRomaji(k)})</span>
+                        </Badge>
+                      )) : <span className="text-muted-foreground text-sm">None</span>}
+                    </div>
+                  )}
                 </div>
                 
-                <div className="bg-rose-500/5 p-4 rounded-xl border border-rose-500/20">
-                  <p className="text-[10px] uppercase tracking-wider font-bold text-rose-500/70">Onyomi (Chinese)</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {item.onyomi.length > 0 ? item.onyomi.map((o, i) => (
-                      <Badge 
-                        key={i} 
-                        variant="outline" 
-                        className="bg-background font-bold text-sm px-3 py-1 text-foreground"
-                      >
-                        {o} <span className="text-muted-foreground font-medium ml-1 text-xs">({kanaToRomaji(o)})</span>
-                      </Badge>
-                    )) : <span className="text-muted-foreground text-sm">None</span>}
-                  </div>
+                <div className="bg-rose-500/5 p-4 rounded-xl border border-rose-500/20 flex flex-col">
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-rose-500/70 mb-2">Onyomi (Chinese)</p>
+                  {item.on_yomi_new ? (
+                    <div className="space-y-3">
+                      {item.on_yomi_new.reading && (
+                        <p className="font-bold text-lg text-foreground">{item.on_yomi_new.reading}</p>
+                      )}
+                      {item.on_yomi_new.examples && item.on_yomi_new.examples.length > 0 && (
+                        <div className="space-y-2 mt-2">
+                          {item.on_yomi_new.examples.map((ex, i) => (
+                            <div key={i} className="flex flex-col bg-background/50 p-2 rounded-lg border border-border/50">
+                              <span className="font-black text-md text-primary">{ex.word}</span>
+                              <span className="text-xs text-muted-foreground">{ex.reading}</span>
+                              <span className="text-sm font-bold text-blue-600 dark:text-blue-400 mt-1">{ex.meaning_bn}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {item.onyomi.length > 0 ? item.onyomi.map((o, i) => (
+                        <Badge 
+                          key={i} 
+                          variant="outline" 
+                          className="bg-background font-bold text-sm px-3 py-1 text-foreground"
+                        >
+                          {o} <span className="text-muted-foreground font-medium ml-1 text-xs">({kanaToRomaji(o)})</span>
+                        </Badge>
+                      )) : <span className="text-muted-foreground text-sm">None</span>}
+                    </div>
+                  )}
                 </div>
               </div>
 

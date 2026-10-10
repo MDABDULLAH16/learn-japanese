@@ -1,842 +1,5794 @@
 [
   {
-    "id": "1", "kanji": "一", "meaning_en": "One", "meaning_bn": "এক",
-    "onyomi": ["イチ", "イツ"], "kunyomi": ["ひと", "ひとつ"],
-    "examples": [{ "word": "一つ", "reading": "ひとつ", "meaning_en": "One thing", "meaning_bn": "একটি" }],
-    "sentences": [{ "japanese": "りんごを一つください。", "romaji": "Ringo o hitotsu kudasai.", "english": "Please give me one apple.", "bangla": "আমাকে একটি আপেল দিন।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "2", "kanji": "二", "meaning_en": "Two", "meaning_bn": "দুই",
-    "onyomi": ["ニ", "ジ"], "kunyomi": ["ふた", "ふたつ"],
-    "examples": [{ "word": "二人", "reading": "ふたり", "meaning_en": "Two people", "meaning_bn": "দুইজন মানুষ" }],
-    "sentences": [{ "japanese": "二人の学生がいます。", "romaji": "Futari no gakusei ga imasu.", "english": "There are two students.", "bangla": "এখানে দুইজন ছাত্র আছে।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "3", "kanji": "三", "meaning_en": "Three", "meaning_bn": "তিন",
-    "onyomi": ["サン"], "kunyomi": ["み", "みつ", "みっつ"],
-    "examples": [{ "word": "三日", "reading": "みっか", "meaning_en": "3rd day", "meaning_bn": "তৃতীয় দিন" }],
-    "sentences": [{ "japanese": "三日待ってください。", "romaji": "Mikka matte kudasai.", "english": "Please wait three days.", "bangla": "তিন দিন অপেক্ষা করুন।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "4", "kanji": "四", "meaning_en": "Four", "meaning_bn": "চার",
-    "onyomi": ["シ"], "kunyomi": ["よ", "よつ", "よっつ", "よん"],
-    "examples": [{ "word": "四月", "reading": "しがつ", "meaning_en": "April", "meaning_bn": "এপ্রিল মাস" }],
-    "sentences": [{ "japanese": "今は四月です。", "romaji": "Ima wa shigatsu desu.", "english": "It is April now.", "bangla": "এখন এপ্রিল মাস।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "5", "kanji": "五", "meaning_en": "Five", "meaning_bn": "পাঁচ",
-    "onyomi": ["ゴ"], "kunyomi": ["いつ", "いつつ"],
-    "examples": [{ "word": "五円", "reading": "ごえん", "meaning_en": "5 Yen", "meaning_bn": "পাঁচ ইয়েন" }],
-    "sentences": [{ "japanese": "五円玉があります。", "romaji": "Goen dama ga arimasu.", "english": "I have a 5-yen coin.", "bangla": "আমার কাছে পাঁচ ইয়েনের কয়েন আছে।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "6", "kanji": "六", "meaning_en": "Six", "meaning_bn": "ছয়",
-    "onyomi": ["ロク"], "kunyomi": ["む", "むつ", "むっつ", "むい"],
-    "examples": [{ "word": "六百", "reading": "ろっぴゃく", "meaning_en": "Six hundred", "meaning_bn": "ছয়শত" }],
-    "sentences": [{ "japanese": "これは六百円です。", "romaji": "Kore wa roppyaku en desu.", "english": "This is 600 yen.", "bangla": "এটার দাম ৬০০ ইয়েন।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "7", "kanji": "七", "meaning_en": "Seven", "meaning_bn": "সাত",
-    "onyomi": ["シチ"], "kunyomi": ["なな", "ななつ", "なの"],
-    "examples": [{ "word": "七時", "reading": "しちじ", "meaning_en": "7 o'clock", "meaning_bn": "সাতটা বাজে" }],
-    "sentences": [{ "japanese": "毎朝七時に起きます。", "romaji": "Maiasa shichiji ni okimasu.", "english": "I wake up at 7 every morning.", "bangla": "আমি প্রতিদিন সকালে সাতটায় উঠি।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "8", "kanji": "八", "meaning_en": "Eight", "meaning_bn": "আট",
-    "onyomi": ["ハチ"], "kunyomi": ["や", "やつ", "やっつ", "よう"],
-    "examples": [{ "word": "八百", "reading": "はっぴゃく", "meaning_en": "Eight hundred", "meaning_bn": "আটশত" }],
-    "sentences": [{ "japanese": "八百屋で買い物をします。", "romaji": "Yaoya de kaimono o shimasu.", "english": "I shop at the greengrocer.", "bangla": "আমি সবজির দোকানে বাজার করি।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "9", "kanji": "九", "meaning_en": "Nine", "meaning_bn": "নয়",
-    "onyomi": ["キュウ", "ク"], "kunyomi": ["ここの", "ここのつ"],
-    "examples": [{ "word": "九月", "reading": "くがつ", "meaning_en": "September", "meaning_bn": "সেপ্টেম্বর মাস" }],
-    "sentences": [{ "japanese": "九月に日本へ行きます。", "romaji": "Kugatsu ni nihon e ikimasu.", "english": "I will go to Japan in September.", "bangla": "আমি সেপ্টেম্বরে জাপান যাবো।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "10", "kanji": "十", "meaning_en": "Ten", "meaning_bn": "দশ",
-    "onyomi": ["ジュウ", "ジッ"], "kunyomi": ["とお", "と"],
-    "examples": [{ "word": "十分", "reading": "じゅっぷん", "meaning_en": "10 minutes", "meaning_bn": "১০ মিনিট" }],
-    "sentences": [{ "japanese": "十分休んでください。", "romaji": "Juppun yasunde kudasai.", "english": "Please rest for 10 minutes.", "bangla": "দয়া করে ১০ মিনিট বিশ্রাম নিন।" }],
-    "level": "N5", "lesson": 1
-  },
-  {
-    "id": "11", "kanji": "百", "meaning_en": "Hundred", "meaning_bn": "একশত",
-    "onyomi": ["ヒャク"], "kunyomi": ["もも"],
-    "examples": [{ "word": "三百", "reading": "さんびゃく", "meaning_en": "Three hundred", "meaning_bn": "তিনশত" }],
-    "sentences": [{ "japanese": "三百円です。", "romaji": "Sanbyaku en desu.", "english": "It is 300 yen.", "bangla": "এটার দাম ৩০০ ইয়েন।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "12", "kanji": "千", "meaning_en": "Thousand", "meaning_bn": "হাজার",
-    "onyomi": ["セン"], "kunyomi": ["ち"],
-    "examples": [{ "word": "三千", "reading": "さんぜん", "meaning_en": "Three thousand", "meaning_bn": "তিন হাজার" }],
-    "sentences": [{ "japanese": "三千円払いました。", "romaji": "Sanzen en haraimashita.", "english": "I paid 3000 yen.", "bangla": "আমি ৩০০০ ইয়েন দিয়েছি।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "13", "kanji": "万", "meaning_en": "Ten thousand", "meaning_bn": "দশ হাজার",
-    "onyomi": ["マン", "バン"], "kunyomi": [],
-    "examples": [{ "word": "一万", "reading": "いちまん", "meaning_en": "Ten thousand", "meaning_bn": "দশ হাজার" }],
-    "sentences": [{ "japanese": "この時計は一万円です。", "romaji": "Kono tokei wa ichiman en desu.", "english": "This watch is 10,000 yen.", "bangla": "এই ঘড়িটির দাম ১০,০০০ ইয়েন।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "14", "kanji": "円", "meaning_en": "Yen, Circle", "meaning_bn": "ইয়েন (জাপানি মুদ্রা)",
-    "onyomi": ["エン"], "kunyomi": ["まる", "まる.い"],
-    "examples": [{ "word": "百円", "reading": "ひゃくえん", "meaning_en": "100 Yen", "meaning_bn": "১০০ ইয়েন" }],
-    "sentences": [{ "japanese": "百円ショップに行きます。", "romaji": "Hyakuen shoppu ni ikimasu.", "english": "I go to the 100 yen shop.", "bangla": "আমি ১০০ ইয়েনের দোকানে যাই।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "15", "kanji": "日", "meaning_en": "Day, Sun", "meaning_bn": "দিন, সূর্য",
-    "onyomi": ["ニチ", "ジツ"], "kunyomi": ["ひ", "-び", "-か"],
-    "examples": [{ "word": "日本", "reading": "にほん", "meaning_en": "Japan", "meaning_bn": "জাপান" }],
-    "sentences": [{ "japanese": "今日は日曜日です。", "romaji": "Kyou wa nichiyoubi desu.", "english": "Today is Sunday.", "bangla": "আজ রবিবার।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "16", "kanji": "月", "meaning_en": "Month, Moon", "meaning_bn": "মাস, চাঁদ",
-    "onyomi": ["ゲツ", "ガツ"], "kunyomi": ["つき"],
-    "examples": [{ "word": "月曜日", "reading": "げつようび", "meaning_en": "Monday", "meaning_bn": "সোমবার" }],
-    "sentences": [{ "japanese": "月曜日は忙しいです。", "romaji": "Getsuyoubi wa isogashii desu.", "english": "Monday is busy.", "bangla": "সোমবার দিনটি ব্যস্ত যায়।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "17", "kanji": "火", "meaning_en": "Fire", "meaning_bn": "আগুন",
-    "onyomi": ["カ"], "kunyomi": ["ひ", "-び"],
-    "examples": [{ "word": "火曜日", "reading": "かようび", "meaning_en": "Tuesday", "meaning_bn": "মঙ্গলবার" }],
-    "sentences": [{ "japanese": "火曜日にテストがあります。", "romaji": "Kayoubi ni tesuto ga arimasu.", "english": "I have a test on Tuesday.", "bangla": "মঙ্গলবারে পরীক্ষা আছে।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "18", "kanji": "水", "meaning_en": "Water", "meaning_bn": "পানি",
-    "onyomi": ["スイ"], "kunyomi": ["みず"],
-    "examples": [{ "word": "水曜日", "reading": "すいようび", "meaning_en": "Wednesday", "meaning_bn": "বুধবার" }],
-    "sentences": [{ "japanese": "お水を飲みたいです。", "romaji": "Omizu o nomitai desu.", "english": "I want to drink water.", "bangla": "আমি পানি খেতে চাই।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "19", "kanji": "木", "meaning_en": "Tree, Wood", "meaning_bn": "গাছ",
-    "onyomi": ["ボク", "モク"], "kunyomi": ["き", "こ-"],
-    "examples": [{ "word": "木曜日", "reading": "もくようび", "meaning_en": "Thursday", "meaning_bn": "বৃহস্পতিবার" }],
-    "sentences": [{ "japanese": "公園に大きな木があります。", "romaji": "Kouen ni ookina ki ga arimasu.", "english": "There is a big tree in the park.", "bangla": "পার্কে একটি বড় গাছ আছে।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "20", "kanji": "金", "meaning_en": "Gold, Money", "meaning_bn": "সোনা, টাকা",
-    "onyomi": ["キン", "コン"], "kunyomi": ["かね", "かな-"],
-    "examples": [{ "word": "金曜日", "reading": "きんようび", "meaning_en": "Friday", "meaning_bn": "শুক্রবার" }],
-    "sentences": [{ "japanese": "お金がありません。", "romaji": "Okane ga arimasen.", "english": "I have no money.", "bangla": "আমার কাছে টাকা নেই।" }],
-    "level": "N5", "lesson": 2
-  },
-  {
-    "id": "21", "kanji": "土", "meaning_en": "Earth, Soil", "meaning_bn": "মাটি",
-    "onyomi": ["ド", "ト"], "kunyomi": ["つち"],
-    "examples": [{ "word": "土曜日", "reading": "どようび", "meaning_en": "Saturday", "meaning_bn": "শনিবার" }],
-    "sentences": [{ "japanese": "土曜日は休みです。", "romaji": "Doyoubi wa yasumi desu.", "english": "Saturday is a holiday.", "bangla": "শনিবার ছুটির দিন।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "22", "kanji": "山", "meaning_en": "Mountain", "meaning_bn": "পাহাড়",
-    "onyomi": ["サン", "セン"], "kunyomi": ["やま"],
-    "examples": [{ "word": "富士山", "reading": "ふじさん", "meaning_en": "Mt. Fuji", "meaning_bn": "মাউন্ট ফুজি" }],
-    "sentences": [{ "japanese": "山に登ります。", "romaji": "Yama ni noborimasu.", "english": "I climb a mountain.", "bangla": "আমি পাহাড়ে চড়ি।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "23", "kanji": "川", "meaning_en": "River", "meaning_bn": "নদী",
-    "onyomi": ["セン"], "kunyomi": ["かわ"],
-    "examples": [{ "word": "川", "reading": "かわ", "meaning_en": "River", "meaning_bn": "নদী" }],
-    "sentences": [{ "japanese": "きれいな川ですね。", "romaji": "Kireina kawa desu ne.", "english": "It is a beautiful river.", "bangla": "এটি একটি সুন্দর নদী।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "24", "kanji": "天", "meaning_en": "Heaven, Sky", "meaning_bn": "আকাশ",
-    "onyomi": ["テン"], "kunyomi": ["あまつ", "あめ"],
-    "examples": [{ "word": "天気", "reading": "てんき", "meaning_en": "Weather", "meaning_bn": "আবহাওয়া" }],
-    "sentences": [{ "japanese": "今日はいい天気です。", "romaji": "Kyou wa ii tenki desu.", "english": "The weather is good today.", "bangla": "আজকের আবহাওয়া ভালো।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "25", "kanji": "気", "meaning_en": "Spirit, Air, Mood", "meaning_bn": "মন, বাতাস",
-    "onyomi": ["キ", "ケ"], "kunyomi": ["いき"],
-    "examples": [{ "word": "元気", "reading": "げんき", "meaning_en": "Healthy, energetic", "meaning_bn": "সুস্থ, প্রাণবন্ত" }],
-    "sentences": [{ "japanese": "お元気ですか。", "romaji": "Ogenki desu ka.", "english": "How are you?", "bangla": "আপনি কেমন আছেন?" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "26", "kanji": "空", "meaning_en": "Sky, Empty", "meaning_bn": "আকাশ, খালি",
-    "onyomi": ["クウ"], "kunyomi": ["そら", "あ.く"],
-    "examples": [{ "word": "空", "reading": "そら", "meaning_en": "Sky", "meaning_bn": "আকাশ" }],
-    "sentences": [{ "japanese": "空が青いです。", "romaji": "Sora ga aoi desu.", "english": "The sky is blue.", "bangla": "আকাশ নীল।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "27", "kanji": "雨", "meaning_en": "Rain", "meaning_bn": "বৃষ্টি",
-    "onyomi": ["ウ"], "kunyomi": ["あめ", "あま-"],
-    "examples": [{ "word": "大雨", "reading": "おおあめ", "meaning_en": "Heavy rain", "meaning_bn": "ভারী বৃষ্টি" }],
-    "sentences": [{ "japanese": "雨が降っています。", "romaji": "Ame ga futte imasu.", "english": "It is raining.", "bangla": "বৃষ্টি পড়ছে।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "28", "kanji": "電", "meaning_en": "Electricity", "meaning_bn": "বিদ্যুৎ",
-    "onyomi": ["デン"], "kunyomi": [],
-    "examples": [{ "word": "電車", "reading": "でんしゃ", "meaning_en": "Train", "meaning_bn": "ট্রেন" }],
-    "sentences": [{ "japanese": "電車で行きます。", "romaji": "Densha de ikimasu.", "english": "I will go by train.", "bangla": "আমি ট্রেনে যাবো।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "29", "kanji": "花", "meaning_en": "Flower", "meaning_bn": "ফুল",
-    "onyomi": ["カ", "ケ"], "kunyomi": ["はな"],
-    "examples": [{ "word": "花見", "reading": "はなみ", "meaning_en": "Flower viewing", "meaning_bn": "ফুল দেখা" }],
-    "sentences": [{ "japanese": "花が咲きました。", "romaji": "Hana ga sakimashita.", "english": "The flowers bloomed.", "bangla": "ফুল ফুটেছে।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "30", "kanji": "魚", "meaning_en": "Fish", "meaning_bn": "মাছ",
-    "onyomi": ["ギョ"], "kunyomi": ["さかな", "うお"],
-    "examples": [{ "word": "魚", "reading": "さかな", "meaning_en": "Fish", "meaning_bn": "মাছ" }],
-    "sentences": [{ "japanese": "魚を食べます。", "romaji": "Sakana o tabemasu.", "english": "I eat fish.", "bangla": "আমি মাছ খাই।" }],
-    "level": "N5", "lesson": 3
-  },
-  {
-    "id": "31", "kanji": "人", "meaning_en": "Person", "meaning_bn": "মানুষ",
-    "onyomi": ["ジン", "ニン"], "kunyomi": ["ひと"],
-    "examples": [{ "word": "あの人", "reading": "あのひと", "meaning_en": "That person", "meaning_bn": "ঐ ব্যক্তি" }],
-    "sentences": [{ "japanese": "あの人は誰ですか。", "romaji": "Ano hito wa dare desu ka.", "english": "Who is that person?", "bangla": "ঐ ব্যক্তিটি কে?" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "32", "kanji": "子", "meaning_en": "Child", "meaning_bn": "বাচ্চা, শিশু",
-    "onyomi": ["シ", "ス"], "kunyomi": ["こ", "-こ"],
-    "examples": [{ "word": "子供", "reading": "こども", "meaning_en": "Child", "meaning_bn": "বাচ্চা" }],
-    "sentences": [{ "japanese": "公園に子供がいます。", "romaji": "Kouen ni kodomo ga imasu.", "english": "There are children in the park.", "bangla": "পার্কে বাচ্চারা আছে।" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "33", "kanji": "男", "meaning_en": "Man, Male", "meaning_bn": "পুরুষ, ছেলে",
-    "onyomi": ["ダン", "ナン"], "kunyomi": ["おとこ"],
-    "examples": [{ "word": "男の子", "reading": "おとこのこ", "meaning_en": "Boy", "meaning_bn": "ছেলে" }],
-    "sentences": [{ "japanese": "男の人がいます。", "romaji": "Otoko no hito ga imasu.", "english": "There is a man.", "bangla": "সেখানে একজন পুরুষ আছে।" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "34", "kanji": "女", "meaning_en": "Woman, Female", "meaning_bn": "মহিলা, মেয়ে",
-    "onyomi": ["ジョ"], "kunyomi": ["おんな", "め"],
-    "examples": [{ "word": "女の子", "reading": "おんなのこ", "meaning_en": "Girl", "meaning_bn": "মেয়ে" }],
-    "sentences": [{ "japanese": "女の人が話しています。", "romaji": "Onna no hito ga hanashiteimasu.", "english": "A woman is speaking.", "bangla": "একজন মহিলা কথা বলছেন।" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "35", "kanji": "父", "meaning_en": "Father", "meaning_bn": "বাবা",
-    "onyomi": ["フ"], "kunyomi": ["ちち"],
-    "examples": [{ "word": "お父さん", "reading": "おとうさん", "meaning_en": "Father (someone else's)", "meaning_bn": "বাবা (অন্যের)" }],
-    "sentences": [{ "japanese": "父は医者です。", "romaji": "Chichi wa isha desu.", "english": "My father is a doctor.", "bangla": "আমার বাবা একজন ডাক্তার।" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "36", "kanji": "母", "meaning_en": "Mother", "meaning_bn": "মা",
-    "onyomi": ["ボ"], "kunyomi": ["はは"],
-    "examples": [{ "word": "お母さん", "reading": "おかあさん", "meaning_en": "Mother (someone else's)", "meaning_bn": "মা (অন্যের)" }],
-    "sentences": [{ "japanese": "母は優しいです。", "romaji": "Haha wa yasashii desu.", "english": "My mother is kind.", "bangla": "আমার মা অনেক দয়ালু।" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "37", "kanji": "名", "meaning_en": "Name", "meaning_bn": "নাম",
-    "onyomi": ["メイ", "ミョウ"], "kunyomi": ["な"],
-    "examples": [{ "word": "名前", "reading": "なまえ", "meaning_en": "Name", "meaning_bn": "নাম" }],
-    "sentences": [{ "japanese": "お名前は何ですか。", "romaji": "Onamae wa nan desu ka.", "english": "What is your name?", "bangla": "আপনার নাম কী?" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "38", "kanji": "友", "meaning_en": "Friend", "meaning_bn": "বন্ধু",
-    "onyomi": ["ユウ"], "kunyomi": ["とも"],
-    "examples": [{ "word": "友達", "reading": "ともだち", "meaning_en": "Friend", "meaning_bn": "বন্ধু" }],
-    "sentences": [{ "japanese": "友達と遊びます。", "romaji": "Tomodachi to asobimasu.", "english": "I play with my friend.", "bangla": "আমি বন্ধুর সাথে খেলি।" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "39", "kanji": "本", "meaning_en": "Book, Origin", "meaning_bn": "বই",
-    "onyomi": ["ホン"], "kunyomi": ["もと"],
-    "examples": [{ "word": "本", "reading": "ほん", "meaning_en": "Book", "meaning_bn": "বই" }],
-    "sentences": [{ "japanese": "この本は面白いです。", "romaji": "Kono hon wa omoshiroi desu.", "english": "This book is interesting.", "bangla": "এই বইটি অনেক মজার।" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "40", "kanji": "何", "meaning_en": "What", "meaning_bn": "কী",
-    "onyomi": ["カ"], "kunyomi": ["なに", "なん"],
-    "examples": [{ "word": "何か", "reading": "なにか", "meaning_en": "Something", "meaning_bn": "কিছু" }],
-    "sentences": [{ "japanese": "これは何ですか。", "romaji": "Kore wa nan desu ka.", "english": "What is this?", "bangla": "এটা কী?" }],
-    "level": "N5", "lesson": 4
-  },
-  {
-    "id": "41", "kanji": "目", "meaning_en": "Eye", "meaning_bn": "চোখ",
-    "onyomi": ["モク", "ボク"], "kunyomi": ["め", "-め"],
-    "examples": [{ "word": "目", "reading": "め", "meaning_en": "Eye", "meaning_bn": "চোখ" }],
-    "sentences": [{ "japanese": "目が痛いです。", "romaji": "Me ga itai desu.", "english": "My eyes hurt.", "bangla": "আমার চোখে ব্যথা করছে।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "42", "kanji": "口", "meaning_en": "Mouth", "meaning_bn": "মুখ",
-    "onyomi": ["コウ", "ク"], "kunyomi": ["くち"],
-    "examples": [{ "word": "入口", "reading": "いりぐち", "meaning_en": "Entrance", "meaning_bn": "প্রবেশদ্বার" }],
-    "sentences": [{ "japanese": "入口はどこですか。", "romaji": "Iriguchi wa doko desu ka.", "english": "Where is the entrance?", "bangla": "প্রবেশদ্বারটি কোথায়?" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "43", "kanji": "耳", "meaning_en": "Ear", "meaning_bn": "কান",
-    "onyomi": ["ジ"], "kunyomi": ["みみ"],
-    "examples": [{ "word": "耳", "reading": "みみ", "meaning_en": "Ear", "meaning_bn": "কান" }],
-    "sentences": [{ "japanese": "耳が聞こえません。", "romaji": "Mimi ga kikoemasen.", "english": "I can't hear.", "bangla": "আমি কানে শুনতে পাচ্ছি না।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "44", "kanji": "手", "meaning_en": "Hand", "meaning_bn": "হাত",
-    "onyomi": ["シュ"], "kunyomi": ["て"],
-    "examples": [{ "word": "手紙", "reading": "てがみ", "meaning_en": "Letter", "meaning_bn": "চিঠি" }],
-    "sentences": [{ "japanese": "手を洗います。", "romaji": "Te o araimasu.", "english": "I wash my hands.", "bangla": "আমি হাত ধুচ্ছি।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "45", "kanji": "足", "meaning_en": "Leg, Foot", "meaning_bn": "পা",
-    "onyomi": ["ソク"], "kunyomi": ["あし", "た.りる"],
-    "examples": [{ "word": "右足", "reading": "みぎあし", "meaning_en": "Right foot", "meaning_bn": "ডান পা" }],
-    "sentences": [{ "japanese": "足が痛いです。", "romaji": "Ashi ga itai desu.", "english": "My leg hurts.", "bangla": "আমার পায়ে ব্যথা।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "46", "kanji": "体", "meaning_en": "Body", "meaning_bn": "শরীর",
-    "onyomi": ["タイ", "テイ"], "kunyomi": ["からだ"],
-    "examples": [{ "word": "体", "reading": "からだ", "meaning_en": "Body", "meaning_bn": "শরীর" }],
-    "sentences": [{ "japanese": "体に気をつけて。", "romaji": "Karada ni ki o tsukete.", "english": "Take care of yourself.", "bangla": "শরীরের যত্ন নিবেন।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "47", "kanji": "上", "meaning_en": "Up, Above", "meaning_bn": "উপরে",
-    "onyomi": ["ジョウ", "ショウ"], "kunyomi": ["うえ", "うわ-", "かみ", "あ.げる"],
-    "examples": [{ "word": "上", "reading": "うえ", "meaning_en": "Above/Up", "meaning_bn": "উপরে" }],
-    "sentences": [{ "japanese": "机の上に本があります。", "romaji": "Tsukue no ue ni hon ga arimasu.", "english": "There is a book on the desk.", "bangla": "টেবিলের উপরে বই আছে।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "48", "kanji": "下", "meaning_en": "Down, Below", "meaning_bn": "নিচে",
-    "onyomi": ["カ", "ゲ"], "kunyomi": ["した", "しも", "もと", "さ.げる"],
-    "examples": [{ "word": "下", "reading": "した", "meaning_en": "Below/Down", "meaning_bn": "নিচে" }],
-    "sentences": [{ "japanese": "木の下に猫がいます。", "romaji": "Ki no shita ni neko ga imasu.", "english": "There is a cat under the tree.", "bangla": "গাছের নিচে একটি বিড়াল আছে।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "49", "kanji": "左", "meaning_en": "Left", "meaning_bn": "বাম",
-    "onyomi": ["サ", "シャ"], "kunyomi": ["ひだり"],
-    "examples": [{ "word": "左手", "reading": "ひだりて", "meaning_en": "Left hand", "meaning_bn": "বাম হাত" }],
-    "sentences": [{ "japanese": "左へ曲がってください。", "romaji": "Hidari e magatte kudasai.", "english": "Please turn left.", "bangla": "বাম দিকে ঘুরুন।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "50", "kanji": "右", "meaning_en": "Right", "meaning_bn": "ডান",
-    "onyomi": ["ウ", "ユウ"], "kunyomi": ["みぎ"],
-    "examples": [{ "word": "右", "reading": "みぎ", "meaning_en": "Right", "meaning_bn": "ডান" }],
-    "sentences": [{ "japanese": "右手で書きます。", "romaji": "Migite de kakimasu.", "english": "I write with my right hand.", "bangla": "আমি ডান হাতে লিখি।" }],
-    "level": "N5", "lesson": 5
-  },
-  {
-    "id": "51", "kanji": "中", "meaning_en": "Inside, Middle", "meaning_bn": "ভিতরে, মাঝে",
-    "onyomi": ["チュウ"], "kunyomi": ["なか"],
-    "examples": [{ "word": "中国", "reading": "ちゅうごく", "meaning_en": "China", "meaning_bn": "চীন" }],
-    "sentences": [{ "japanese": "かばんの中にペンがあります。", "romaji": "Kaban no naka ni pen ga arimasu.", "english": "There is a pen in the bag.", "bangla": "ব্যাগের ভেতরে কলম আছে।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "52", "kanji": "外", "meaning_en": "Outside", "meaning_bn": "বাইরে",
-    "onyomi": ["ガイ", "ゲ"], "kunyomi": ["そと", "ほか", "はず.す"],
-    "examples": [{ "word": "外国", "reading": "がいこく", "meaning_en": "Foreign country", "meaning_bn": "বিদেশ" }],
-    "sentences": [{ "japanese": "外は寒いです。", "romaji": "Soto wa samui desu.", "english": "It's cold outside.", "bangla": "বাইরে অনেক ঠাণ্ডা।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "53", "kanji": "前", "meaning_en": "Before, Front", "meaning_bn": "আগে, সামনে",
-    "onyomi": ["ゼン"], "kunyomi": ["まえ"],
-    "examples": [{ "word": "名前", "reading": "なまえ", "meaning_en": "Name", "meaning_bn": "নাম" }],
-    "sentences": [{ "japanese": "駅の前にいます。", "romaji": "Eki no mae ni imasu.", "english": "I am in front of the station.", "bangla": "আমি স্টেশনের সামনে আছি।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "54", "kanji": "後", "meaning_en": "After, Behind", "meaning_bn": "পরে, পেছনে",
-    "onyomi": ["ゴ", "コウ"], "kunyomi": ["のち", "うし.ろ", "あと", "おく.れる"],
-    "examples": [{ "word": "後ろ", "reading": "うしろ", "meaning_en": "Behind", "meaning_bn": "পেছনে" }],
-    "sentences": [{ "japanese": "私の後ろに誰かいます。", "romaji": "Watashi no ushiro ni dareka imasu.", "english": "Someone is behind me.", "bangla": "আমার পেছনে কেউ একজন আছে।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "55", "kanji": "東", "meaning_en": "East", "meaning_bn": "পূর্ব",
-    "onyomi": ["トウ"], "kunyomi": ["ひがし"],
-    "examples": [{ "word": "東口", "reading": "ひがしぐち", "meaning_en": "East exit", "meaning_bn": "পূর্ব দিকের গেট" }],
-    "sentences": [{ "japanese": "太陽は東から昇ります。", "romaji": "Taiyou wa higashi kara noborimasu.", "english": "The sun rises in the east.", "bangla": "সূর্য পূর্ব দিকে ওঠে।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "56", "kanji": "西", "meaning_en": "West", "meaning_bn": "পশ্চিম",
-    "onyomi": ["セイ", "サイ"], "kunyomi": ["にし"],
-    "examples": [{ "word": "西口", "reading": "にしぐち", "meaning_en": "West exit", "meaning_bn": "পশ্চিম দিকের গেট" }],
-    "sentences": [{ "japanese": "西へ行きます。", "romaji": "Nishi e ikimasu.", "english": "I go to the west.", "bangla": "আমি পশ্চিমে যাচ্ছি।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "57", "kanji": "南", "meaning_en": "South", "meaning_bn": "দক্ষিণ",
-    "onyomi": ["ナン", "ナ"], "kunyomi": ["みなみ"],
-    "examples": [{ "word": "南口", "reading": "みなみぐち", "meaning_en": "South exit", "meaning_bn": "দক্ষিণ দিকের গেট" }],
-    "sentences": [{ "japanese": "南の国は暑いです。", "romaji": "Minami no kuni wa atsui desu.", "english": "Southern countries are hot.", "bangla": "দক্ষিণের দেশগুলো গরম হয়।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "58", "kanji": "北", "meaning_en": "North", "meaning_bn": "উত্তর",
-    "onyomi": ["ホク"], "kunyomi": ["きた"],
-    "examples": [{ "word": "北口", "reading": "きたぐち", "meaning_en": "North exit", "meaning_bn": "উত্তর দিকের গেট" }],
-    "sentences": [{ "japanese": "北の風が吹いています。", "romaji": "Kita no kaze ga fuiteimasu.", "english": "The north wind is blowing.", "bangla": "উত্তরের বাতাস বইছে।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "59", "kanji": "大", "meaning_en": "Large, Big", "meaning_bn": "বড়",
-    "onyomi": ["ダイ", "タイ"], "kunyomi": ["おお", "おおきい"],
-    "examples": [{ "word": "大きい", "reading": "おおきい", "meaning_en": "Big", "meaning_bn": "বড়" }],
-    "sentences": [{ "japanese": "とても大きいです。", "romaji": "Totemo ookii desu.", "english": "It's very big.", "bangla": "এটি অনেক বড়।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "60", "kanji": "小", "meaning_en": "Small", "meaning_bn": "ছোট",
-    "onyomi": ["ショウ"], "kunyomi": ["ちい.さい", "こ-", "お-"],
-    "examples": [{ "word": "小さい", "reading": "ちいさい", "meaning_en": "Small", "meaning_bn": "ছোট" }],
-    "sentences": [{ "japanese": "小さい犬を飼っています。", "romaji": "Chiisai inu o katteimasu.", "english": "I have a small dog.", "bangla": "আমার একটি ছোট কুকুর আছে।" }],
-    "level": "N5", "lesson": 6
-  },
-  {
-    "id": "61", "kanji": "高", "meaning_en": "High, Expensive", "meaning_bn": "উঁচু, দামি",
-    "onyomi": ["コウ"], "kunyomi": ["たか.い", "たか", "たか.まる", "たか.める"],
-    "examples": [{ "word": "高い", "reading": "たかい", "meaning_en": "High/Expensive", "meaning_bn": "দামি/উঁচু" }],
-    "sentences": [{ "japanese": "この本は高いです。", "romaji": "Kono hon wa takai desu.", "english": "This book is expensive.", "bangla": "এই বইটার অনেক দাম।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "62", "kanji": "安", "meaning_en": "Cheap, Peaceful", "meaning_bn": "সস্তা, শান্ত",
-    "onyomi": ["アン"], "kunyomi": ["やす.い", "やす.まる", "やす", "やす.らか"],
-    "examples": [{ "word": "安い", "reading": "やすい", "meaning_en": "Cheap", "meaning_bn": "সস্তা" }],
-    "sentences": [{ "japanese": "このりんごは安いです。", "romaji": "Kono ringo wa yasui desu.", "english": "This apple is cheap.", "bangla": "এই আপেলটা সস্তা।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "63", "kanji": "新", "meaning_en": "New", "meaning_bn": "নতুন",
-    "onyomi": ["シン"], "kunyomi": ["あたら.しい", "あら.た", "にい-"],
-    "examples": [{ "word": "新しい", "reading": "あたらしい", "meaning_en": "New", "meaning_bn": "নতুন" }],
-    "sentences": [{ "japanese": "新しい靴を買いました。", "romaji": "Atarashii kutsu o kaimashita.", "english": "I bought new shoes.", "bangla": "আমি নতুন জুতো কিনেছি।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "64", "kanji": "古", "meaning_en": "Old", "meaning_bn": "পুরাতন",
-    "onyomi": ["コ"], "kunyomi": ["ふる.い", "ふる-", "ふる.す"],
-    "examples": [{ "word": "古い", "reading": "ふるい", "meaning_en": "Old", "meaning_bn": "পুরাতন" }],
-    "sentences": [{ "japanese": "これは古い時計です。", "romaji": "Kore wa furui tokei desu.", "english": "This is an old watch.", "bangla": "এটি একটি পুরোনো ঘড়ি।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "65", "kanji": "長", "meaning_en": "Long, Leader", "meaning_bn": "লম্বা, প্রধান",
-    "onyomi": ["チョウ"], "kunyomi": ["なが.い", "おさ"],
-    "examples": [{ "word": "長い", "reading": "ながい", "meaning_en": "Long", "meaning_bn": "লম্বা" }],
-    "sentences": [{ "japanese": "髪が長いです。", "romaji": "Kami ga nagai desu.", "english": "My hair is long.", "bangla": "আমার চুল লম্বা।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "66", "kanji": "多", "meaning_en": "Many", "meaning_bn": "অনেক",
-    "onyomi": ["タ"], "kunyomi": ["おお.い", "まさ.に", "まさ.る"],
-    "examples": [{ "word": "多い", "reading": "おおい", "meaning_en": "Many", "meaning_bn": "অনেক" }],
-    "sentences": [{ "japanese": "人が多いです。", "romaji": "Hito ga ooi desu.", "english": "There are many people.", "bangla": "এখানে অনেক মানুষ।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "67", "kanji": "少", "meaning_en": "Few, Little", "meaning_bn": "অল্প",
-    "onyomi": ["ショウ"], "kunyomi": ["すく.ない", "すこ.し"],
-    "examples": [{ "word": "少し", "reading": "すこし", "meaning_en": "A little", "meaning_bn": "একটু/অল্প" }],
-    "sentences": [{ "japanese": "少し疲れました。", "romaji": "Sukoshi tsukaremashita.", "english": "I am a little tired.", "bangla": "আমি একটু ক্লান্ত।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "68", "kanji": "白", "meaning_en": "White", "meaning_bn": "সাদা",
-    "onyomi": ["ハク", "ビャク"], "kunyomi": ["しろ", "しら-", "しろ.い"],
-    "examples": [{ "word": "白い", "reading": "しろい", "meaning_en": "White", "meaning_bn": "সাদা" }],
-    "sentences": [{ "japanese": "白い猫が好きです。", "romaji": "Shiroi neko ga suki desu.", "english": "I like white cats.", "bangla": "আমি সাদা বিড়াল পছন্দ করি।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "69", "kanji": "黒", "meaning_en": "Black", "meaning_bn": "কালো",
-    "onyomi": ["コク"], "kunyomi": ["くろ", "くろ.ずむ", "くろ.い"],
-    "examples": [{ "word": "黒い", "reading": "くろい", "meaning_en": "Black", "meaning_bn": "কালো" }],
-    "sentences": [{ "japanese": "黒いペンを持っています。", "romaji": "Kuroi pen o motteimasu.", "english": "I have a black pen.", "bangla": "আমার একটি কালো কলম আছে।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "70", "kanji": "赤", "meaning_en": "Red", "meaning_bn": "লাল",
-    "onyomi": ["セキ", "シャク"], "kunyomi": ["あか", "あか-", "あか.い", "あか.らむ", "あか.らめる"],
-    "examples": [{ "word": "赤い", "reading": "あかい", "meaning_en": "Red", "meaning_bn": "লাল" }],
-    "sentences": [{ "japanese": "赤い車が見えます。", "romaji": "Akai kuruma ga miemasu.", "english": "I can see a red car.", "bangla": "আমি একটি লাল গাড়ি দেখতে পাচ্ছি।" }],
-    "level": "N5", "lesson": 7
-  },
-  {
-    "id": "71", "kanji": "青", "meaning_en": "Blue", "meaning_bn": "নীল",
-    "onyomi": ["セイ", "ショウ"], "kunyomi": ["あお", "あお-", "あお.い"],
-    "examples": [{ "word": "青い", "reading": "あおい", "meaning_en": "Blue", "meaning_bn": "নীল" }],
-    "sentences": [{ "japanese": "青い空が綺麗です。", "romaji": "Aoi sora ga kirei desu.", "english": "The blue sky is beautiful.", "bangla": "নীল আকাশটি খুব সুন্দর।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "72", "kanji": "行", "meaning_en": "Go", "meaning_bn": "যাওয়া",
-    "onyomi": ["コウ", "ギョウ", "アン"], "kunyomi": ["い.く", "ゆ.く", "おこな.う"],
-    "examples": [{ "word": "行く", "reading": "いく", "meaning_en": "To go", "meaning_bn": "যাওয়া" }],
-    "sentences": [{ "japanese": "学校に行きます。", "romaji": "Gakkou ni ikimasu.", "english": "I will go to school.", "bangla": "আমি স্কুলে যাবো।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "73", "kanji": "来", "meaning_en": "Come", "meaning_bn": "আসা",
-    "onyomi": ["ライ", "タイ"], "kunyomi": ["く.る", "きた.る", "きた.す", "き.たす", "き.たる", "き", "こ"],
-    "examples": [{ "word": "来る", "reading": "くる", "meaning_en": "To come", "meaning_bn": "আসা" }],
-    "sentences": [{ "japanese": "友達が家に来ます。", "romaji": "Tomodachi ga uchi ni kimasu.", "english": "A friend will come to my house.", "bangla": "বন্ধু আমার বাসায় আসবে।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "74", "kanji": "見", "meaning_en": "See", "meaning_bn": "দেখা",
-    "onyomi": ["ケン"], "kunyomi": ["み.る", "み.える", "み.せる"],
-    "examples": [{ "word": "見る", "reading": "みる", "meaning_en": "To see", "meaning_bn": "দেখা" }],
-    "sentences": [{ "japanese": "テレビを見ます。", "romaji": "Terebi o mimasu.", "english": "I watch TV.", "bangla": "আমি টিভি দেখি।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "75", "kanji": "食", "meaning_en": "Eat", "meaning_bn": "খাওয়া",
-    "onyomi": ["ショク", "ジキ"], "kunyomi": ["た.べる", "く.う", "く.らう"],
-    "examples": [{ "word": "食べる", "reading": "たべる", "meaning_en": "To eat", "meaning_bn": "খাওয়া" }],
-    "sentences": [{ "japanese": "寿司を食べます。", "romaji": "Sushi o tabemasu.", "english": "I will eat sushi.", "bangla": "আমি সুশি খাবো।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "76", "kanji": "飲", "meaning_en": "Drink", "meaning_bn": "পান করা",
-    "onyomi": ["イン", "オン"], "kunyomi": ["の.む", "-の.み"],
-    "examples": [{ "word": "飲む", "reading": "のむ", "meaning_en": "To drink", "meaning_bn": "পান করা" }],
-    "sentences": [{ "japanese": "水を飲みます。", "romaji": "Mizu o nomimasu.", "english": "I drink water.", "bangla": "আমি পানি খাই।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "77", "kanji": "言", "meaning_en": "Say", "meaning_bn": "বলা",
-    "onyomi": ["ゲン", "ゴン"], "kunyomi": ["い.う", "こと"],
-    "examples": [{ "word": "言う", "reading": "いう", "meaning_en": "To say", "meaning_bn": "বলা" }],
-    "sentences": [{ "japanese": "『こんにちは』と言いました。", "romaji": "'Konnichiwa' to iimashita.", "english": "I said 'Hello'.", "bangla": "আমি 'হ্যালো' বলেছিলাম।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "78", "kanji": "話", "meaning_en": "Speak, Talk", "meaning_bn": "কথা বলা",
-    "onyomi": ["ワ"], "kunyomi": ["はな.す", "はなし"],
-    "examples": [{ "word": "話す", "reading": "はなす", "meaning_en": "To speak", "meaning_bn": "কথা বলা" }],
-    "sentences": [{ "japanese": "日本語を話します。", "romaji": "Nihongo o hanashimasu.", "english": "I speak Japanese.", "bangla": "আমি জাপানি ভাষায় কথা বলি।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "79", "kanji": "立", "meaning_en": "Stand", "meaning_bn": "দাঁড়ানো",
-    "onyomi": ["リツ", "リュウ", "リットル"], "kunyomi": ["た.つ", "-た.つ", "た.ち-", "た.てる", "-た.てる", "た.て-", "たて-", "-た.て", "-だ.て", "-だ.てる"],
-    "examples": [{ "word": "立つ", "reading": "たつ", "meaning_en": "To stand", "meaning_bn": "দাঁড়ানো" }],
-    "sentences": [{ "japanese": "立ってください。", "romaji": "Tatte kudasai.", "english": "Please stand up.", "bangla": "দয়া করে দাঁড়ান।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "80", "kanji": "休", "meaning_en": "Rest", "meaning_bn": "বিশ্রাম নেওয়া",
-    "onyomi": ["キュウ"], "kunyomi": ["やす.む", "やす.まる", "やす.める"],
-    "examples": [{ "word": "休む", "reading": "やすむ", "meaning_en": "To rest/be absent", "meaning_bn": "বিশ্রাম নেওয়া / ছুটি নেওয়া" }],
-    "sentences": [{ "japanese": "今日は休みます。", "romaji": "Kyou wa yasumimasu.", "english": "I will rest today.", "bangla": "আমি আজ ছুটি নেবো।" }],
-    "level": "N5", "lesson": 8
-  },
-  {
-    "id": "81", "kanji": "買", "meaning_en": "Buy", "meaning_bn": "কেনা",
-    "onyomi": ["バイ"], "kunyomi": ["か.う"],
-    "examples": [{ "word": "買う", "reading": "かう", "meaning_en": "To buy", "meaning_bn": "কেনা" }],
-    "sentences": [{ "japanese": "本を買いました。", "romaji": "Hon o kaimashita.", "english": "I bought a book.", "bangla": "আমি একটি বই কিনেছিলাম।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "82", "kanji": "出", "meaning_en": "Exit, Go out", "meaning_bn": "বের হওয়া",
-    "onyomi": ["シュツ", "スイ"], "kunyomi": ["で.る", "-で", "だ.す", "-だ.す", "い.でる", "い.だす"],
-    "examples": [{ "word": "出る", "reading": "でる", "meaning_en": "To go out", "meaning_bn": "বের হওয়া" }],
-    "sentences": [{ "japanese": "部屋を出ます。", "romaji": "Heya o demasu.", "english": "I will leave the room.", "bangla": "আমি রুম থেকে বের হবো।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "83", "kanji": "入", "meaning_en": "Enter", "meaning_bn": "প্রবেশ করা",
-    "onyomi": ["ニュウ", "ジュ"], "kunyomi": ["い.る", "-い.る", "-い.り", "い.れる", "-い.れ", "はい.る"],
-    "examples": [{ "word": "入る", "reading": "はいる", "meaning_en": "To enter", "meaning_bn": "প্রবেশ করা" }],
-    "sentences": [{ "japanese": "お店に入ります。", "romaji": "Omise ni hairimasu.", "english": "I will enter the shop.", "bangla": "আমি দোকানে প্রবেশ করবো।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "84", "kanji": "書", "meaning_en": "Write", "meaning_bn": "লেখা",
-    "onyomi": ["ショ"], "kunyomi": ["か.く", "-が.き", "-がき"],
-    "examples": [{ "word": "書く", "reading": "かく", "meaning_en": "To write", "meaning_bn": "লেখা" }],
-    "sentences": [{ "japanese": "手紙を書きます。", "romaji": "Tegami o kakimasu.", "english": "I will write a letter.", "bangla": "আমি একটি চিঠি লিখবো।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "85", "kanji": "読", "meaning_en": "Read", "meaning_bn": "পড়া",
-    "onyomi": ["ドク", "トク", "トウ"], "kunyomi": ["よ.む", "-よ.み"],
-    "examples": [{ "word": "読む", "reading": "よむ", "meaning_en": "To read", "meaning_bn": "পড়া" }],
-    "sentences": [{ "japanese": "本を読みます。", "romaji": "Hon o yomimasu.", "english": "I will read a book.", "bangla": "আমি বই পড়বো।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "86", "kanji": "聞", "meaning_en": "Hear, Listen", "meaning_bn": "শোনা",
-    "onyomi": ["ブン", "モン"], "kunyomi": ["き.く", "き.こえる"],
-    "examples": [{ "word": "聞く", "reading": "きく", "meaning_en": "To listen/hear", "meaning_bn": "শোনা" }],
-    "sentences": [{ "japanese": "音楽を聞きます。", "romaji": "Ongaku o kikimasu.", "english": "I listen to music.", "bangla": "আমি গান শুনি।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "87", "kanji": "学", "meaning_en": "Study, Learning", "meaning_bn": "শেখা, পড়ালেখা",
-    "onyomi": ["ガク"], "kunyomi": ["まな.ぶ"],
-    "examples": [{ "word": "学生", "reading": "がくせい", "meaning_en": "Student", "meaning_bn": "ছাত্র" }],
-    "sentences": [{ "japanese": "私は学生です。", "romaji": "Watashi wa gakusei desu.", "english": "I am a student.", "bangla": "আমি একজন ছাত্র।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "88", "kanji": "生", "meaning_en": "Life, Birth", "meaning_bn": "জীবন, জন্ম",
-    "onyomi": ["セイ", "ショウ"], "kunyomi": ["い.きる", "い.かす", "い.ける", "う.まれる", "う.まれ", "うまれ", "う.む", "お.いる", "は.える", "は.やす", "き", "なま", "なま-", "な.る", "な.す", "む.す", "-う"],
-    "examples": [{ "word": "先生", "reading": "せんせい", "meaning_en": "Teacher", "meaning_bn": "শিক্ষক" }],
-    "sentences": [{ "japanese": "先生に質問します。", "romaji": "Sensei ni shitsumon shimasu.", "english": "I ask the teacher a question.", "bangla": "আমি শিক্ষককে প্রশ্ন করি।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "89", "kanji": "会", "meaning_en": "Meet, Society", "meaning_bn": "সাক্ষাৎ করা",
-    "onyomi": ["カイ", "エ"], "kunyomi": ["あ.う", "あ.わせる", "あつ.まる"],
-    "examples": [{ "word": "会う", "reading": "あう", "meaning_en": "To meet", "meaning_bn": "সাক্ষাৎ করা" }],
-    "sentences": [{ "japanese": "友達に会います。", "romaji": "Tomodachi ni aimasu.", "english": "I will meet my friend.", "bangla": "আমি বন্ধুর সাথে দেখা করবো।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "90", "kanji": "語", "meaning_en": "Word, Language", "meaning_bn": "ভাষা",
-    "onyomi": ["ゴ"], "kunyomi": ["かた.る", "かた.らう"],
-    "examples": [{ "word": "日本語", "reading": "にほんご", "meaning_en": "Japanese language", "meaning_bn": "জাপানি ভাষা" }],
-    "sentences": [{ "japanese": "日本語を勉強します。", "romaji": "Nihongo o benkyou shimasu.", "english": "I study Japanese.", "bangla": "আমি জাপানি ভাষা পড়ি।" }],
-    "level": "N5", "lesson": 9
-  },
-  {
-    "id": "91", "kanji": "車", "meaning_en": "Car", "meaning_bn": "গাড়ি",
-    "onyomi": ["シャ"], "kunyomi": ["くるま"],
-    "examples": [{ "word": "車", "reading": "くるま", "meaning_en": "Car", "meaning_bn": "গাড়ি" }],
-    "sentences": [{ "japanese": "車を運転します。", "romaji": "Kuruma o unten shimasu.", "english": "I drive a car.", "bangla": "আমি গাড়ি চালাই।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "92", "kanji": "駅", "meaning_en": "Station", "meaning_bn": "স্টেশন",
-    "onyomi": ["エキ"], "kunyomi": [],
-    "examples": [{ "word": "駅", "reading": "えき", "meaning_en": "Station", "meaning_bn": "স্টেশন" }],
-    "sentences": [{ "japanese": "駅はどこですか。", "romaji": "Eki wa doko desu ka.", "english": "Where is the station?", "bangla": "স্টেশন কোথায়?" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "93", "kanji": "社", "meaning_en": "Company", "meaning_bn": "কোম্পানি",
-    "onyomi": ["シャ"], "kunyomi": ["やしろ"],
-    "examples": [{ "word": "会社", "reading": "かいしゃ", "meaning_en": "Company", "meaning_bn": "কোম্পানি" }],
-    "sentences": [{ "japanese": "会社で働きます。", "romaji": "Kaisha de hatarakimasu.", "english": "I work at a company.", "bangla": "আমি একটি কোম্পানিতে কাজ করি।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "94", "kanji": "校", "meaning_en": "School", "meaning_bn": "বিদ্যালয়",
-    "onyomi": ["コウ", "キョウ"], "kunyomi": [],
-    "examples": [{ "word": "学校", "reading": "がっこう", "meaning_en": "School", "meaning_bn": "বিদ্যালয়" }],
-    "sentences": [{ "japanese": "学校に行きます。", "romaji": "Gakkou ni ikimasu.", "english": "I go to school.", "bangla": "আমি স্কুলে যাই।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "95", "kanji": "店", "meaning_en": "Shop, Store", "meaning_bn": "দোকান",
-    "onyomi": ["テン"], "kunyomi": ["みせ", "たな"],
-    "examples": [{ "word": "お店", "reading": "おみせ", "meaning_en": "Shop", "meaning_bn": "দোকান" }],
-    "sentences": [{ "japanese": "あのお店は安いです。", "romaji": "Ano omise wa yasui desu.", "english": "That shop is cheap.", "bangla": "ঐ দোকানটি সস্তা।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "96", "kanji": "国", "meaning_en": "Country", "meaning_bn": "দেশ",
-    "onyomi": ["コク"], "kunyomi": ["くに"],
-    "examples": [{ "word": "国", "reading": "くに", "meaning_en": "Country", "meaning_bn": "দেশ" }],
-    "sentences": [{ "japanese": "私の国はバングラデシュです。", "romaji": "Watashi no kuni wa banguradeshu desu.", "english": "My country is Bangladesh.", "bangla": "আমার দেশ বাংলাদেশ।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "97", "kanji": "道", "meaning_en": "Road, Way", "meaning_bn": "রাস্তা",
-    "onyomi": ["ドウ", "トウ"], "kunyomi": ["みち"],
-    "examples": [{ "word": "道", "reading": "みち", "meaning_en": "Road", "meaning_bn": "রাস্তা" }],
-    "sentences": [{ "japanese": "道を歩きます。", "romaji": "Michi o arukimasu.", "english": "I walk on the road.", "bangla": "আমি রাস্তায় হাঁটি।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "98", "kanji": "時", "meaning_en": "Time, Hour", "meaning_bn": "সময়, ঘণ্টা",
-    "onyomi": ["ジ"], "kunyomi": ["とき", "-どき"],
-    "examples": [{ "word": "時間", "reading": "じかん", "meaning_en": "Time", "meaning_bn": "সময়" }],
-    "sentences": [{ "japanese": "時間がありません。", "romaji": "Jikan ga arimasen.", "english": "I don't have time.", "bangla": "আমার কাছে সময় নেই।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "99", "kanji": "分", "meaning_en": "Minute, Part", "meaning_bn": "মিনিট, অংশ",
-    "onyomi": ["ブン", "フン", "ブ"], "kunyomi": ["わ.ける", "わ.け", "わ.かれる", "わ.かる", "わ.かつ"],
-    "examples": [{ "word": "五分", "reading": "ごふん", "meaning_en": "5 minutes", "meaning_bn": "৫ মিনিট" }],
-    "sentences": [{ "japanese": "五分待ってください。", "romaji": "Gofun matte kudasai.", "english": "Please wait 5 minutes.", "bangla": "দয়া করে ৫ মিনিট অপেক্ষা করুন।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "100", "kanji": "半", "meaning_en": "Half", "meaning_bn": "অর্ধেক",
-    "onyomi": ["ハン"], "kunyomi": ["なか.ば"],
-    "examples": [{ "word": "半分", "reading": "はんぶん", "meaning_en": "Half", "meaning_bn": "অর্ধেক" }],
-    "sentences": [{ "japanese": "ケーキを半分食べます。", "romaji": "Keeki o hanbun tabemasu.", "english": "I eat half a cake.", "bangla": "আমি অর্ধেক কেক খাবো।" }],
-    "level": "N5", "lesson": 10
-  },
-  {
-    "id": "101", "kanji": "今", "meaning_en": "Now", "meaning_bn": "এখন",
-    "onyomi": ["コン", "キン"], "kunyomi": ["いま"],
-    "examples": [{ "word": "今日", "reading": "きょう", "meaning_en": "Today", "meaning_bn": "আজ" }],
-    "sentences": [{ "japanese": "今は何時ですか。", "romaji": "Ima wa nanji desu ka.", "english": "What time is it now?", "bangla": "এখন কয়টা বাজে?" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "102", "kanji": "年", "meaning_en": "Year", "meaning_bn": "বছর",
-    "onyomi": ["ネン"], "kunyomi": ["とし"],
-    "examples": [{ "word": "今年", "reading": "ことし", "meaning_en": "This year", "meaning_bn": "এই বছর" }],
-    "sentences": [{ "japanese": "今年は日本に行きます。", "romaji": "Kotoshi wa nihon ni ikimasu.", "english": "I will go to Japan this year.", "bangla": "এই বছর আমি জাপান যাবো।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "103", "kanji": "毎", "meaning_en": "Every", "meaning_bn": "প্রতি",
-    "onyomi": ["マイ"], "kunyomi": ["ごと"],
-    "examples": [{ "word": "毎日", "reading": "まいにち", "meaning_en": "Every day", "meaning_bn": "প্রতিদিন" }],
-    "sentences": [{ "japanese": "毎日勉強します。", "romaji": "Mainichi benkyou shimasu.", "english": "I study every day.", "bangla": "আমি প্রতিদিন পড়াশোনা করি।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "104", "kanji": "週", "meaning_en": "Week", "meaning_bn": "সপ্তাহ",
-    "onyomi": ["シュウ"], "kunyomi": [],
-    "examples": [{ "word": "来週", "reading": "らいしゅう", "meaning_en": "Next week", "meaning_bn": "আগামী সপ্তাহ" }],
-    "sentences": [{ "japanese": "来週テストがあります。", "romaji": "Raishuu tesuto ga arimasu.", "english": "There is a test next week.", "bangla": "আগামী সপ্তাহে পরীক্ষা আছে।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "105", "kanji": "午", "meaning_en": "Noon", "meaning_bn": "দুপুর",
-    "onyomi": ["ゴ"], "kunyomi": ["うま"],
-    "examples": [{ "word": "午後", "reading": "ごご", "meaning_en": "Afternoon", "meaning_bn": "বিকাল" }],
-    "sentences": [{ "japanese": "午後に会いましょう。", "romaji": "Gogo ni aimashou.", "english": "Let's meet in the afternoon.", "bangla": "বিকালে দেখা করি।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "106", "kanji": "間", "meaning_en": "Interval, Between", "meaning_bn": "মাঝে, সময়",
-    "onyomi": ["カン", "ケン"], "kunyomi": ["あいだ", "ま", "あい"],
-    "examples": [{ "word": "時間", "reading": "じかん", "meaning_en": "Time", "meaning_bn": "সময়" }],
-    "sentences": [{ "japanese": "AとBの間にあります。", "romaji": "A to B no aida ni arimasu.", "english": "It is between A and B.", "bangla": "এটি A এবং B এর মাঝে অবস্থিত।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "107", "kanji": "先", "meaning_en": "Before, Ahead", "meaning_bn": "আগে",
-    "onyomi": ["セン"], "kunyomi": ["さき", "ま.ず"],
-    "examples": [{ "word": "先生", "reading": "せんせい", "meaning_en": "Teacher", "meaning_bn": "শিক্ষক" }],
-    "sentences": [{ "japanese": "お先に失礼します。", "romaji": "Osaki ni shitsurei shimasu.", "english": "Pardon me for leaving before you.", "bangla": "আমি আগে যাচ্ছি (বিদায়)।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "108", "kanji": "朝", "meaning_en": "Morning", "meaning_bn": "সকাল",
-    "onyomi": ["チョウ"], "kunyomi": ["あさ"],
-    "examples": [{ "word": "朝", "reading": "あさ", "meaning_en": "Morning", "meaning_bn": "সকাল" }],
-    "sentences": [{ "japanese": "朝ごはんを食べます。", "romaji": "Asagohan o tabemasu.", "english": "I eat breakfast.", "bangla": "আমি সকালের নাস্তা খাই।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "109", "kanji": "昼", "meaning_en": "Daytime, Noon", "meaning_bn": "দুপুর, দিনের বেলা",
-    "onyomi": ["チュウ"], "kunyomi": ["ひる"],
-    "examples": [{ "word": "昼休み", "reading": "ひるやすみ", "meaning_en": "Lunch break", "meaning_bn": "দুপুরের বিরতি" }],
-    "sentences": [{ "japanese": "昼は暑いです。", "romaji": "Hiru wa atsui desu.", "english": "It is hot in the daytime.", "bangla": "দিনের বেলা গরম থাকে।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "110", "kanji": "夜", "meaning_en": "Night", "meaning_bn": "রাত",
-    "onyomi": ["ヤ"], "kunyomi": ["よる", "よ"],
-    "examples": [{ "word": "夜", "reading": "よる", "meaning_en": "Night", "meaning_bn": "রাত" }],
-    "sentences": [{ "japanese": "夜、寝ます。", "romaji": "Yoru, nemasu.", "english": "I sleep at night.", "bangla": "আমি রাতে ঘুমাই।" }],
-    "level": "N5", "lesson": 11
-  },
-  {
-    "id": "111", "kanji": "明", "meaning_en": "Bright", "meaning_bn": "উজ্জ্বল",
-    "onyomi": ["メイ", "ミョウ", "ミン"], "kunyomi": ["あ.かり", "あか.るい", "あか.るむ", "あか.らむ", "あき.らか", "あ.ける", "-あ.け", "あ.く", "あ.くる", "あ.かす"],
-    "examples": [{ "word": "明日", "reading": "あした", "meaning_en": "Tomorrow", "meaning_bn": "আগামীকাল" }],
-    "sentences": [{ "japanese": "明日は休みです。", "romaji": "Ashita wa yasumi desu.", "english": "Tomorrow is a day off.", "bangla": "আগামীকাল ছুটির দিন।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "112", "kanji": "帰", "meaning_en": "Return", "meaning_bn": "ফিরে আসা",
-    "onyomi": ["キ"], "kunyomi": ["かえ.る", "かえ.す", "おく.る", "とつ.ぐ"],
-    "examples": [{ "word": "帰る", "reading": "かえる", "meaning_en": "To return", "meaning_bn": "ফিরে আসা/যাওয়া" }],
-    "sentences": [{ "japanese": "家に帰ります。", "romaji": "Ie ni kaerimasu.", "english": "I return home.", "bangla": "আমি বাসায় ফিরে যাই।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "113", "kanji": "歩", "meaning_en": "Walk", "meaning_bn": "হাঁটা",
-    "onyomi": ["ホ", "ブ", "フ"], "kunyomi": ["ある.く", "あゆ.む"],
-    "examples": [{ "word": "歩く", "reading": "あるく", "meaning_en": "To walk", "meaning_bn": "হাঁটা" }],
-    "sentences": [{ "japanese": "公園を歩きます。", "romaji": "Kouen o arukimasu.", "english": "I walk in the park.", "bangla": "আমি পার্কে হাঁটি।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "114", "kanji": "待", "meaning_en": "Wait", "meaning_bn": "অপেক্ষা করা",
-    "onyomi": ["タイ"], "kunyomi": ["ま.つ", "-ま.ち"],
-    "examples": [{ "word": "待つ", "reading": "まつ", "meaning_en": "To wait", "meaning_bn": "অপেক্ষা করা" }],
-    "sentences": [{ "japanese": "ここで待ってください。", "romaji": "Koko de matte kudasai.", "english": "Please wait here.", "bangla": "দয়া করে এখানে অপেক্ষা করুন।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "115", "kanji": "止", "meaning_en": "Stop", "meaning_bn": "থামা",
-    "onyomi": ["シ"], "kunyomi": ["と.まる", "-ど.まり", "と.める", "-と.める", "-ど.め", "とど.める", "とど.め", "とど.まる", "や.める", "や.む", "-や.む", "よ.す", "-さ.す", "-さ.し"],
-    "examples": [{ "word": "止まる", "reading": "とまる", "meaning_en": "To stop", "meaning_bn": "থামা" }],
-    "sentences": [{ "japanese": "車が止まります。", "romaji": "Kuruma ga tomarimasu.", "english": "The car stops.", "bangla": "গাড়িটি থামবে।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "116", "kanji": "思", "meaning_en": "Think", "meaning_bn": "ভাবা, মনে করা",
-    "onyomi": ["シ"], "kunyomi": ["おも.う", "おも.えらく", "おぼ.す"],
-    "examples": [{ "word": "思う", "reading": "おもう", "meaning_en": "To think", "meaning_bn": "ভাবা" }],
-    "sentences": [{ "japanese": "いいと思います。", "romaji": "Ii to omoimasu.", "english": "I think it is good.", "bangla": "আমি মনে করি এটি ভালো।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "117", "kanji": "知", "meaning_en": "Know", "meaning_bn": "জানা",
-    "onyomi": ["チ"], "kunyomi": ["し.る", "し.らせる"],
-    "examples": [{ "word": "知る", "reading": "しる", "meaning_en": "To know", "meaning_bn": "জানা" }],
-    "sentences": [{ "japanese": "その人を知りません。", "romaji": "Sono hito o shirimasen.", "english": "I don't know that person.", "bangla": "আমি ঐ মানুষটিকে চিনি না।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "118", "kanji": "歌", "meaning_en": "Song, Sing", "meaning_bn": "গান, গাওয়া",
-    "onyomi": ["カ"], "kunyomi": ["うた", "うた.う"],
-    "examples": [{ "word": "歌う", "reading": "うたう", "meaning_en": "To sing", "meaning_bn": "গান গাওয়া" }],
-    "sentences": [{ "japanese": "歌を歌います。", "romaji": "Uta o utaimasu.", "english": "I sing a song.", "bangla": "আমি গান গাই।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "119", "kanji": "音", "meaning_en": "Sound", "meaning_bn": "শব্দ",
-    "onyomi": ["オン", "イン", "-ノン"], "kunyomi": ["おと", "ね"],
-    "examples": [{ "word": "音楽", "reading": "おんがく", "meaning_en": "Music", "meaning_bn": "মিউজিক" }],
-    "sentences": [{ "japanese": "いい音がします。", "romaji": "Ii oto ga shimasu.", "english": "It sounds good.", "bangla": "এটার শব্দ ভালো।" }],
-    "level": "N5", "lesson": 12
-  },
-  {
-    "id": "120", "kanji": "楽", "meaning_en": "Music, Fun", "meaning_bn": "মজা, আনন্দ",
-    "onyomi": ["ガク", "ラク", "ゴウ"], "kunyomi": ["たの.しい", "たの.しむ", "この.む"],
-    "examples": [{ "word": "楽しい", "reading": "たのしい", "meaning_en": "Fun", "meaning_bn": "মজার" }],
-    "sentences": [{ "japanese": "日本語は楽しいです。", "romaji": "Nihongo wa tanoshii desu.", "english": "Japanese is fun.", "bangla": "জাপানি ভাষা অনেক মজার।" }],
-    "level": "N5", "lesson": 12
+    "id": "1",
+    "kanji": "一",
+    "meaning_en": "One",
+    "meaning_bn": "এক",
+    "onyomi": [
+      "イチ",
+      "イツ"
+    ],
+    "kunyomi": [
+      "ひと",
+      "ひとつ"
+    ],
+    "examples": [
+      {
+        "word": "一つ",
+        "reading": "ひとつ",
+        "meaning_en": "One thing",
+        "meaning_bn": "একটি"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "りんごを一つください。",
+        "romaji": "Ringo o hitotsu kudasai.",
+        "english": "Please give me one apple.",
+        "bangla": "আমাকে একটি আপেল দিন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "একটি সরল রেখা মানে ১।",
+    "kun_yomi_new": {
+      "reading": "ひと (hito)",
+      "examples": [
+        {
+          "word": "一人",
+          "reading": "ひとり (hitori)",
+          "meaning_bn": "একজন"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "イチ (ichi), イツ (itsu)",
+      "examples": [
+        {
+          "word": "一月",
+          "reading": "いちがつ (ichigatsu)",
+          "meaning_bn": "জানুয়ারি মাস"
+        },
+        {
+          "word": "一日",
+          "reading": "ついたち (tsuitachi)",
+          "meaning_bn": "১ তারিখ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "2",
+    "kanji": "二",
+    "meaning_en": "Two",
+    "meaning_bn": "দুই",
+    "onyomi": [
+      "ニ",
+      "ジ"
+    ],
+    "kunyomi": [
+      "ふた",
+      "ふたつ"
+    ],
+    "examples": [
+      {
+        "word": "二人",
+        "reading": "ふたり",
+        "meaning_en": "Two people",
+        "meaning_bn": "দুইজন মানুষ"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "二人の学生がいます。",
+        "romaji": "Futari no gakusei ga imasu.",
+        "english": "There are two students.",
+        "bangla": "এখানে দুইজন ছাত্র আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "দুটি সমান্তরাল রেখা মানে ২।",
+    "kun_yomi_new": {
+      "reading": "ふた (futa)",
+      "examples": [
+        {
+          "word": "二人",
+          "reading": "ふたり (futari)",
+          "meaning_bn": "দুজণ"
+        },
+        {
+          "word": "二日",
+          "reading": "ふつか (futsuka)",
+          "meaning_bn": "২ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ニ (ni)",
+      "examples": [
+        {
+          "word": "二月",
+          "reading": "にがつ (nigatsu)",
+          "meaning_bn": "ফেব্রুয়ারি মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "3",
+    "kanji": "三",
+    "meaning_en": "Three",
+    "meaning_bn": "তিন",
+    "onyomi": [
+      "サン"
+    ],
+    "kunyomi": [
+      "み",
+      "みつ",
+      "みっつ"
+    ],
+    "examples": [
+      {
+        "word": "三日",
+        "reading": "みっか",
+        "meaning_en": "3rd day",
+        "meaning_bn": "তৃতীয় দিন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "三日待ってください。",
+        "romaji": "Mikka matte kudasai.",
+        "english": "Please wait three days.",
+        "bangla": "তিন দিন অপেক্ষা করুন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "তিনটি সমান্তরাল রেখা মানে ৩।",
+    "kun_yomi_new": {
+      "reading": "みっ (mi-)",
+      "examples": [
+        {
+          "word": "三つ",
+          "reading": "みっつ (mittsu)",
+          "meaning_bn": "তিনটি"
+        },
+        {
+          "word": "三日",
+          "reading": "みっか (mikka)",
+          "meaning_bn": "৩ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "サン (san)",
+      "examples": [
+        {
+          "word": "三月",
+          "reading": "さんががつ (sangatsu)",
+          "meaning_bn": "মার্চ মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "4",
+    "kanji": "四",
+    "meaning_en": "Four",
+    "meaning_bn": "চার",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [
+      "よ",
+      "よつ",
+      "よっつ",
+      "よん"
+    ],
+    "examples": [
+      {
+        "word": "四月",
+        "reading": "しがつ",
+        "meaning_en": "April",
+        "meaning_bn": "এপ্রিল মাস"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "今は四月です。",
+        "romaji": "Ima wa shigatsu desu.",
+        "english": "It is April now.",
+        "bangla": "এখন এপ্রিল মাস।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "জানular চার কোণা ফ্রেম।",
+    "kun_yomi_new": {
+      "reading": "よっ (yo-), よん (yon)",
+      "examples": [
+        {
+          "word": "四人",
+          "reading": "よにん (yonin)",
+          "meaning_bn": "চারজন"
+        },
+        {
+          "word": "四日",
+          "reading": "よっか (yokka)",
+          "meaning_bn": "৪ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "シ (shi)",
+      "examples": [
+        {
+          "word": "四月",
+          "reading": "しがつ (shigatsu)",
+          "meaning_bn": "এপ্রিল মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "5",
+    "kanji": "五",
+    "meaning_en": "Five",
+    "meaning_bn": "পাঁচ",
+    "onyomi": [
+      "ゴ"
+    ],
+    "kunyomi": [
+      "いつ",
+      "いつつ"
+    ],
+    "examples": [
+      {
+        "word": "五円",
+        "reading": "ごえん",
+        "meaning_en": "5 Yen",
+        "meaning_bn": "পাঁচ ইয়েন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "五円玉があります。",
+        "romaji": "Goen dama ga arimasu.",
+        "english": "I have a 5-yen coin.",
+        "bangla": "আমার কাছে পাঁচ ইয়েনের কয়েন আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "পাঁচ আঙুলের গঠনবিন্যাস।",
+    "kun_yomi_new": {
+      "reading": "いつ (itsu)",
+      "examples": [
+        {
+          "word": "五つ",
+          "reading": "いつつ (ittsutsu)",
+          "meaning_bn": "পাঁচটি"
+        },
+        {
+          "word": "五日",
+          "reading": "いつか (itsuka)",
+          "meaning_bn": "৫ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ゴ (go)",
+      "examples": [
+        {
+          "word": "五月",
+          "reading": "ごがつ (gogatsu)",
+          "meaning_bn": "মে মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "6",
+    "kanji": "六",
+    "meaning_en": "Six",
+    "meaning_bn": "ছয়",
+    "onyomi": [
+      "ロク"
+    ],
+    "kunyomi": [
+      "む",
+      "むつ",
+      "むっつ",
+      "むい"
+    ],
+    "examples": [
+      {
+        "word": "六百",
+        "reading": "ろっぴゃく",
+        "meaning_en": "Six hundred",
+        "meaning_bn": "ছয়শত"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "これは六百円です。",
+        "romaji": "Kore wa roppyaku en desu.",
+        "english": "This is 600 yen.",
+        "bangla": "এটার দাম ৬০০ ইয়েন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "ছয় সংখ্যাটির প্রতীকী রূপ।",
+    "kun_yomi_new": {
+      "reading": "むっ (mu-), むい (mui)",
+      "examples": [
+        {
+          "word": "六つ",
+          "reading": "むっつ (muttsu)",
+          "meaning_bn": "ছয়টি"
+        },
+        {
+          "word": "六日",
+          "reading": "むいか (muika)",
+          "meaning_bn": "৬ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ロク (roku)",
+      "examples": [
+        {
+          "word": "六月",
+          "reading": "ろくがつ (rokugatsu)",
+          "meaning_bn": "জুন মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "7",
+    "kanji": "七",
+    "meaning_en": "Seven",
+    "meaning_bn": "সাত",
+    "onyomi": [
+      "シチ"
+    ],
+    "kunyomi": [
+      "なな",
+      "ななつ",
+      "なの"
+    ],
+    "examples": [
+      {
+        "word": "七時",
+        "reading": "しちじ",
+        "meaning_en": "7 o'clock",
+        "meaning_bn": "সাতটা বাজে"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "毎朝七時に起きます。",
+        "romaji": "Maiasa shichiji ni okimasu.",
+        "english": "I wake up at 7 every morning.",
+        "bangla": "আমি প্রতিদিন সকালে সাতটায় উঠি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "উলটো সাত বা কাটার মতো।",
+    "kun_yomi_new": {
+      "reading": "なな (nana), なの (nano)",
+      "examples": [
+        {
+          "word": "七つ",
+          "reading": "ななつ (nanatsu)",
+          "meaning_bn": "সাতটি"
+        },
+        {
+          "word": "七日",
+          "reading": "なのか (nanoka)",
+          "meaning_bn": "৭ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "シチ (shichi)",
+      "examples": [
+        {
+          "word": "七月",
+          "reading": "しちがつ (shichigatsu)",
+          "meaning_bn": "জুলাই মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "8",
+    "kanji": "八",
+    "meaning_en": "Eight",
+    "meaning_bn": "আট",
+    "onyomi": [
+      "ハチ"
+    ],
+    "kunyomi": [
+      "や",
+      "やつ",
+      "やっつ",
+      "よう"
+    ],
+    "examples": [
+      {
+        "word": "八百",
+        "reading": "はっぴゃく",
+        "meaning_en": "Eight hundred",
+        "meaning_bn": "আটশত"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "八百屋で買い物をします。",
+        "romaji": "Yaoya de kaimono o shimasu.",
+        "english": "I shop at the greengrocer.",
+        "bangla": "আমি সবজির দোকানে বাজার করি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "দুটি রেখা দুপাশে ছড়িয়ে পড়া (৮)।",
+    "kun_yomi_new": {
+      "reading": "やっ (ya-), よう (you)",
+      "examples": [
+        {
+          "word": "八つ",
+          "reading": "やっつ (yattsu)",
+          "meaning_bn": "আটটি"
+        },
+        {
+          "word": "八日",
+          "reading": "ようか (youka)",
+          "meaning_bn": "৮ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ハチ (hachi)",
+      "examples": [
+        {
+          "word": "八月",
+          "reading": "はちがつ (hachigatsu)",
+          "meaning_bn": "আগস্ট মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "9",
+    "kanji": "九",
+    "meaning_en": "Nine",
+    "meaning_bn": "নয়",
+    "onyomi": [
+      "キュウ",
+      "ク"
+    ],
+    "kunyomi": [
+      "ここの",
+      "ここのつ"
+    ],
+    "examples": [
+      {
+        "word": "九月",
+        "reading": "くがつ",
+        "meaning_en": "September",
+        "meaning_bn": "সেপ্টেম্বর মাস"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "九月に日本へ行きます。",
+        "romaji": "Kugatsu ni nihon e ikimasu.",
+        "english": "I will go to Japan in September.",
+        "bangla": "আমি সেপ্টেম্বরে জাপান যাবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "হুকের মতো বাঁকানো নয়।",
+    "kun_yomi_new": {
+      "reading": "ここの (kokono)",
+      "examples": [
+        {
+          "word": "九つ",
+          "reading": "ここのつ (kokonotsu)",
+          "meaning_bn": "নয়টি"
+        },
+        {
+          "word": "九日",
+          "reading": "ここのか (kokonoka)",
+          "meaning_bn": "৯ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "キュウ (kyuu), ク (ku)",
+      "examples": [
+        {
+          "word": "九月",
+          "reading": "くがつ (kugatsu)",
+          "meaning_bn": "সেপ্টেম্বর মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "10",
+    "kanji": "十",
+    "meaning_en": "Ten",
+    "meaning_bn": "দশ",
+    "onyomi": [
+      "ジュウ",
+      "ジッ"
+    ],
+    "kunyomi": [
+      "とお",
+      "と"
+    ],
+    "examples": [
+      {
+        "word": "十分",
+        "reading": "じゅっぷん",
+        "meaning_en": "10 minutes",
+        "meaning_bn": "১০ মিনিট"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "十分休んでください。",
+        "romaji": "Juppun yasunde kudasai.",
+        "english": "Please rest for 10 minutes.",
+        "bangla": "দয়া করে ১০ মিনিট বিশ্রাম নিন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 1,
+    "mnemonic": "যোগ চিহ্ন বা ক্রস (+) মানে পূর্ণ দশ।",
+    "kun_yomi_new": {
+      "reading": "とお (too)",
+      "examples": [
+        {
+          "word": "十",
+          "reading": "とお (too)",
+          "meaning_bn": "দশ"
+        },
+        {
+          "word": "十日",
+          "reading": "とおか (tooka)",
+          "meaning_bn": "১০ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ジュウ (juu)",
+      "examples": [
+        {
+          "word": "十月",
+          "reading": "じゅうがつ (juugatsu)",
+          "meaning_bn": "অক্টোবর মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "11",
+    "kanji": "百",
+    "meaning_en": "Hundred",
+    "meaning_bn": "একশত",
+    "onyomi": [
+      "ヒャク"
+    ],
+    "kunyomi": [
+      "もも"
+    ],
+    "examples": [
+      {
+        "word": "三百",
+        "reading": "さんびゃく",
+        "meaning_en": "Three hundred",
+        "meaning_bn": "তিনশত"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "三百円です。",
+        "romaji": "Sanbyaku en desu.",
+        "english": "It is 300 yen.",
+        "bangla": "এটার দাম ৩০০ ইয়েন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "এক ও মুখ মিলে একশ।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "ひゃく (hyaku)",
+      "examples": [
+        {
+          "word": "百",
+          "reading": "ひゃく (hyaku)",
+          "meaning_bn": "একশ"
+        },
+        {
+          "word": "二百",
+          "reading": "にひゃく (nihyaku)",
+          "meaning_bn": "দুইশ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "12",
+    "kanji": "千",
+    "meaning_en": "Thousand",
+    "meaning_bn": "হাজার",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "ち"
+    ],
+    "examples": [
+      {
+        "word": "三千",
+        "reading": "さんぜん",
+        "meaning_en": "Three thousand",
+        "meaning_bn": "তিন হাজার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "三千円払いました。",
+        "romaji": "Sanzen en haraimashita.",
+        "english": "I paid 3000 yen.",
+        "bangla": "আমি ৩০০০ ইয়েন দিয়েছি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "দশ ও মানুষের সহযোগে হাজার।",
+    "kun_yomi_new": {
+      "reading": "ち (chi)",
+      "examples": [
+        {
+          "word": "千",
+          "reading": "せん (sen)",
+          "meaning_bn": "হাজার"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "セン (sen)",
+      "examples": [
+        {
+          "word": "三千",
+          "reading": "さんぜん (sanzen)",
+          "meaning_bn": "তিন হাজার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "13",
+    "kanji": "万",
+    "meaning_en": "Ten thousand",
+    "meaning_bn": "দশ হাজার",
+    "onyomi": [
+      "マン",
+      "バン"
+    ],
+    "kunyomi": [],
+    "examples": [
+      {
+        "word": "一万",
+        "reading": "いちまん",
+        "meaning_en": "Ten thousand",
+        "meaning_bn": "দশ হাজার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "この時計は一万円です。",
+        "romaji": "Kono tokei wa ichiman en desu.",
+        "english": "This watch is 10,000 yen.",
+        "bangla": "এই ঘড়িটির দাম ১০,০০০ ইয়েন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "অনেক বিশাল সংখ্যা বা দশ হাজার।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "マン (man), バン (ban)",
+      "examples": [
+        {
+          "word": "一万",
+          "reading": "いちまん (ichiman)",
+          "meaning_bn": "দশ হাজার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "14",
+    "kanji": "円",
+    "meaning_en": "Yen, Circle",
+    "meaning_bn": "ইয়েন (জাপানি মুদ্রা)",
+    "onyomi": [
+      "エン"
+    ],
+    "kunyomi": [
+      "まる",
+      "まる.い"
+    ],
+    "examples": [
+      {
+        "word": "百円",
+        "reading": "ひゃくえん",
+        "meaning_en": "100 Yen",
+        "meaning_bn": "১০০ ইয়েন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "百円ショップに行きます。",
+        "romaji": "Hyakuen shoppu ni ikimasu.",
+        "english": "I go to the 100 yen shop.",
+        "bangla": "আমি ১০০ ইয়েনের দোকানে যাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "গোলাকার বৃত্ত বা জাপানি মুদ্রা।",
+    "kun_yomi_new": {
+      "reading": "まる (maru)",
+      "examples": [
+        {
+          "word": "円い",
+          "reading": "まるい (marui)",
+          "meaning_bn": "বৃত্তাকার"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "エン (en)",
+      "examples": [
+        {
+          "word": "百円",
+          "reading": "ひゃくえん (hyakuen)",
+          "meaning_bn": "একশ ইয়েন"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "15",
+    "kanji": "日",
+    "meaning_en": "Day, Sun",
+    "meaning_bn": "দিন, সূর্য",
+    "onyomi": [
+      "ニチ",
+      "ジツ"
+    ],
+    "kunyomi": [
+      "ひ",
+      "-び",
+      "-か"
+    ],
+    "examples": [
+      {
+        "word": "日本",
+        "reading": "にほん",
+        "meaning_en": "Japan",
+        "meaning_bn": "জাপান"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "今日は日曜日です。",
+        "romaji": "Kyou wa nichiyoubi desu.",
+        "english": "Today is Sunday.",
+        "bangla": "আজ রবিবার।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "গোল সূর্যের মাঝে আলোর বিন্দু বা জানালার মতো।",
+    "kun_yomi_new": {
+      "reading": "ひ (hi), び (bi), か (ka)",
+      "examples": [
+        {
+          "word": "日",
+          "reading": "ひ (hi)",
+          "meaning_bn": "দিন / গ্রহ"
+        },
+        {
+          "word": "日よう日",
+          "reading": "にちようび (nichiyoubi)",
+          "meaning_bn": "রবিবার"
+        },
+        {
+          "word": "みっか",
+          "reading": "みっか (mikka)",
+          "meaning_bn": "৩ তারিখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ニチ (nichi), ジツ (jitsu)",
+      "examples": [
+        {
+          "word": "日ほん",
+          "reading": "にほん (nihon)",
+          "meaning_bn": "জাপান"
+        },
+        {
+          "word": "日よう日",
+          "reading": "にちようび (nichiyoubi)",
+          "meaning_bn": "রবিবার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "16",
+    "kanji": "月",
+    "meaning_en": "Month, Moon",
+    "meaning_bn": "মাস, চাঁদ",
+    "onyomi": [
+      "ゲツ",
+      "ガツ"
+    ],
+    "kunyomi": [
+      "つき"
+    ],
+    "examples": [
+      {
+        "word": "月曜日",
+        "reading": "げつようび",
+        "meaning_en": "Monday",
+        "meaning_bn": "সোমবার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "月曜日は忙しいです。",
+        "romaji": "Getsuyoubi wa isogashii desu.",
+        "english": "Monday is busy.",
+        "bangla": "সোমবার দিনটি ব্যস্ত যায়।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "বাঁকা চাঁদের আকৃতি।",
+    "kun_yomi_new": {
+      "reading": "つき (tsuki)",
+      "examples": [
+        {
+          "word": "月",
+          "reading": "つき (tsuki)",
+          "meaning_bn": "চাঁদ"
+        },
+        {
+          "word": "まい月",
+          "reading": "まいづき (maizuki)",
+          "meaning_bn": "প্রতি মাস"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ゲツ (getsu), ガツ (gatsu)",
+      "examples": [
+        {
+          "word": "いち月",
+          "reading": "いちがつ (ichigatsu)",
+          "meaning_bn": "জানুয়ারি মাস"
+        },
+        {
+          "word": "月よう日",
+          "reading": "げつようび (getsuyoubi)",
+          "meaning_bn": "সোমবার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "17",
+    "kanji": "火",
+    "meaning_en": "Fire",
+    "meaning_bn": "আগুন",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [
+      "ひ",
+      "-び"
+    ],
+    "examples": [
+      {
+        "word": "火曜日",
+        "reading": "かようび",
+        "meaning_en": "Tuesday",
+        "meaning_bn": "মঙ্গলবার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "火曜日にテストがあります。",
+        "romaji": "Kayoubi ni tesuto ga arimasu.",
+        "english": "I have a test on Tuesday.",
+        "bangla": "মঙ্গলবারে পরীক্ষা আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "আগুনের শিখা ওপরের দিকে দাউদাউ করে জ্বলছে।",
+    "kun_yomi_new": {
+      "reading": "ひ (hi)",
+      "examples": [
+        {
+          "word": "火",
+          "reading": "ひ (hi)",
+          "meaning_bn": "আগুন"
+        },
+        {
+          "word": "火事",
+          "reading": "かじ (kaji)",
+          "meaning_bn": "আগুন লাগা / দুর্ঘটনা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "カ (ka)",
+      "examples": [
+        {
+          "word": "火よう日",
+          "reading": "かようび (kayoubi)",
+          "meaning_bn": "মঙ্গলবার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "18",
+    "kanji": "水",
+    "meaning_en": "Water",
+    "meaning_bn": "পানি",
+    "onyomi": [
+      "スイ"
+    ],
+    "kunyomi": [
+      "みず"
+    ],
+    "examples": [
+      {
+        "word": "水曜日",
+        "reading": "すいようび",
+        "meaning_en": "Wednesday",
+        "meaning_bn": "বুধবার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "お水を飲みたいです。",
+        "romaji": "Omizu o nomitai desu.",
+        "english": "I want to drink water.",
+        "bangla": "আমি পানি খেতে চাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "পানির প্রবাহ বা ফোটার দৃশ্য।",
+    "kun_yomi_new": {
+      "reading": "みず (mizu)",
+      "examples": [
+        {
+          "word": "水",
+          "reading": "みず (mizu)",
+          "meaning_bn": "পানি"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "スイ (sui)",
+      "examples": [
+        {
+          "word": "水よう日",
+          "reading": "すいようび (suiyoubi)",
+          "meaning_bn": "বুধবার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "19",
+    "kanji": "木",
+    "meaning_en": "Tree, Wood",
+    "meaning_bn": "গাছ",
+    "onyomi": [
+      "ボク",
+      "モク"
+    ],
+    "kunyomi": [
+      "き",
+      "こ-"
+    ],
+    "examples": [
+      {
+        "word": "木曜日",
+        "reading": "もくようび",
+        "meaning_en": "Thursday",
+        "meaning_bn": "বৃহস্পতিবার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "公園に大きな木があります。",
+        "romaji": "Kouen ni ookina ki ga arimasu.",
+        "english": "There is a big tree in the park.",
+        "bangla": "পার্কে একটি বড় গাছ আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "একটি গাছের কান্ড, ডালপালা এবং শিকড়।",
+    "kun_yomi_new": {
+      "reading": "き (ki)",
+      "examples": [
+        {
+          "word": "木",
+          "reading": "き (ki)",
+          "meaning_bn": "গাছ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "モク (moku), ボク (boku)",
+      "examples": [
+        {
+          "word": "木よう日",
+          "reading": "もくようび (mokuyoubi)",
+          "meaning_bn": "বৃহস্পতিবার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "20",
+    "kanji": "金",
+    "meaning_en": "Gold, Money",
+    "meaning_bn": "সোনা, টাকা",
+    "onyomi": [
+      "キン",
+      "コン"
+    ],
+    "kunyomi": [
+      "かね",
+      "かな-"
+    ],
+    "examples": [
+      {
+        "word": "金曜日",
+        "reading": "きんようび",
+        "meaning_en": "Friday",
+        "meaning_bn": "শুক্রবার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "お金がありません。",
+        "romaji": "Okane ga arimasen.",
+        "english": "I have no money.",
+        "bangla": "আমার কাছে টাকা নেই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 2,
+    "mnemonic": "মাটির নিচে লুকিয়ে থাকা সোনার টুকরো ও ছাদ।",
+    "kun_yomi_new": {
+      "reading": "かね (kane)",
+      "examples": [
+        {
+          "word": "金",
+          "reading": "かね (kane)",
+          "meaning_bn": "টাকা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "キン (kin)",
+      "examples": [
+        {
+          "word": "金",
+          "reading": "きん (kin)",
+          "meaning_bn": "সোনা"
+        },
+        {
+          "word": "金よう日",
+          "reading": "きんようび (kinyoubi)",
+          "meaning_bn": "শুক্রবার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "21",
+    "kanji": "土",
+    "meaning_en": "Earth, Soil",
+    "meaning_bn": "মাটি",
+    "onyomi": [
+      "ド",
+      "ト"
+    ],
+    "kunyomi": [
+      "つち"
+    ],
+    "examples": [
+      {
+        "word": "土曜日",
+        "reading": "どようび",
+        "meaning_en": "Saturday",
+        "meaning_bn": "শনিবার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "土曜日は休みです。",
+        "romaji": "Doyoubi wa yasumi desu.",
+        "english": "Saturday is a holiday.",
+        "bangla": "শনিবার ছুটির দিন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "mnemonic": "মাটির ওপর দাঁড়িয়ে থাকা উদ্ভিদ।",
+    "kun_yomi_new": {
+      "reading": "つち (tsuchi)",
+      "examples": [
+        {
+          "word": "土",
+          "reading": "つち (tsuchi)",
+          "meaning_bn": "মাটি"
+        },
+        {
+          "word": "土ち",
+          "reading": "とち (tochi)",
+          "meaning_bn": "জমিন / ভূমি"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ド (do), ト (to)",
+      "examples": [
+        {
+          "word": "土よう日",
+          "reading": "どようび (doyoubi)",
+          "meaning_bn": "শনিবার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "22",
+    "kanji": "山",
+    "meaning_en": "Mountain",
+    "meaning_bn": "পাহাড়",
+    "onyomi": [
+      "サン",
+      "セン"
+    ],
+    "kunyomi": [
+      "やま"
+    ],
+    "examples": [
+      {
+        "word": "富士山",
+        "reading": "ふじさん",
+        "meaning_en": "Mt. Fuji",
+        "meaning_bn": "মাউন্ট ফুজি"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "山に登ります。",
+        "romaji": "Yama ni noborimasu.",
+        "english": "I climb a mountain.",
+        "bangla": "আমি পাহাড়ে চড়ি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "mnemonic": "তিনটি চূড়া বিশিষ্ট পাহাড়ের মতো দেখতে।",
+    "kun_yomi_new": {
+      "reading": "やま (yama)",
+      "examples": [
+        {
+          "word": "山",
+          "reading": "やま (yama)",
+          "meaning_bn": "পাহাড়"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "サン (san)",
+      "examples": [
+        {
+          "word": "ふじ山",
+          "reading": "ふじさん (fujisan)",
+          "meaning_bn": "ফুজি পাহাড়"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "23",
+    "kanji": "川",
+    "meaning_en": "River",
+    "meaning_bn": "নদী",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "かわ"
+    ],
+    "examples": [
+      {
+        "word": "川",
+        "reading": "かわ",
+        "meaning_en": "River",
+        "meaning_bn": "নদী"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "きれいな川ですね。",
+        "romaji": "Kireina kawa desu ne.",
+        "english": "It is a beautiful river.",
+        "bangla": "এটি একটি সুন্দর নদী।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "mnemonic": "পানির তিনটি স্রোত বা ঢেউয়ের মতো বয়ে চলা নদী।",
+    "kun_yomi_new": {
+      "reading": "かわ (kawa)",
+      "examples": [
+        {
+          "word": "川",
+          "reading": "かわ (kawa)",
+          "meaning_bn": "নদী"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "セン (sen)",
+      "examples": [
+        {
+          "word": "川",
+          "reading": "せん (sen)",
+          "meaning_bn": "নদী (যৌগিক শব্দে)"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "24",
+    "kanji": "天",
+    "meaning_en": "Heaven, Sky",
+    "meaning_bn": "আকাশ",
+    "onyomi": [
+      "テン"
+    ],
+    "kunyomi": [
+      "あまつ",
+      "あめ"
+    ],
+    "examples": [
+      {
+        "word": "天気",
+        "reading": "てんき",
+        "meaning_en": "Weather",
+        "meaning_bn": "আবহাওয়া"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "今日はいい天気です。",
+        "romaji": "Kyou wa ii tenki desu.",
+        "english": "The weather is good today.",
+        "bangla": "আজকের আবহাওয়া ভালো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "mnemonic": "মাটির ওপর বিশাল আকাশ।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "テン (ten)",
+      "examples": [
+        {
+          "word": "天気",
+          "reading": "てんき (tenki)",
+          "meaning_bn": "আবহাওয়া"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "25",
+    "kanji": "気",
+    "meaning_en": "Spirit, Air, Mood",
+    "meaning_bn": "মন, বাতাস",
+    "onyomi": [
+      "キ",
+      "ケ"
+    ],
+    "kunyomi": [
+      "いき"
+    ],
+    "examples": [
+      {
+        "word": "元気",
+        "reading": "げんき",
+        "meaning_en": "Healthy, energetic",
+        "meaning_bn": "সুস্থ, প্রাণবন্ত"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "お元気ですか。",
+        "romaji": "Ogenki desu ka.",
+        "english": "How are you?",
+        "bangla": "আপনি কেমন আছেন?"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "mnemonic": "বাষ্প বা অদৃশ্য শক্তির প্রবাহ।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "キ (ki)",
+      "examples": [
+        {
+          "word": "元気",
+          "reading": "げんき (genki)",
+          "meaning_bn": "সুস্থ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "26",
+    "kanji": "空",
+    "meaning_en": "Sky, Empty",
+    "meaning_bn": "আকাশ, খালি",
+    "onyomi": [
+      "クウ"
+    ],
+    "kunyomi": [
+      "そら",
+      "あ.く"
+    ],
+    "examples": [
+      {
+        "word": "空",
+        "reading": "そら",
+        "meaning_en": "Sky",
+        "meaning_bn": "আকাশ"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "空が青いです。",
+        "romaji": "Sora ga aoi desu.",
+        "english": "The sky is blue.",
+        "bangla": "আকাশ নীল।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "27",
+    "kanji": "雨",
+    "meaning_en": "Rain",
+    "meaning_bn": "বৃষ্টি",
+    "onyomi": [
+      "ウ"
+    ],
+    "kunyomi": [
+      "あめ",
+      "あま-"
+    ],
+    "examples": [
+      {
+        "word": "大雨",
+        "reading": "おおあめ",
+        "meaning_en": "Heavy rain",
+        "meaning_bn": "ভারী বৃষ্টি"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "雨が降っています。",
+        "romaji": "Ame ga futte imasu.",
+        "english": "It is raining.",
+        "bangla": "বৃষ্টি পড়ছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "mnemonic": "মেঘ থেকে ফোঁটায় ফোঁটায় বৃষ্টি পড়া।",
+    "kun_yomi_new": {
+      "reading": "あめ (ame)",
+      "examples": [
+        {
+          "word": "雨",
+          "reading": "あめ (ame)",
+          "meaning_bn": "বৃষ্টি"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ウ (u)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "28",
+    "kanji": "電",
+    "meaning_en": "Electricity",
+    "meaning_bn": "বিদ্যুৎ",
+    "onyomi": [
+      "デン"
+    ],
+    "kunyomi": [],
+    "examples": [
+      {
+        "word": "電車",
+        "reading": "でんしゃ",
+        "meaning_en": "Train",
+        "meaning_bn": "ট্রেন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "電車で行きます。",
+        "romaji": "Densha de ikimasu.",
+        "english": "I will go by train.",
+        "bangla": "আমি ট্রেনে যাবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "mnemonic": "বৃষ্টির দিনে মেঘের মধ্যে বিদ্যুতের ঝলক।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "デン (den)",
+      "examples": [
+        {
+          "word": "電気",
+          "reading": "でんき (denki)",
+          "meaning_bn": "বিদ্যুৎ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "29",
+    "kanji": "花",
+    "meaning_en": "Flower",
+    "meaning_bn": "ফুল",
+    "onyomi": [
+      "カ",
+      "ケ"
+    ],
+    "kunyomi": [
+      "はな"
+    ],
+    "examples": [
+      {
+        "word": "花見",
+        "reading": "はなみ",
+        "meaning_en": "Flower viewing",
+        "meaning_bn": "ফুল দেখা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "花が咲きました。",
+        "romaji": "Hana ga sakimashita.",
+        "english": "The flowers bloomed.",
+        "bangla": "ফুল ফুটেছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "30",
+    "kanji": "魚",
+    "meaning_en": "Fish",
+    "meaning_bn": "মাছ",
+    "onyomi": [
+      "ギョ"
+    ],
+    "kunyomi": [
+      "さかな",
+      "うお"
+    ],
+    "examples": [
+      {
+        "word": "魚",
+        "reading": "さかな",
+        "meaning_en": "Fish",
+        "meaning_bn": "মাছ"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "魚を食べます。",
+        "romaji": "Sakana o tabemasu.",
+        "english": "I eat fish.",
+        "bangla": "আমি মাছ খাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 3,
+    "mnemonic": "মাছের মাথা, শরীর ও লেজ।",
+    "kun_yomi_new": {
+      "reading": "さかな (sakana)",
+      "examples": [
+        {
+          "word": "魚",
+          "reading": "さかな (sakana)",
+          "meaning_bn": "মাছ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ギョ (gyo)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "31",
+    "kanji": "人",
+    "meaning_en": "Person",
+    "meaning_bn": "মানুষ",
+    "onyomi": [
+      "ジン",
+      "ニン"
+    ],
+    "kunyomi": [
+      "ひと"
+    ],
+    "examples": [
+      {
+        "word": "あの人",
+        "reading": "あのひと",
+        "meaning_en": "That person",
+        "meaning_bn": "ঐ ব্যক্তি"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "あの人は誰ですか。",
+        "romaji": "Ano hito wa dare desu ka.",
+        "english": "Who is that person?",
+        "bangla": "ঐ ব্যক্তিটি কে?"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "দুটি পায়ে দাঁড়িয়ে থাকা মানুষ।",
+    "kun_yomi_new": {
+      "reading": "ひと (hito)",
+      "examples": [
+        {
+          "word": "人",
+          "reading": "ひと (hito)",
+          "meaning_bn": "মানুষ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ニン (nin), ジン (jin)",
+      "examples": [
+        {
+          "word": "日本人",
+          "reading": "にほんじん (nihonjin)",
+          "meaning_bn": "জাপানি নাগরিক"
+        },
+        {
+          "word": "二人",
+          "reading": "ふたり (futari)",
+          "meaning_bn": "দুজণ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "32",
+    "kanji": "子",
+    "meaning_en": "Child",
+    "meaning_bn": "বাচ্চা, শিশু",
+    "onyomi": [
+      "シ",
+      "ス"
+    ],
+    "kunyomi": [
+      "こ",
+      "-こ"
+    ],
+    "examples": [
+      {
+        "word": "子供",
+        "reading": "こども",
+        "meaning_en": "Child",
+        "meaning_bn": "বাচ্চা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "公園に子供がいます。",
+        "romaji": "Kouen ni kodomo ga imasu.",
+        "english": "There are children in the park.",
+        "bangla": "পার্কে বাচ্চারা আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "ছোট একটি শিশু হাত বাড়িয়ে আছে।",
+    "kun_yomi_new": {
+      "reading": "こ (ko)",
+      "examples": [
+        {
+          "word": "子ども",
+          "reading": "こども (kodomo)",
+          "meaning_bn": "শিশু"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "シ (shi)",
+      "examples": [
+        {
+          "word": "女子",
+          "reading": "じょし (joshi)",
+          "meaning_bn": "বালিকারা / নারী"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "33",
+    "kanji": "男",
+    "meaning_en": "Man, Male",
+    "meaning_bn": "পুরুষ, ছেলে",
+    "onyomi": [
+      "ダン",
+      "ナン"
+    ],
+    "kunyomi": [
+      "おとこ"
+    ],
+    "examples": [
+      {
+        "word": "男の子",
+        "reading": "おとこのこ",
+        "meaning_en": "Boy",
+        "meaning_bn": "ছেলে"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "男の人がいます。",
+        "romaji": "Otoko no hito ga imasu.",
+        "english": "There is a man.",
+        "bangla": "সেখানে একজন পুরুষ আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "জমিতে শক্তি প্রয়োগ করে পুরুষ।",
+    "kun_yomi_new": {
+      "reading": "おとこ (otoko)",
+      "examples": [
+        {
+          "word": "男の子",
+          "reading": "おとこのこ (otoko no ko)",
+          "meaning_bn": "ছেলে শিশু"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ダン (dan)",
+      "examples": [
+        {
+          "word": "男子",
+          "reading": "だんし (danshi)",
+          "meaning_bn": "ছাত্র / বালক"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "34",
+    "kanji": "女",
+    "meaning_en": "Woman, Female",
+    "meaning_bn": "মহিলা, মেয়ে",
+    "onyomi": [
+      "ジョ"
+    ],
+    "kunyomi": [
+      "おんな",
+      "め"
+    ],
+    "examples": [
+      {
+        "word": "女の子",
+        "reading": "おんなのこ",
+        "meaning_en": "Girl",
+        "meaning_bn": "মেয়ে"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "女の人が話しています。",
+        "romaji": "Onna no hito ga hanashiteimasu.",
+        "english": "A woman is speaking.",
+        "bangla": "একজন মহিলা কথা বলছেন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "বসে থাকা একজন নারী।",
+    "kun_yomi_new": {
+      "reading": "おんな (onna)",
+      "examples": [
+        {
+          "word": "女の子",
+          "reading": "おんなのこ (onna no ko)",
+          "meaning_bn": "মেয়ে শিশু"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ジョ (jo)",
+      "examples": [
+        {
+          "word": "女性",
+          "reading": "じょせい (josei)",
+          "meaning_bn": "মহিলা / নারী"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "35",
+    "kanji": "父",
+    "meaning_en": "Father",
+    "meaning_bn": "বাবা",
+    "onyomi": [
+      "フ"
+    ],
+    "kunyomi": [
+      "ちち"
+    ],
+    "examples": [
+      {
+        "word": "お父さん",
+        "reading": "おとうさん",
+        "meaning_en": "Father (someone else's)",
+        "meaning_bn": "বাবা (অন্যের)"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "父は医者です。",
+        "romaji": "Chichi wa isha desu.",
+        "english": "My father is a doctor.",
+        "bangla": "আমার বাবা একজন ডাক্তার।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "হাতে লাঠি নিয়ে পরিবারের প্রধান।",
+    "kun_yomi_new": {
+      "reading": "ちち (chichi)",
+      "examples": [
+        {
+          "word": "父",
+          "reading": "ちち (chichi)",
+          "meaning_bn": "বাবা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "フ (fu)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "36",
+    "kanji": "母",
+    "meaning_en": "Mother",
+    "meaning_bn": "মা",
+    "onyomi": [
+      "ボ"
+    ],
+    "kunyomi": [
+      "はは"
+    ],
+    "examples": [
+      {
+        "word": "お母さん",
+        "reading": "おかあさん",
+        "meaning_en": "Mother (someone else's)",
+        "meaning_bn": "মা (অন্যের)"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "母は優しいです。",
+        "romaji": "Haha wa yasashii desu.",
+        "english": "My mother is kind.",
+        "bangla": "আমার মা অনেক দয়ালু।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "মায়ের ভালোবাসা ও স্তন্যদানের প্রতীক।",
+    "kun_yomi_new": {
+      "reading": "はは (haha)",
+      "examples": [
+        {
+          "word": "母",
+          "reading": "はは (haha)",
+          "meaning_bn": "মা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ボ (bo)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "37",
+    "kanji": "名",
+    "meaning_en": "Name",
+    "meaning_bn": "নাম",
+    "onyomi": [
+      "メイ",
+      "ミョウ"
+    ],
+    "kunyomi": [
+      "な"
+    ],
+    "examples": [
+      {
+        "word": "名前",
+        "reading": "なまえ",
+        "meaning_en": "Name",
+        "meaning_bn": "নাম"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "お名前は何ですか。",
+        "romaji": "Onamae wa nan desu ka.",
+        "english": "What is your name?",
+        "bangla": "আপনার নাম কী?"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "সন্ধ্যায় মুখের ডাক বা নাম।",
+    "kun_yomi_new": {
+      "reading": "な (na)",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "メイ (mei)",
+      "examples": [
+        {
+          "word": "名前",
+          "reading": "なまえ (namae)",
+          "meaning_bn": "নাম"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "38",
+    "kanji": "友",
+    "meaning_en": "Friend",
+    "meaning_bn": "বন্ধু",
+    "onyomi": [
+      "ユウ"
+    ],
+    "kunyomi": [
+      "とも"
+    ],
+    "examples": [
+      {
+        "word": "友達",
+        "reading": "ともだち",
+        "meaning_en": "Friend",
+        "meaning_bn": "বন্ধু"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "友達と遊びます。",
+        "romaji": "Tomodachi to asobimasu.",
+        "english": "I play with my friend.",
+        "bangla": "আমি বন্ধুর সাথে খেলি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "দুটি হাত একসাথে মিলে বন্ধু হওয়া।",
+    "kun_yomi_new": {
+      "reading": "とも (tomo)",
+      "examples": [
+        {
+          "word": "友達",
+          "reading": "ともだち (tomodachi)",
+          "meaning_bn": "বন্ধু"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ユウ (yuu)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "39",
+    "kanji": "本",
+    "meaning_en": "Book, Origin",
+    "meaning_bn": "বই",
+    "onyomi": [
+      "ホン"
+    ],
+    "kunyomi": [
+      "もと"
+    ],
+    "examples": [
+      {
+        "word": "本",
+        "reading": "ほん",
+        "meaning_en": "Book",
+        "meaning_bn": "বই"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "この本は面白いです。",
+        "romaji": "Kono hon wa omoshiroi desu.",
+        "english": "This book is interesting.",
+        "bangla": "এই বইটি অনেক মজার।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "গাছের মূল বা কান্ড থেকে বই তৈরি।",
+    "kun_yomi_new": {
+      "reading": "もと (moto)",
+      "examples": [
+        {
+          "word": "本",
+          "reading": "ほん (hon)",
+          "meaning_bn": "বই"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ホン (hon)",
+      "examples": [
+        {
+          "word": "日本",
+          "reading": "にほん (nihon)",
+          "meaning_bn": "জাপান"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "40",
+    "kanji": "何",
+    "meaning_en": "What",
+    "meaning_bn": "কী",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [
+      "なに",
+      "なん"
+    ],
+    "examples": [
+      {
+        "word": "何か",
+        "reading": "なにか",
+        "meaning_en": "Something",
+        "meaning_bn": "কিছু"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "これは何ですか。",
+        "romaji": "Kore wa nan desu ka.",
+        "english": "What is this?",
+        "bangla": "এটা কী?"
+      }
+    ],
+    "level": "N5",
+    "lesson": 4,
+    "mnemonic": "মানুষের সামনে প্রশ্নবোধক চিহ্ন।",
+    "kun_yomi_new": {
+      "reading": "なに (nani), なん (nan)",
+      "examples": [
+        {
+          "word": "何",
+          "reading": "なに (nani)",
+          "meaning_bn": "কী"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "カ (ka)",
+      "examples": [
+        {
+          "word": "何人",
+          "reading": "なんにん (nannin)",
+          "meaning_bn": "কতজন"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "41",
+    "kanji": "目",
+    "meaning_en": "Eye",
+    "meaning_bn": "চোখ",
+    "onyomi": [
+      "モク",
+      "ボク"
+    ],
+    "kunyomi": [
+      "め",
+      "-め"
+    ],
+    "examples": [
+      {
+        "word": "目",
+        "reading": "め",
+        "meaning_en": "Eye",
+        "meaning_bn": "চোখ"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "目が痛いです。",
+        "romaji": "Me ga itai desu.",
+        "english": "My eyes hurt.",
+        "bangla": "আমার চোখে ব্যথা করছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "mnemonic": "মানুষের চোখের অবয়ব।",
+    "kun_yomi_new": {
+      "reading": "め (me)",
+      "examples": [
+        {
+          "word": "目",
+          "reading": "め (me)",
+          "meaning_bn": "চোখ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "モク (moku)",
+      "examples": [
+        {
+          "word": "目的",
+          "reading": "もくてき (mokuteki)",
+          "meaning_bn": "উদ্দেশ্য"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "42",
+    "kanji": "口",
+    "meaning_en": "Mouth",
+    "meaning_bn": "মুখ",
+    "onyomi": [
+      "コウ",
+      "ク"
+    ],
+    "kunyomi": [
+      "くち"
+    ],
+    "examples": [
+      {
+        "word": "入口",
+        "reading": "いりぐち",
+        "meaning_en": "Entrance",
+        "meaning_bn": "প্রবেশদ্বার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "入口はどこですか。",
+        "romaji": "Iriguchi wa doko desu ka.",
+        "english": "Where is the entrance?",
+        "bangla": "প্রবেশদ্বারটি কোথায়?"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "mnemonic": "খুদে মুখ বা প্রবেশপথ।",
+    "kun_yomi_new": {
+      "reading": "くち (kuchi)",
+      "examples": [
+        {
+          "word": "口",
+          "reading": "くち (kuchi)",
+          "meaning_bn": "মুখ"
+        },
+        {
+          "word": "入り口",
+          "reading": "いりぐち (iriguchi)",
+          "meaning_bn": "প্রবেশপথ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "コウ (kou)",
+      "examples": [
+        {
+          "word": "人口",
+          "reading": "じんこう (jinkou)",
+          "meaning_bn": "জনসংখ্যা"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "43",
+    "kanji": "耳",
+    "meaning_en": "Ear",
+    "meaning_bn": "কান",
+    "onyomi": [
+      "ジ"
+    ],
+    "kunyomi": [
+      "みみ"
+    ],
+    "examples": [
+      {
+        "word": "耳",
+        "reading": "みみ",
+        "meaning_en": "Ear",
+        "meaning_bn": "কান"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "耳が聞こえません。",
+        "romaji": "Mimi ga kikoemasen.",
+        "english": "I can't hear.",
+        "bangla": "আমি কানে শুনতে পাচ্ছি না।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "mnemonic": "মানুষের কানের আকৃতি।",
+    "kun_yomi_new": {
+      "reading": "みみ (mimi)",
+      "examples": [
+        {
+          "word": "耳",
+          "reading": "みみ (mimi)",
+          "meaning_bn": "কান"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ジ (ji)",
+      "examples": [
+        {
+          "word": "耳鼻科",
+          "reading": "じびか (jibika)",
+          "meaning_bn": "নাক-কান-গলার বিভাগ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "44",
+    "kanji": "手",
+    "meaning_en": "Hand",
+    "meaning_bn": "হাত",
+    "onyomi": [
+      "シュ"
+    ],
+    "kunyomi": [
+      "て"
+    ],
+    "examples": [
+      {
+        "word": "手紙",
+        "reading": "てがみ",
+        "meaning_en": "Letter",
+        "meaning_bn": "চিঠি"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "手を洗います。",
+        "romaji": "Te o araimasu.",
+        "english": "I wash my hands.",
+        "bangla": "আমি হাত ধুচ্ছি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "mnemonic": "হাতের পাঁচটি আঙুল ও তালু।",
+    "kun_yomi_new": {
+      "reading": "て (te)",
+      "examples": [
+        {
+          "word": "手",
+          "reading": "て (te)",
+          "meaning_bn": "হাত"
+        },
+        {
+          "word": "手紙",
+          "reading": "てがみ (tegami)",
+          "meaning_bn": "চিঠি"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "シュ (shu)",
+      "examples": [
+        {
+          "word": "上手",
+          "reading": "じょうず (jouzu)",
+          "meaning_bn": "দক্ষ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "45",
+    "kanji": "足",
+    "meaning_en": "Leg, Foot",
+    "meaning_bn": "পা",
+    "onyomi": [
+      "ソク"
+    ],
+    "kunyomi": [
+      "あし",
+      "た.りる"
+    ],
+    "examples": [
+      {
+        "word": "右足",
+        "reading": "みぎあし",
+        "meaning_en": "Right foot",
+        "meaning_bn": "ডান পা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "足が痛いです。",
+        "romaji": "Ashi ga itai desu.",
+        "english": "My leg hurts.",
+        "bangla": "আমার পায়ে ব্যথা।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "mnemonic": "পায়ের পাতা ও গোড়ালি।",
+    "kun_yomi_new": {
+      "reading": "あし (ashi), たりる (tariru)",
+      "examples": [
+        {
+          "word": "足",
+          "reading": "あし (ashi)",
+          "meaning_bn": "পা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ソク (soku)",
+      "examples": [
+        {
+          "word": "一足",
+          "reading": "いっそく (issoku)",
+          "meaning_bn": "এক জোড়া"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "46",
+    "kanji": "体",
+    "meaning_en": "Body",
+    "meaning_bn": "শরীর",
+    "onyomi": [
+      "タイ",
+      "テイ"
+    ],
+    "kunyomi": [
+      "からだ"
+    ],
+    "examples": [
+      {
+        "word": "体",
+        "reading": "からだ",
+        "meaning_en": "Body",
+        "meaning_bn": "শরীর"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "体に気をつけて。",
+        "romaji": "Karada ni ki o tsukete.",
+        "english": "Take care of yourself.",
+        "bangla": "শরীরের যত্ন নিবেন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "47",
+    "kanji": "上",
+    "meaning_en": "Up, Above",
+    "meaning_bn": "উপরে",
+    "onyomi": [
+      "ジョウ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "うえ",
+      "うわ-",
+      "かみ",
+      "あ.げる"
+    ],
+    "examples": [
+      {
+        "word": "上",
+        "reading": "うえ",
+        "meaning_en": "Above/Up",
+        "meaning_bn": "উপরে"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "机の上に本があります。",
+        "romaji": "Tsukue no ue ni hon ga arimasu.",
+        "english": "There is a book on the desk.",
+        "bangla": "টেবিলের উপরে বই আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "mnemonic": "রেখার উপরের অংশ।",
+    "kun_yomi_new": {
+      "reading": "うえ (ue), あがる (agaru)",
+      "examples": [
+        {
+          "word": "上",
+          "reading": "うえ (ue)",
+          "meaning_bn": "উপরে"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ジョウ (jou)",
+      "examples": [
+        {
+          "word": "上手",
+          "reading": "じょうず (jouzu)",
+          "meaning_bn": "দক্ষ / পারদর্শী"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "48",
+    "kanji": "下",
+    "meaning_en": "Down, Below",
+    "meaning_bn": "নিচে",
+    "onyomi": [
+      "カ",
+      "ゲ"
+    ],
+    "kunyomi": [
+      "した",
+      "しも",
+      "もと",
+      "さ.げる"
+    ],
+    "examples": [
+      {
+        "word": "下",
+        "reading": "した",
+        "meaning_en": "Below/Down",
+        "meaning_bn": "নিচে"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "木の下に猫がいます。",
+        "romaji": "Ki no shita ni neko ga imasu.",
+        "english": "There is a cat under the tree.",
+        "bangla": "গাছের নিচে একটি বিড়াল আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "mnemonic": "রেখার নিচের অংশ।",
+    "kun_yomi_new": {
+      "reading": "した (shita), さがる (sagaru)",
+      "examples": [
+        {
+          "word": "下",
+          "reading": "した (shita)",
+          "meaning_bn": "নিচে"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "カ (ka), ゲ (ge)",
+      "examples": [
+        {
+          "word": "下手",
+          "reading": "へた (heta)",
+          "meaning_bn": "অদক্ষ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "49",
+    "kanji": "左",
+    "meaning_en": "Left",
+    "meaning_bn": "বাম",
+    "onyomi": [
+      "サ",
+      "シャ"
+    ],
+    "kunyomi": [
+      "ひだり"
+    ],
+    "examples": [
+      {
+        "word": "左手",
+        "reading": "ひだりて",
+        "meaning_en": "Left hand",
+        "meaning_bn": "বাম হাত"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "左へ曲がってください。",
+        "romaji": "Hidari e magatte kudasai.",
+        "english": "Please turn left.",
+        "bangla": "বাম দিকে ঘুরুন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "50",
+    "kanji": "右",
+    "meaning_en": "Right",
+    "meaning_bn": "ডান",
+    "onyomi": [
+      "ウ",
+      "ユウ"
+    ],
+    "kunyomi": [
+      "みぎ"
+    ],
+    "examples": [
+      {
+        "word": "右",
+        "reading": "みぎ",
+        "meaning_en": "Right",
+        "meaning_bn": "ডান"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "右手で書きます。",
+        "romaji": "Migite de kakimasu.",
+        "english": "I write with my right hand.",
+        "bangla": "আমি ডান হাতে লিখি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 5,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "51",
+    "kanji": "中",
+    "meaning_en": "Inside, Middle",
+    "meaning_bn": "ভিতরে, মাঝে",
+    "onyomi": [
+      "チュウ"
+    ],
+    "kunyomi": [
+      "なか"
+    ],
+    "examples": [
+      {
+        "word": "中国",
+        "reading": "ちゅうごく",
+        "meaning_en": "China",
+        "meaning_bn": "চীন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "かばんの中にペンがあります。",
+        "romaji": "Kaban no naka ni pen ga arimasu.",
+        "english": "There is a pen in the bag.",
+        "bangla": "ব্যাগের ভেতরে কলম আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "mnemonic": "বাক্সের মাঝখান দিয়ে ফালা করা দাগ।",
+    "kun_yomi_new": {
+      "reading": "なか (naka)",
+      "examples": [
+        {
+          "word": "中",
+          "reading": "なか (naka)",
+          "meaning_bn": "মন / ভেতর"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "チュウ (chuu), ジュウ (juu)",
+      "examples": [
+        {
+          "word": "中国",
+          "reading": "ちゅうごく (chuugoku)",
+          "meaning_bn": "চীন দেশ"
+        },
+        {
+          "word": "一日中",
+          "reading": "いちにちじゅう (ichinichijuu)",
+          "meaning_bn": "সারাদিন"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "52",
+    "kanji": "外",
+    "meaning_en": "Outside",
+    "meaning_bn": "বাইরে",
+    "onyomi": [
+      "ガイ",
+      "ゲ"
+    ],
+    "kunyomi": [
+      "そと",
+      "ほか",
+      "はず.す"
+    ],
+    "examples": [
+      {
+        "word": "外国",
+        "reading": "がいこく",
+        "meaning_en": "Foreign country",
+        "meaning_bn": "বিদেশ"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "外は寒いです。",
+        "romaji": "Soto wa samui desu.",
+        "english": "It's cold outside.",
+        "bangla": "বাইরে অনেক ঠাণ্ডা।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "mnemonic": "রাতের বেলা বাইরে বেরিয়ে তাকানো।",
+    "kun_yomi_new": {
+      "reading": "そと (soto)",
+      "examples": [
+        {
+          "word": "外",
+          "reading": "そと (soto)",
+          "meaning_bn": "বাইরে"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ガイ (gai)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "53",
+    "kanji": "前",
+    "meaning_en": "Before, Front",
+    "meaning_bn": "আগে, সামনে",
+    "onyomi": [
+      "ゼン"
+    ],
+    "kunyomi": [
+      "まえ"
+    ],
+    "examples": [
+      {
+        "word": "名前",
+        "reading": "なまえ",
+        "meaning_en": "Name",
+        "meaning_bn": "নাম"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "駅の前にいます。",
+        "romaji": "Eki no mae ni imasu.",
+        "english": "I am in front of the station.",
+        "bangla": "আমি স্টেশনের সামনে আছি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "mnemonic": "চাঁদ ও তলোয়ার দিয়ে সামনে এগিয়ে যাওয়া।",
+    "kun_yomi_new": {
+      "reading": "まえ (mae)",
+      "examples": [
+        {
+          "word": "前",
+          "reading": "まえ (mae)",
+          "meaning_bn": "সামনে"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ゼン (zen)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "54",
+    "kanji": "後",
+    "meaning_en": "After, Behind",
+    "meaning_bn": "পরে, পেছনে",
+    "onyomi": [
+      "ゴ",
+      "コウ"
+    ],
+    "kunyomi": [
+      "のち",
+      "うし.ろ",
+      "あと",
+      "おく.れる"
+    ],
+    "examples": [
+      {
+        "word": "後ろ",
+        "reading": "うしろ",
+        "meaning_en": "Behind",
+        "meaning_bn": "পেছনে"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "私の後ろに誰かいます。",
+        "romaji": "Watashi no ushiro ni dareka imasu.",
+        "english": "Someone is behind me.",
+        "bangla": "আমার পেছনে কেউ একজন আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "mnemonic": "পিছনের দিকে হাঁটা মানুষ।",
+    "kun_yomi_new": {
+      "reading": "あと (ato), うしろ (ushiro)",
+      "examples": [
+        {
+          "word": "後ろ",
+          "reading": "うしろ (ushiro)",
+          "meaning_bn": "পিছনে"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ゴ (go)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "55",
+    "kanji": "東",
+    "meaning_en": "East",
+    "meaning_bn": "পূর্ব",
+    "onyomi": [
+      "トウ"
+    ],
+    "kunyomi": [
+      "ひがし"
+    ],
+    "examples": [
+      {
+        "word": "東口",
+        "reading": "ひがしぐち",
+        "meaning_en": "East exit",
+        "meaning_bn": "পূর্ব দিকের গেট"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "太陽は東から昇ります。",
+        "romaji": "Taiyou wa higashi kara noborimasu.",
+        "english": "The sun rises in the east.",
+        "bangla": "সূর্য পূর্ব দিকে ওঠে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "56",
+    "kanji": "西",
+    "meaning_en": "West",
+    "meaning_bn": "পশ্চিম",
+    "onyomi": [
+      "セイ",
+      "サイ"
+    ],
+    "kunyomi": [
+      "にし"
+    ],
+    "examples": [
+      {
+        "word": "西口",
+        "reading": "にしぐち",
+        "meaning_en": "West exit",
+        "meaning_bn": "পশ্চিম দিকের গেট"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "西へ行きます。",
+        "romaji": "Nishi e ikimasu.",
+        "english": "I go to the west.",
+        "bangla": "আমি পশ্চিমে যাচ্ছি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "57",
+    "kanji": "南",
+    "meaning_en": "South",
+    "meaning_bn": "দক্ষিণ",
+    "onyomi": [
+      "ナン",
+      "ナ"
+    ],
+    "kunyomi": [
+      "みなみ"
+    ],
+    "examples": [
+      {
+        "word": "南口",
+        "reading": "みなみぐち",
+        "meaning_en": "South exit",
+        "meaning_bn": "দক্ষিণ দিকের গেট"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "南の国は暑いです。",
+        "romaji": "Minami no kuni wa atsui desu.",
+        "english": "Southern countries are hot.",
+        "bangla": "দক্ষিণের দেশগুলো গরম হয়।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "58",
+    "kanji": "北",
+    "meaning_en": "North",
+    "meaning_bn": "উত্তর",
+    "onyomi": [
+      "ホク"
+    ],
+    "kunyomi": [
+      "きた"
+    ],
+    "examples": [
+      {
+        "word": "北口",
+        "reading": "きたぐち",
+        "meaning_en": "North exit",
+        "meaning_bn": "উত্তর দিকের গেট"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "北の風が吹いています。",
+        "romaji": "Kita no kaze ga fuiteimasu.",
+        "english": "The north wind is blowing.",
+        "bangla": "উত্তরের বাতাস বইছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "59",
+    "kanji": "大",
+    "meaning_en": "Large, Big",
+    "meaning_bn": "বড়",
+    "onyomi": [
+      "ダイ",
+      "タイ"
+    ],
+    "kunyomi": [
+      "おお",
+      "おおきい"
+    ],
+    "examples": [
+      {
+        "word": "大きい",
+        "reading": "おおきい",
+        "meaning_en": "Big",
+        "meaning_bn": "বড়"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "とても大きいです。",
+        "romaji": "Totemo ookii desu.",
+        "english": "It's very big.",
+        "bangla": "এটি অনেক বড়।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "60",
+    "kanji": "小",
+    "meaning_en": "Small",
+    "meaning_bn": "ছোট",
+    "onyomi": [
+      "ショウ"
+    ],
+    "kunyomi": [
+      "ちい.さい",
+      "こ-",
+      "お-"
+    ],
+    "examples": [
+      {
+        "word": "小さい",
+        "reading": "ちいさい",
+        "meaning_en": "Small",
+        "meaning_bn": "ছোট"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "小さい犬を飼っています。",
+        "romaji": "Chiisai inu o katteimasu.",
+        "english": "I have a small dog.",
+        "bangla": "আমার একটি ছোট কুকুর আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 6,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "61",
+    "kanji": "高",
+    "meaning_en": "High, Expensive",
+    "meaning_bn": "উঁচু, দামি",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "たか.い",
+      "たか",
+      "たか.まる",
+      "たか.める"
+    ],
+    "examples": [
+      {
+        "word": "高い",
+        "reading": "たかい",
+        "meaning_en": "High/Expensive",
+        "meaning_bn": "দামি/উঁচু"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "この本は高いです。",
+        "romaji": "Kono hon wa takai desu.",
+        "english": "This book is expensive.",
+        "bangla": "এই বইটার অনেক দাম।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "mnemonic": "অনেক উঁচুতে অবস্থিত মিনার।",
+    "kun_yomi_new": {
+      "reading": "たかい (takai)",
+      "examples": [
+        {
+          "word": "高い",
+          "reading": "たかい (takai)",
+          "meaning_bn": "উঁচু"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "コウ (kou)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "62",
+    "kanji": "安",
+    "meaning_en": "Cheap, Peaceful",
+    "meaning_bn": "সস্তা, শান্ত",
+    "onyomi": [
+      "アン"
+    ],
+    "kunyomi": [
+      "やす.い",
+      "やす.まる",
+      "やす",
+      "やす.らか"
+    ],
+    "examples": [
+      {
+        "word": "安い",
+        "reading": "やすい",
+        "meaning_en": "Cheap",
+        "meaning_bn": "সস্তা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "このりんごは安いです。",
+        "romaji": "Kono ringo wa yasui desu.",
+        "english": "This apple is cheap.",
+        "bangla": "এই আপেলটা সস্তা।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "mnemonic": "ছাদের নিচে নারী শান্তিতে থাকা।",
+    "kun_yomi_new": {
+      "reading": "やすい (yasui)",
+      "examples": [
+        {
+          "word": "安い",
+          "reading": "やすい (yasui)",
+          "meaning_bn": "সস্তা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "アン (an)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "63",
+    "kanji": "新",
+    "meaning_en": "New",
+    "meaning_bn": "নতুন",
+    "onyomi": [
+      "シン"
+    ],
+    "kunyomi": [
+      "あたら.しい",
+      "あら.た",
+      "にい-"
+    ],
+    "examples": [
+      {
+        "word": "新しい",
+        "reading": "あたらしい",
+        "meaning_en": "New",
+        "meaning_bn": "নতুন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "新しい靴を買いました。",
+        "romaji": "Atarashii kutsu o kaimashita.",
+        "english": "I bought new shoes.",
+        "bangla": "আমি নতুন জুতো কিনেছি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "mnemonic": "গাছ কেটে নতুন কুঠার দিয়ে পরিষ্কার করা।",
+    "kun_yomi_new": {
+      "reading": "あたらしい (atarashii)",
+      "examples": [
+        {
+          "word": "新しい",
+          "reading": "あたらしい (atarashii)",
+          "meaning_bn": "নতুন"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "シン (shin)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "64",
+    "kanji": "古",
+    "meaning_en": "Old",
+    "meaning_bn": "পুরাতন",
+    "onyomi": [
+      "コ"
+    ],
+    "kunyomi": [
+      "ふる.い",
+      "ふる-",
+      "ふる.す"
+    ],
+    "examples": [
+      {
+        "word": "古い",
+        "reading": "ふるい",
+        "meaning_en": "Old",
+        "meaning_bn": "পুরাতন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "これは古い時計です。",
+        "romaji": "Kore wa furui tokei desu.",
+        "english": "This is an old watch.",
+        "bangla": "এটি একটি পুরোনো ঘড়ি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "mnemonic": "দশটি মুখের পুরনো কথা।",
+    "kun_yomi_new": {
+      "reading": "ふるい (furui)",
+      "examples": [
+        {
+          "word": "古い",
+          "reading": "ふるい (furui)",
+          "meaning_bn": "পুরাতন"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "コ (ko)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "65",
+    "kanji": "長",
+    "meaning_en": "Long, Leader",
+    "meaning_bn": "লম্বা, প্রধান",
+    "onyomi": [
+      "チョウ"
+    ],
+    "kunyomi": [
+      "なが.い",
+      "おさ"
+    ],
+    "examples": [
+      {
+        "word": "長い",
+        "reading": "ながい",
+        "meaning_en": "Long",
+        "meaning_bn": "লম্বা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "髪が長いです。",
+        "romaji": "Kami ga nagai desu.",
+        "english": "My hair is long.",
+        "bangla": "আমার চুল লম্বা।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "mnemonic": "লম্বা চুলওয়ালা বয়স্ক প্রধান ব্যক্তি।",
+    "kun_yomi_new": {
+      "reading": "ながい (nagai)",
+      "examples": [
+        {
+          "word": "長い",
+          "reading": "ながい (nagai)",
+          "meaning_bn": "লম্বা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "チョウ (chou)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "66",
+    "kanji": "多",
+    "meaning_en": "Many",
+    "meaning_bn": "অনেক",
+    "onyomi": [
+      "タ"
+    ],
+    "kunyomi": [
+      "おお.い",
+      "まさ.に",
+      "まさ.る"
+    ],
+    "examples": [
+      {
+        "word": "多い",
+        "reading": "おおい",
+        "meaning_en": "Many",
+        "meaning_bn": "অনেক"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "人が多いです。",
+        "romaji": "Hito ga ooi desu.",
+        "english": "There are many people.",
+        "bangla": "এখানে অনেক মানুষ।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "mnemonic": "দুটি সন্ধ্যা বা অনেক কিছু একসাথে।",
+    "kun_yomi_new": {
+      "reading": "おおい (ooji)",
+      "examples": [
+        {
+          "word": "多い",
+          "reading": "おおい (ooji)",
+          "meaning_bn": "অনেক"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "タ (ta)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "67",
+    "kanji": "少",
+    "meaning_en": "Few, Little",
+    "meaning_bn": "অল্প",
+    "onyomi": [
+      "ショウ"
+    ],
+    "kunyomi": [
+      "すく.ない",
+      "すこ.し"
+    ],
+    "examples": [
+      {
+        "word": "少し",
+        "reading": "すこし",
+        "meaning_en": "A little",
+        "meaning_bn": "একটু/অল্প"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "少し疲れました。",
+        "romaji": "Sukoshi tsukaremashita.",
+        "english": "I am a little tired.",
+        "bangla": "আমি একটু ক্লান্ত।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "mnemonic": "ছোট কিছু টুকরো বা অল্প পরিমাণ।",
+    "kun_yomi_new": {
+      "reading": "すこし (sukoshi)",
+      "examples": [
+        {
+          "word": "少し",
+          "reading": "すこし (sukoshi)",
+          "meaning_bn": "অল্প"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ショウ (shou)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "68",
+    "kanji": "白",
+    "meaning_en": "White",
+    "meaning_bn": "সাদা",
+    "onyomi": [
+      "ハク",
+      "ビャク"
+    ],
+    "kunyomi": [
+      "しろ",
+      "しら-",
+      "しろ.い"
+    ],
+    "examples": [
+      {
+        "word": "白い",
+        "reading": "しろい",
+        "meaning_en": "White",
+        "meaning_bn": "সাদা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "白い猫が好きです。",
+        "romaji": "Shiroi neko ga suki desu.",
+        "english": "I like white cats.",
+        "bangla": "আমি সাদা বিড়াল পছন্দ করি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "mnemonic": "সূর্যের আলোর মতো সাদা রং।",
+    "kun_yomi_new": {
+      "reading": "しろい (shiroi)",
+      "examples": [
+        {
+          "word": "白い",
+          "reading": "しろい (shiroi)",
+          "meaning_bn": "সাদা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ハク (haku)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "69",
+    "kanji": "黒",
+    "meaning_en": "Black",
+    "meaning_bn": "কালো",
+    "onyomi": [
+      "コク"
+    ],
+    "kunyomi": [
+      "くろ",
+      "くろ.ずむ",
+      "くろ.い"
+    ],
+    "examples": [
+      {
+        "word": "黒い",
+        "reading": "くろい",
+        "meaning_en": "Black",
+        "meaning_bn": "কালো"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "黒いペンを持っています。",
+        "romaji": "Kuroi pen o motteimasu.",
+        "english": "I have a black pen.",
+        "bangla": "আমার একটি কালো কলম আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "70",
+    "kanji": "赤",
+    "meaning_en": "Red",
+    "meaning_bn": "লাল",
+    "onyomi": [
+      "セキ",
+      "シャク"
+    ],
+    "kunyomi": [
+      "あか",
+      "あか-",
+      "あか.い",
+      "あか.らむ",
+      "あか.らめる"
+    ],
+    "examples": [
+      {
+        "word": "赤い",
+        "reading": "あかい",
+        "meaning_en": "Red",
+        "meaning_bn": "লাল"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "赤い車が見えます。",
+        "romaji": "Akai kuruma ga miemasu.",
+        "english": "I can see a red car.",
+        "bangla": "আমি একটি লাল গাড়ি দেখতে পাচ্ছি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 7,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "71",
+    "kanji": "青",
+    "meaning_en": "Blue",
+    "meaning_bn": "নীল",
+    "onyomi": [
+      "セイ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "あお",
+      "あお-",
+      "あお.い"
+    ],
+    "examples": [
+      {
+        "word": "青い",
+        "reading": "あおい",
+        "meaning_en": "Blue",
+        "meaning_bn": "নীল"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "青い空が綺麗です。",
+        "romaji": "Aoi sora ga kirei desu.",
+        "english": "The blue sky is beautiful.",
+        "bangla": "নীল আকাশটি খুব সুন্দর।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "72",
+    "kanji": "行",
+    "meaning_en": "Go",
+    "meaning_bn": "যাওয়া",
+    "onyomi": [
+      "コウ",
+      "ギョウ",
+      "アン"
+    ],
+    "kunyomi": [
+      "い.く",
+      "ゆ.く",
+      "おこな.う"
+    ],
+    "examples": [
+      {
+        "word": "行く",
+        "reading": "いく",
+        "meaning_en": "To go",
+        "meaning_bn": "যাওয়া"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "学校に行きます。",
+        "romaji": "Gakkou ni ikimasu.",
+        "english": "I will go to school.",
+        "bangla": "আমি স্কুলে যাবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "পথের মোড় বা চলাচলের রাস্তা।",
+    "kun_yomi_new": {
+      "reading": "いく (iku), ゆく (yuku)",
+      "examples": [
+        {
+          "word": "行く",
+          "reading": "いく (iku)",
+          "meaning_bn": "যাওয়া"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "コウ (kou), ギョウ (gyou)",
+      "examples": [
+        {
+          "word": "銀行",
+          "reading": "ぎんこう (ginkou)",
+          "meaning_bn": "ব্যাংক"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "73",
+    "kanji": "来",
+    "meaning_en": "Come",
+    "meaning_bn": "আসা",
+    "onyomi": [
+      "ライ",
+      "タイ"
+    ],
+    "kunyomi": [
+      "く.る",
+      "きた.る",
+      "きた.す",
+      "き.たす",
+      "き.たる",
+      "き",
+      "こ"
+    ],
+    "examples": [
+      {
+        "word": "来る",
+        "reading": "くる",
+        "meaning_en": "To come",
+        "meaning_bn": "আসা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "友達が家に来ます。",
+        "romaji": "Tomodachi ga uchi ni kimasu.",
+        "english": "A friend will come to my house.",
+        "bangla": "বন্ধু আমার বাসায় আসবে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "গাছের ডালপালা বেয়ে নিচে নেমে আসা।",
+    "kun_yomi_new": {
+      "reading": "くる (kuru)",
+      "examples": [
+        {
+          "word": "来る",
+          "reading": "くる (kuru)",
+          "meaning_bn": "আসা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ライ (rai)",
+      "examples": [
+        {
+          "word": "来年",
+          "reading": "らいねん (rainen)",
+          "meaning_bn": "আগামী বছর"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "74",
+    "kanji": "見",
+    "meaning_en": "See",
+    "meaning_bn": "দেখা",
+    "onyomi": [
+      "ケン"
+    ],
+    "kunyomi": [
+      "み.る",
+      "み.える",
+      "み.せる"
+    ],
+    "examples": [
+      {
+        "word": "見る",
+        "reading": "みる",
+        "meaning_en": "To see",
+        "meaning_bn": "দেখা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "テレビを見ます。",
+        "romaji": "Terebi o mimasu.",
+        "english": "I watch TV.",
+        "bangla": "আমি টিভি দেখি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "চোখের উপর পা দিয়ে দূর কিছু দেখা।",
+    "kun_yomi_new": {
+      "reading": "みる (miru)",
+      "examples": [
+        {
+          "word": "見る",
+          "reading": "みる (miru)",
+          "meaning_bn": "দেখা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ケン (ken)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "75",
+    "kanji": "食",
+    "meaning_en": "Eat",
+    "meaning_bn": "খাওয়া",
+    "onyomi": [
+      "ショク",
+      "ジキ"
+    ],
+    "kunyomi": [
+      "た.べる",
+      "く.う",
+      "く.らう"
+    ],
+    "examples": [
+      {
+        "word": "食べる",
+        "reading": "たべる",
+        "meaning_en": "To eat",
+        "meaning_bn": "খাওয়া"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "寿司を食べます。",
+        "romaji": "Sushi o tabemasu.",
+        "english": "I will eat sushi.",
+        "bangla": "আমি সুশি খাবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "ছাদের নিচে বসে খাবার খাওয়া।",
+    "kun_yomi_new": {
+      "reading": "たべる (taberu)",
+      "examples": [
+        {
+          "word": "食べる",
+          "reading": "たべる (taberu)",
+          "meaning_bn": "খাওয়া"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ショク (shoku)",
+      "examples": [
+        {
+          "word": "食事",
+          "reading": "しょくじ (shokuji)",
+          "meaning_bn": "খাবার"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "76",
+    "kanji": "飲",
+    "meaning_en": "Drink",
+    "meaning_bn": "পান করা",
+    "onyomi": [
+      "イン",
+      "オン"
+    ],
+    "kunyomi": [
+      "の.む",
+      "-の.み"
+    ],
+    "examples": [
+      {
+        "word": "飲む",
+        "reading": "のむ",
+        "meaning_en": "To drink",
+        "meaning_bn": "পান করা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "水を飲みます。",
+        "romaji": "Mizu o nomimasu.",
+        "english": "I drink water.",
+        "bangla": "আমি পানি খাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "মুখ দিয়ে কিছু পান করা।",
+    "kun_yomi_new": {
+      "reading": "のむ (nomu)",
+      "examples": [
+        {
+          "word": "飲む",
+          "reading": "のむ (nomu)",
+          "meaning_bn": "পান করা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "イン (in)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "77",
+    "kanji": "言",
+    "meaning_en": "Say",
+    "meaning_bn": "বলা",
+    "onyomi": [
+      "ゲン",
+      "ゴン"
+    ],
+    "kunyomi": [
+      "い.う",
+      "こと"
+    ],
+    "examples": [
+      {
+        "word": "言う",
+        "reading": "いう",
+        "meaning_en": "To say",
+        "meaning_bn": "বলা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "『こんにちは』と言いました。",
+        "romaji": "'Konnichiwa' to iimashita.",
+        "english": "I said 'Hello'.",
+        "bangla": "আমি 'হ্যালো' বলেছিলাম।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "মুখ থেকে কথা বের হওয়া।",
+    "kun_yomi_new": {
+      "reading": "いう (iu)",
+      "examples": [
+        {
+          "word": "言う",
+          "reading": "いう (iu)",
+          "meaning_bn": "বলা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ゲン (gen), ゴン (gon)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "78",
+    "kanji": "話",
+    "meaning_en": "Speak, Talk",
+    "meaning_bn": "কথা বলা",
+    "onyomi": [
+      "ワ"
+    ],
+    "kunyomi": [
+      "はな.す",
+      "はなし"
+    ],
+    "examples": [
+      {
+        "word": "話す",
+        "reading": "はなす",
+        "meaning_en": "To speak",
+        "meaning_bn": "কথা বলা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "日本語を話します。",
+        "romaji": "Nihongo o hanashimasu.",
+        "english": "I speak Japanese.",
+        "bangla": "আমি জাপানি ভাষায় কথা বলি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "জিহ্বা দিয়ে কথা বলা বা গল্প করা।",
+    "kun_yomi_new": {
+      "reading": "はなす (hanasu)",
+      "examples": [
+        {
+          "word": "話す",
+          "reading": "はなす (hanasu)",
+          "meaning_bn": "কথা বলা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ワ (wa)",
+      "examples": [
+        {
+          "word": "電話",
+          "reading": "でんわ (denwa)",
+          "meaning_bn": "ফোন"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "79",
+    "kanji": "立",
+    "meaning_en": "Stand",
+    "meaning_bn": "দাঁড়ানো",
+    "onyomi": [
+      "リツ",
+      "リュウ",
+      "リットル"
+    ],
+    "kunyomi": [
+      "た.つ",
+      "-た.つ",
+      "た.ち-",
+      "た.てる",
+      "-た.てる",
+      "た.て-",
+      "たて-",
+      "-た.て",
+      "-だ.て",
+      "-だ.てる"
+    ],
+    "examples": [
+      {
+        "word": "立つ",
+        "reading": "たつ",
+        "meaning_en": "To stand",
+        "meaning_bn": "দাঁড়ানো"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "立ってください。",
+        "romaji": "Tatte kudasai.",
+        "english": "Please stand up.",
+        "bangla": "দয়া করে দাঁড়ান।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "দুই পায়ে মাটিতে সোজা হয়ে দাঁড়ানো।",
+    "kun_yomi_new": {
+      "reading": "たつ (tatsu)",
+      "examples": [
+        {
+          "word": "立つ",
+          "reading": "たつ (tatsu)",
+          "meaning_bn": "দাঁড়ানো"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "リツ (ritsu)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "80",
+    "kanji": "休",
+    "meaning_en": "Rest",
+    "meaning_bn": "বিশ্রাম নেওয়া",
+    "onyomi": [
+      "キュウ"
+    ],
+    "kunyomi": [
+      "やす.む",
+      "やす.まる",
+      "やす.める"
+    ],
+    "examples": [
+      {
+        "word": "休む",
+        "reading": "やすむ",
+        "meaning_en": "To rest/be absent",
+        "meaning_bn": "বিশ্রাম নেওয়া / ছুটি নেওয়া"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "今日は休みます。",
+        "romaji": "Kyou wa yasumimasu.",
+        "english": "I will rest today.",
+        "bangla": "আমি আজ ছুটি নেবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 8,
+    "mnemonic": "মানুষ গাছের নিচে দাঁড়িয়ে বিশ্রাম নিচ্ছে।",
+    "kun_yomi_new": {
+      "reading": "やすむ (yasumu)",
+      "examples": [
+        {
+          "word": "休み",
+          "reading": "やすみ (yasumi)",
+          "meaning_bn": "ছুটি"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "キュウ (kyuu)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "81",
+    "kanji": "買",
+    "meaning_en": "Buy",
+    "meaning_bn": "কেনা",
+    "onyomi": [
+      "バイ"
+    ],
+    "kunyomi": [
+      "か.う"
+    ],
+    "examples": [
+      {
+        "word": "買う",
+        "reading": "かう",
+        "meaning_en": "To buy",
+        "meaning_bn": "কেনা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "本を買いました。",
+        "romaji": "Hon o kaimashita.",
+        "english": "I bought a book.",
+        "bangla": "আমি একটি বই কিনেছিলাম।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "ঝিনুকের ভেতরে টাকা দিয়ে কিছু কেনা।",
+    "kun_yomi_new": {
+      "reading": "かう (kau)",
+      "examples": [
+        {
+          "word": "買う",
+          "reading": "かう (kau)",
+          "meaning_bn": "কেনা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "バイ (bai)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "82",
+    "kanji": "出",
+    "meaning_en": "Exit, Go out",
+    "meaning_bn": "বের হওয়া",
+    "onyomi": [
+      "シュツ",
+      "スイ"
+    ],
+    "kunyomi": [
+      "で.る",
+      "-で",
+      "だ.す",
+      "-だ.す",
+      "い.でる",
+      "い.だす"
+    ],
+    "examples": [
+      {
+        "word": "出る",
+        "reading": "でる",
+        "meaning_en": "To go out",
+        "meaning_bn": "বের হওয়া"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "部屋を出ます。",
+        "romaji": "Heya o demasu.",
+        "english": "I will leave the room.",
+        "bangla": "আমি রুম থেকে বের হবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "বাক্স থেকে কিছু বাইরে বেরিয়ে আসা।",
+    "kun_yomi_new": {
+      "reading": "でる (deru)",
+      "examples": [
+        {
+          "word": "出る",
+          "reading": "でる (deru)",
+          "meaning_bn": "বের হওয়া"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "シュツ (shutsu)",
+      "examples": [
+        {
+          "word": "出口",
+          "reading": "でぐち (deguchi)",
+          "meaning_bn": "প্রস্থানপথ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "83",
+    "kanji": "入",
+    "meaning_en": "Enter",
+    "meaning_bn": "প্রবেশ করা",
+    "onyomi": [
+      "ニュウ",
+      "ジュ"
+    ],
+    "kunyomi": [
+      "い.る",
+      "-い.る",
+      "-い.り",
+      "い.れる",
+      "-い.れ",
+      "はい.る"
+    ],
+    "examples": [
+      {
+        "word": "入る",
+        "reading": "はいる",
+        "meaning_en": "To enter",
+        "meaning_bn": "প্রবেশ করা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "お店に入ります。",
+        "romaji": "Omise ni hairimasu.",
+        "english": "I will enter the shop.",
+        "bangla": "আমি দোকানে প্রবেশ করবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "দুটি রেখার ভেতরের দিকে প্রবেশ পথ।",
+    "kun_yomi_new": {
+      "reading": "はいる (hairu)",
+      "examples": [
+        {
+          "word": "入る",
+          "reading": "はいる (hairu)",
+          "meaning_bn": "ঢোকা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ニュウ (nyuu)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "84",
+    "kanji": "書",
+    "meaning_en": "Write",
+    "meaning_bn": "লেখা",
+    "onyomi": [
+      "ショ"
+    ],
+    "kunyomi": [
+      "か.く",
+      "-が.き",
+      "-がき"
+    ],
+    "examples": [
+      {
+        "word": "書く",
+        "reading": "かく",
+        "meaning_en": "To write",
+        "meaning_bn": "লেখা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "手紙を書きます。",
+        "romaji": "Tegami o kakimasu.",
+        "english": "I will write a letter.",
+        "bangla": "আমি একটি চিঠি লিখবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "কলম দিয়ে কিছু লেখা।",
+    "kun_yomi_new": {
+      "reading": "かく (kaku)",
+      "examples": [
+        {
+          "word": "書く",
+          "reading": "かく (kaku)",
+          "meaning_bn": "লেখা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ショ (sho)",
+      "examples": [
+        {
+          "word": "辞書",
+          "reading": "じしょ (jisho)",
+          "meaning_bn": "অভিধান"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "85",
+    "kanji": "読",
+    "meaning_en": "Read",
+    "meaning_bn": "পড়া",
+    "onyomi": [
+      "ドク",
+      "トク",
+      "トウ"
+    ],
+    "kunyomi": [
+      "よ.む",
+      "-よ.み"
+    ],
+    "examples": [
+      {
+        "word": "読む",
+        "reading": "よむ",
+        "meaning_en": "To read",
+        "meaning_bn": "পড়া"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "本を読みます。",
+        "romaji": "Hon o yomimasu.",
+        "english": "I will read a book.",
+        "bangla": "আমি বই পড়বো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "শব্দ দেখে মনে মনে পড়া।",
+    "kun_yomi_new": {
+      "reading": "よむ (yomu)",
+      "examples": [
+        {
+          "word": "読む",
+          "reading": "よむ (yomu)",
+          "meaning_bn": "পড়া"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ドク (doku)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "86",
+    "kanji": "聞",
+    "meaning_en": "Hear, Listen",
+    "meaning_bn": "শোনা",
+    "onyomi": [
+      "ブン",
+      "モン"
+    ],
+    "kunyomi": [
+      "き.く",
+      "き.こえる"
+    ],
+    "examples": [
+      {
+        "word": "聞く",
+        "reading": "きく",
+        "meaning_en": "To listen/hear",
+        "meaning_bn": "শোনা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "音楽を聞きます。",
+        "romaji": "Ongaku o kikimasu.",
+        "english": "I listen to music.",
+        "bangla": "আমি গান শুনি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "কানে দরজা লাগিয়ে কিছু শোনা।",
+    "kun_yomi_new": {
+      "reading": "きく (kiku)",
+      "examples": [
+        {
+          "word": "聞く",
+          "reading": "きく (kiku)",
+          "meaning_bn": "শোনা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ブン (bun), モン (mon)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "87",
+    "kanji": "学",
+    "meaning_en": "Study, Learning",
+    "meaning_bn": "শেখা, পড়ালেখা",
+    "onyomi": [
+      "ガク"
+    ],
+    "kunyomi": [
+      "まな.ぶ"
+    ],
+    "examples": [
+      {
+        "word": "学生",
+        "reading": "がくせい",
+        "meaning_en": "Student",
+        "meaning_bn": "ছাত্র"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "私は学生です。",
+        "romaji": "Watashi wa gakusei desu.",
+        "english": "I am a student.",
+        "bangla": "আমি একজন ছাত্র।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "ছাদের নিচে বসে জ্ঞান অর্জন করা।",
+    "kun_yomi_new": {
+      "reading": "まなぶ (manabu)",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "ガク (gaku)",
+      "examples": [
+        {
+          "word": "学校",
+          "reading": "がっこう (gakkou)",
+          "meaning_bn": "বিদ্যালয়"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "88",
+    "kanji": "生",
+    "meaning_en": "Life, Birth",
+    "meaning_bn": "জীবন, জন্ম",
+    "onyomi": [
+      "セイ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "い.きる",
+      "い.かす",
+      "い.ける",
+      "う.まれる",
+      "う.まれ",
+      "うまれ",
+      "う.む",
+      "お.いる",
+      "は.える",
+      "は.やす",
+      "き",
+      "なま",
+      "なま-",
+      "な.る",
+      "な.す",
+      "む.す",
+      "-う"
+    ],
+    "examples": [
+      {
+        "word": "先生",
+        "reading": "せんせい",
+        "meaning_en": "Teacher",
+        "meaning_bn": "শিক্ষক"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "先生に質問します。",
+        "romaji": "Sensei ni shitsumon shimasu.",
+        "english": "I ask the teacher a question.",
+        "bangla": "আমি শিক্ষককে প্রশ্ন করি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "মাটি ভেদ করে নতুন গাছ বা জীবনের জন্ম।",
+    "kun_yomi_new": {
+      "reading": "いきる (ikiru), うまれる (umareru)",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "セイ (sei), ショウ (shou)",
+      "examples": [
+        {
+          "word": "先生",
+          "reading": "せんせい (sensei)",
+          "meaning_bn": "শিক্ষক"
+        },
+        {
+          "word": "学生",
+          "reading": "がくせい (gakusei)",
+          "meaning_bn": "ছাত্র"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "89",
+    "kanji": "会",
+    "meaning_en": "Meet, Society",
+    "meaning_bn": "সাক্ষাৎ করা",
+    "onyomi": [
+      "カイ",
+      "エ"
+    ],
+    "kunyomi": [
+      "あ.う",
+      "あ.わせる",
+      "あつ.まる"
+    ],
+    "examples": [
+      {
+        "word": "会う",
+        "reading": "あう",
+        "meaning_en": "To meet",
+        "meaning_bn": "সাক্ষাৎ করা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "友達に会います。",
+        "romaji": "Tomodachi ni aimasu.",
+        "english": "I will meet my friend.",
+        "bangla": "আমি বন্ধুর সাথে দেখা করবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "90",
+    "kanji": "語",
+    "meaning_en": "Word, Language",
+    "meaning_bn": "ভাষা",
+    "onyomi": [
+      "ゴ"
+    ],
+    "kunyomi": [
+      "かた.る",
+      "かた.らう"
+    ],
+    "examples": [
+      {
+        "word": "日本語",
+        "reading": "にほんご",
+        "meaning_en": "Japanese language",
+        "meaning_bn": "জাপানি ভাষা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "日本語を勉強します。",
+        "romaji": "Nihongo o benkyou shimasu.",
+        "english": "I study Japanese.",
+        "bangla": "আমি জাপানি ভাষা পড়ি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 9,
+    "mnemonic": "মুখ দিয়ে কথা বা ভাষা প্রকাশ করা।",
+    "kun_yomi_new": {
+      "reading": "かたる (kataru)",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "ゴ (go)",
+      "examples": [
+        {
+          "word": "日本語",
+          "reading": "にほんご (nihongo)",
+          "meaning_bn": "জাপানি ভাষা"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "91",
+    "kanji": "車",
+    "meaning_en": "Car",
+    "meaning_bn": "গাড়ি",
+    "onyomi": [
+      "シャ"
+    ],
+    "kunyomi": [
+      "くるま"
+    ],
+    "examples": [
+      {
+        "word": "車",
+        "reading": "くるま",
+        "meaning_en": "Car",
+        "meaning_bn": "গাড়ি"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "車を運転します。",
+        "romaji": "Kuruma o unten shimasu.",
+        "english": "I drive a car.",
+        "bangla": "আমি গাড়ি চালাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "দুই চাকা ও মাঝের অক্ষবিশিষ্ট গাড়ি।",
+    "kun_yomi_new": {
+      "reading": "くるま (kuruma)",
+      "examples": [
+        {
+          "word": "車",
+          "reading": "くるま (kuruma)",
+          "meaning_bn": "গাড়ি"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "シャ (sha)",
+      "examples": [
+        {
+          "word": "電車",
+          "reading": "でんしゃ (densha)",
+          "meaning_bn": "ট্রেন"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "92",
+    "kanji": "駅",
+    "meaning_en": "Station",
+    "meaning_bn": "স্টেশন",
+    "onyomi": [
+      "エキ"
+    ],
+    "kunyomi": [],
+    "examples": [
+      {
+        "word": "駅",
+        "reading": "えき",
+        "meaning_en": "Station",
+        "meaning_bn": "স্টেশন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "駅はどこですか。",
+        "romaji": "Eki wa doko desu ka.",
+        "english": "Where is the station?",
+        "bangla": "স্টেশন কোথায়?"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "ঘোড়া ও থামার স্থান।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "エキ (eki)",
+      "examples": [
+        {
+          "word": "駅",
+          "reading": "えき (eki)",
+          "meaning_bn": "স্টেশন"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "93",
+    "kanji": "社",
+    "meaning_en": "Company",
+    "meaning_bn": "কোম্পানি",
+    "onyomi": [
+      "シャ"
+    ],
+    "kunyomi": [
+      "やしろ"
+    ],
+    "examples": [
+      {
+        "word": "会社",
+        "reading": "かいしゃ",
+        "meaning_en": "Company",
+        "meaning_bn": "কোম্পানি"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "会社で働きます。",
+        "romaji": "Kaisha de hatarakimasu.",
+        "english": "I work at a company.",
+        "bangla": "আমি একটি কোম্পানিতে কাজ করি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "মাটি ও দেবতার মিলনস্থল।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "シャ (sha)",
+      "examples": [
+        {
+          "word": "会社",
+          "reading": "かいしゃ (kaisha)",
+          "meaning_bn": "কোম্পানি"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "94",
+    "kanji": "校",
+    "meaning_en": "School",
+    "meaning_bn": "বিদ্যালয়",
+    "onyomi": [
+      "コウ",
+      "キョウ"
+    ],
+    "kunyomi": [],
+    "examples": [
+      {
+        "word": "学校",
+        "reading": "がっこう",
+        "meaning_en": "School",
+        "meaning_bn": "বিদ্যালয়"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "学校に行きます。",
+        "romaji": "Gakkou ni ikimasu.",
+        "english": "I go to school.",
+        "bangla": "আমি স্কুলে যাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "কাঠ দিয়ে তৈরি শিক্ষাপ্রতিষ্ঠান।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "コウ (kou)",
+      "examples": [
+        {
+          "word": "学校",
+          "reading": "がっこう (gakkou)",
+          "meaning_bn": "বিদ্যালয়"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "95",
+    "kanji": "店",
+    "meaning_en": "Shop, Store",
+    "meaning_bn": "দোকান",
+    "onyomi": [
+      "テン"
+    ],
+    "kunyomi": [
+      "みせ",
+      "たな"
+    ],
+    "examples": [
+      {
+        "word": "お店",
+        "reading": "おみせ",
+        "meaning_en": "Shop",
+        "meaning_bn": "দোকান"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "あのお店は安いです。",
+        "romaji": "Ano omise wa yasui desu.",
+        "english": "That shop is cheap.",
+        "bangla": "ঐ দোকানটি সস্তা।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "ছাদের নিচে পণ্য বিক্রি করার দোকান।",
+    "kun_yomi_new": {
+      "reading": "みせ (mise)",
+      "examples": [
+        {
+          "word": "店",
+          "reading": "みせ (mise)",
+          "meaning_bn": "দোকান"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "テン (ten)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "96",
+    "kanji": "国",
+    "meaning_en": "Country",
+    "meaning_bn": "দেশ",
+    "onyomi": [
+      "コク"
+    ],
+    "kunyomi": [
+      "くに"
+    ],
+    "examples": [
+      {
+        "word": "国",
+        "reading": "くに",
+        "meaning_en": "Country",
+        "meaning_bn": "দেশ"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "私の国はバングラデシュです。",
+        "romaji": "Watashi no kuni wa banguradeshu desu.",
+        "english": "My country is Bangladesh.",
+        "bangla": "আমার দেশ বাংলাদেশ।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "সীমান্তের ভেতরে মূল্যবান রত্ন।",
+    "kun_yomi_new": {
+      "reading": "くに (kuni)",
+      "examples": [
+        {
+          "word": "国",
+          "reading": "くに (kuni)",
+          "meaning_bn": "দেশ"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "コク (koku)",
+      "examples": [
+        {
+          "word": "外国",
+          "reading": "がいこく (gaikoku)",
+          "meaning_bn": "বিদেশ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "97",
+    "kanji": "道",
+    "meaning_en": "Road, Way",
+    "meaning_bn": "রাস্তা",
+    "onyomi": [
+      "ドウ",
+      "トウ"
+    ],
+    "kunyomi": [
+      "みち"
+    ],
+    "examples": [
+      {
+        "word": "道",
+        "reading": "みち",
+        "meaning_en": "Road",
+        "meaning_bn": "রাস্তা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "道を歩きます。",
+        "romaji": "Michi o arukimasu.",
+        "english": "I walk on the road.",
+        "bangla": "আমি রাস্তায় হাঁটি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "মাথা নিয়ে সামনে চলা বা রাস্তা।",
+    "kun_yomi_new": {
+      "reading": "みち (michi)",
+      "examples": [
+        {
+          "word": "道",
+          "reading": "みち (michi)",
+          "meaning_bn": "রাস্তা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ドウ (dou)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "98",
+    "kanji": "時",
+    "meaning_en": "Time, Hour",
+    "meaning_bn": "সময়, ঘণ্টা",
+    "onyomi": [
+      "ジ"
+    ],
+    "kunyomi": [
+      "とき",
+      "-どき"
+    ],
+    "examples": [
+      {
+        "word": "時間",
+        "reading": "じかん",
+        "meaning_en": "Time",
+        "meaning_bn": "সময়"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "時間がありません。",
+        "romaji": "Jikan ga arimasen.",
+        "english": "I don't have time.",
+        "bangla": "আমার কাছে সময় নেই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "সূর্য ও মন্দিরের সময় নির্দেশক।",
+    "kun_yomi_new": {
+      "reading": "とき (toki)",
+      "examples": [
+        {
+          "word": "時",
+          "reading": "とき (toki)",
+          "meaning_bn": "সময় / যখন"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ジ (ji)",
+      "examples": [
+        {
+          "word": "時計",
+          "reading": "とけい (tokei)",
+          "meaning_bn": "ঘড়ি"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "99",
+    "kanji": "分",
+    "meaning_en": "Minute, Part",
+    "meaning_bn": "মিনিট, অংশ",
+    "onyomi": [
+      "ブン",
+      "フン",
+      "ブ"
+    ],
+    "kunyomi": [
+      "わ.ける",
+      "わ.け",
+      "わ.かれる",
+      "わ.かる",
+      "わ.かつ"
+    ],
+    "examples": [
+      {
+        "word": "五分",
+        "reading": "ごふん",
+        "meaning_en": "5 minutes",
+        "meaning_bn": "৫ মিনিট"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "五分待ってください。",
+        "romaji": "Gofun matte kudasai.",
+        "english": "Please wait 5 minutes.",
+        "bangla": "দয়া করে ৫ মিনিট অপেক্ষা করুন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "ধারালো ছুরি দিয়ে কিছু ভাগ করা।",
+    "kun_yomi_new": {
+      "reading": "わける (wakeru), わかる (wakaru)",
+      "examples": [
+        {
+          "word": "分かる",
+          "reading": "わかる (wakaru)",
+          "meaning_bn": "বোঝা"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "フン (fun), ブン (bun)",
+      "examples": [
+        {
+          "word": "五分",
+          "reading": "ごふん (gofun)",
+          "meaning_bn": "পাঁচ মিনিট"
+        },
+        {
+          "word": "自分",
+          "reading": "じぶん (jibun)",
+          "meaning_bn": "নিজে"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "100",
+    "kanji": "半",
+    "meaning_en": "Half",
+    "meaning_bn": "অর্ধেক",
+    "onyomi": [
+      "ハン"
+    ],
+    "kunyomi": [
+      "なか.ば"
+    ],
+    "examples": [
+      {
+        "word": "半分",
+        "reading": "はんぶん",
+        "meaning_en": "Half",
+        "meaning_bn": "অর্ধেক"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "ケーキを半分食べます。",
+        "romaji": "Keeki o hanbun tabemasu.",
+        "english": "I eat half a cake.",
+        "bangla": "আমি অর্ধেক কেক খাবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 10,
+    "mnemonic": "কোনো কিছুর মাঝখান থেকে কাটা অংশ।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "ハン (han)",
+      "examples": [
+        {
+          "word": "半分",
+          "reading": "はんぶん (hanbun)",
+          "meaning_bn": "অর্ধেক"
+        },
+        {
+          "word": "半年",
+          "reading": "はんとし (hantoshi)",
+          "meaning_bn": "ছয় মাস"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "101",
+    "kanji": "今",
+    "meaning_en": "Now",
+    "meaning_bn": "এখন",
+    "onyomi": [
+      "コン",
+      "キン"
+    ],
+    "kunyomi": [
+      "いま"
+    ],
+    "examples": [
+      {
+        "word": "今日",
+        "reading": "きょう",
+        "meaning_en": "Today",
+        "meaning_bn": "আজ"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "今は何時ですか。",
+        "romaji": "Ima wa nanji desu ka.",
+        "english": "What time is it now?",
+        "bangla": "এখন কয়টা বাজে?"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "102",
+    "kanji": "年",
+    "meaning_en": "Year",
+    "meaning_bn": "বছর",
+    "onyomi": [
+      "ネン"
+    ],
+    "kunyomi": [
+      "とし"
+    ],
+    "examples": [
+      {
+        "word": "今年",
+        "reading": "ことし",
+        "meaning_en": "This year",
+        "meaning_bn": "এই বছর"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "今年は日本に行きます。",
+        "romaji": "Kotoshi wa nihon ni ikimasu.",
+        "english": "I will go to Japan this year.",
+        "bangla": "এই বছর আমি জাপান যাবো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "ধান কাটার মৌসুম বা বছর পার হওয়া।",
+    "kun_yomi_new": {
+      "reading": "とし (toshi)",
+      "examples": [
+        {
+          "word": "年",
+          "reading": "とし (toshi)",
+          "meaning_bn": "বছর / বয়স"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ネン (nen)",
+      "examples": [
+        {
+          "word": "一年",
+          "reading": "いちねん (ichinen)",
+          "meaning_bn": "এক বছর"
+        },
+        {
+          "word": "来年",
+          "reading": "らいねん (rainen)",
+          "meaning_bn": "আগামী বছর"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "103",
+    "kanji": "毎",
+    "meaning_en": "Every",
+    "meaning_bn": "প্রতি",
+    "onyomi": [
+      "マイ"
+    ],
+    "kunyomi": [
+      "ごと"
+    ],
+    "examples": [
+      {
+        "word": "毎日",
+        "reading": "まいにち",
+        "meaning_en": "Every day",
+        "meaning_bn": "প্রতিদিন"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "毎日勉強します。",
+        "romaji": "Mainichi benkyou shimasu.",
+        "english": "I study every day.",
+        "bangla": "আমি প্রতিদিন পড়াশোনা করি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "প্রতিটি দিন বা প্রতি মাস।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "マイ (mai)",
+      "examples": [
+        {
+          "word": "毎日",
+          "reading": "まいにち (mainichi)",
+          "meaning_bn": "প্রতিদিন"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "104",
+    "kanji": "週",
+    "meaning_en": "Week",
+    "meaning_bn": "সপ্তাহ",
+    "onyomi": [
+      "シュウ"
+    ],
+    "kunyomi": [],
+    "examples": [
+      {
+        "word": "来週",
+        "reading": "らいしゅう",
+        "meaning_en": "Next week",
+        "meaning_bn": "আগামী সপ্তাহ"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "来週テストがあります。",
+        "romaji": "Raishuu tesuto ga arimasu.",
+        "english": "There is a test next week.",
+        "bangla": "আগামী সপ্তাহে পরীক্ষা আছে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "সপ্তাহের চক্র বা চারপাশ ঘোরা।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "シュウ (shuu)",
+      "examples": [
+        {
+          "word": "週末",
+          "reading": "しゅうまつ (shuumatsu)",
+          "meaning_bn": "সপ্তাহের শেষ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "105",
+    "kanji": "午",
+    "meaning_en": "Noon",
+    "meaning_bn": "দুপুর",
+    "onyomi": [
+      "ゴ"
+    ],
+    "kunyomi": [
+      "うま"
+    ],
+    "examples": [
+      {
+        "word": "午後",
+        "reading": "ごご",
+        "meaning_en": "Afternoon",
+        "meaning_bn": "বিকাল"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "午後に会いましょう。",
+        "romaji": "Gogo ni aimashou.",
+        "english": "Let's meet in the afternoon.",
+        "bangla": "বিকালে দেখা করি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "দুপুরের সময়সূচি।",
+    "kun_yomi_new": {
+      "reading": "",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "ゴ (go)",
+      "examples": [
+        {
+          "word": "午前",
+          "reading": "ごぜん (gozen)",
+          "meaning_bn": "সকাল (AM)"
+        },
+        {
+          "word": "午後",
+          "reading": "ごご (gogo)",
+          "meaning_bn": "বিকাল (PM)"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "106",
+    "kanji": "間",
+    "meaning_en": "Interval, Between",
+    "meaning_bn": "মাঝে, সময়",
+    "onyomi": [
+      "カン",
+      "ケン"
+    ],
+    "kunyomi": [
+      "あいだ",
+      "ま",
+      "あい"
+    ],
+    "examples": [
+      {
+        "word": "時間",
+        "reading": "じかん",
+        "meaning_en": "Time",
+        "meaning_bn": "সময়"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "AとBの間にあります。",
+        "romaji": "A to B no aida ni arimasu.",
+        "english": "It is between A and B.",
+        "bangla": "এটি A এবং B এর মাঝে অবস্থিত।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "দরজার ফাঁক দিয়ে আলো বা সময় দেখা।",
+    "kun_yomi_new": {
+      "reading": "あいだ (aida)",
+      "examples": [
+        {
+          "word": "間",
+          "reading": "あいだ (aida)",
+          "meaning_bn": "মাঝখানে"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "カン (kan), ケン (ken)",
+      "examples": [
+        {
+          "word": "時間",
+          "reading": "じかん (jikan)",
+          "meaning_bn": "সময়"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "107",
+    "kanji": "先",
+    "meaning_en": "Before, Ahead",
+    "meaning_bn": "আগে",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "さき",
+      "ま.ず"
+    ],
+    "examples": [
+      {
+        "word": "先生",
+        "reading": "せんせい",
+        "meaning_en": "Teacher",
+        "meaning_bn": "শিক্ষক"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "お先に失礼します。",
+        "romaji": "Osaki ni shitsurei shimasu.",
+        "english": "Pardon me for leaving before you.",
+        "bangla": "আমি আগে যাচ্ছি (বিদায়)।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "পায়ের অগ্রভাগ বা সামনে চলা।",
+    "kun_yomi_new": {
+      "reading": "さき (saki)",
+      "examples": []
+    },
+    "on_yomi_new": {
+      "reading": "セン (sen)",
+      "examples": [
+        {
+          "word": "先週",
+          "reading": "せんしゅう (senshuu)",
+          "meaning_bn": "গত সপ্তাহ"
+        }
+      ]
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "108",
+    "kanji": "朝",
+    "meaning_en": "Morning",
+    "meaning_bn": "সকাল",
+    "onyomi": [
+      "チョウ"
+    ],
+    "kunyomi": [
+      "あさ"
+    ],
+    "examples": [
+      {
+        "word": "朝",
+        "reading": "あさ",
+        "meaning_en": "Morning",
+        "meaning_bn": "সকাল"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "朝ごはんを食べます。",
+        "romaji": "Asagohan o tabemasu.",
+        "english": "I eat breakfast.",
+        "bangla": "আমি সকালের নাস্তা খাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "সকালে গাছের ফাঁক দিয়ে সূর্য ওঠা।",
+    "kun_yomi_new": {
+      "reading": "あさ (asa)",
+      "examples": [
+        {
+          "word": "朝",
+          "reading": "あさ (asa)",
+          "meaning_bn": "সকাল"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "チョウ (chou)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "109",
+    "kanji": "昼",
+    "meaning_en": "Daytime, Noon",
+    "meaning_bn": "দুপুর, দিনের বেলা",
+    "onyomi": [
+      "チュウ"
+    ],
+    "kunyomi": [
+      "ひる"
+    ],
+    "examples": [
+      {
+        "word": "昼休み",
+        "reading": "ひるやすみ",
+        "meaning_en": "Lunch break",
+        "meaning_bn": "দুপুরের বিরতি"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "昼は暑いです。",
+        "romaji": "Hiru wa atsui desu.",
+        "english": "It is hot in the daytime.",
+        "bangla": "দিনের বেলা গরম থাকে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "দিনের বেলা রোদের আলো।",
+    "kun_yomi_new": {
+      "reading": "ひる (hiru)",
+      "examples": [
+        {
+          "word": "昼",
+          "reading": "ひる (hiru)",
+          "meaning_bn": "দুপুর"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "チュウ (chuu)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "110",
+    "kanji": "夜",
+    "meaning_en": "Night",
+    "meaning_bn": "রাত",
+    "onyomi": [
+      "ヤ"
+    ],
+    "kunyomi": [
+      "よる",
+      "よ"
+    ],
+    "examples": [
+      {
+        "word": "夜",
+        "reading": "よる",
+        "meaning_en": "Night",
+        "meaning_bn": "রাত"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "夜、寝ます。",
+        "romaji": "Yoru, nemasu.",
+        "english": "I sleep at night.",
+        "bangla": "আমি রাতে ঘুমাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 11,
+    "mnemonic": "রাতের বেলা চাঁদের আলো ও মানুষ।",
+    "kun_yomi_new": {
+      "reading": "よる (yoru)",
+      "examples": [
+        {
+          "word": "夜",
+          "reading": "よる (yoru)",
+          "meaning_bn": "রাত"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "ヤ (ya)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "111",
+    "kanji": "明",
+    "meaning_en": "Bright",
+    "meaning_bn": "উজ্জ্বল",
+    "onyomi": [
+      "メイ",
+      "ミョウ",
+      "ミン"
+    ],
+    "kunyomi": [
+      "あ.かり",
+      "あか.るい",
+      "あか.るむ",
+      "あか.らむ",
+      "あき.らか",
+      "あ.ける",
+      "-あ.け",
+      "あ.く",
+      "あ.くる",
+      "あ.かす"
+    ],
+    "examples": [
+      {
+        "word": "明日",
+        "reading": "あした",
+        "meaning_en": "Tomorrow",
+        "meaning_bn": "আগামীকাল"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "明日は休みです。",
+        "romaji": "Ashita wa yasumi desu.",
+        "english": "Tomorrow is a day off.",
+        "bangla": "আগামীকাল ছুটির দিন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "mnemonic": "সূর্য ও চাঁদ মিলে আলোকিত করা।",
+    "kun_yomi_new": {
+      "reading": "あかるい (akarui)",
+      "examples": [
+        {
+          "word": "明るい",
+          "reading": "あかるい (akarui)",
+          "meaning_bn": "উজ্জ্বল"
+        }
+      ]
+    },
+    "on_yomi_new": {
+      "reading": "メイ (mei)",
+      "examples": []
+    },
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "112",
+    "kanji": "帰",
+    "meaning_en": "Return",
+    "meaning_bn": "ফিরে আসা",
+    "onyomi": [
+      "キ"
+    ],
+    "kunyomi": [
+      "かえ.る",
+      "かえ.す",
+      "おく.る",
+      "とつ.ぐ"
+    ],
+    "examples": [
+      {
+        "word": "帰る",
+        "reading": "かえる",
+        "meaning_en": "To return",
+        "meaning_bn": "ফিরে আসা/যাওয়া"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "家に帰ります。",
+        "romaji": "Ie ni kaerimasu.",
+        "english": "I return home.",
+        "bangla": "আমি বাসায় ফিরে যাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "113",
+    "kanji": "歩",
+    "meaning_en": "Walk",
+    "meaning_bn": "হাঁটা",
+    "onyomi": [
+      "ホ",
+      "ブ",
+      "フ"
+    ],
+    "kunyomi": [
+      "ある.く",
+      "あゆ.む"
+    ],
+    "examples": [
+      {
+        "word": "歩く",
+        "reading": "あるく",
+        "meaning_en": "To walk",
+        "meaning_bn": "হাঁটা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "公園を歩きます。",
+        "romaji": "Kouen o arukimasu.",
+        "english": "I walk in the park.",
+        "bangla": "আমি পার্কে হাঁটি।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "114",
+    "kanji": "待",
+    "meaning_en": "Wait",
+    "meaning_bn": "অপেক্ষা করা",
+    "onyomi": [
+      "タイ"
+    ],
+    "kunyomi": [
+      "ま.つ",
+      "-ま.ち"
+    ],
+    "examples": [
+      {
+        "word": "待つ",
+        "reading": "まつ",
+        "meaning_en": "To wait",
+        "meaning_bn": "অপেক্ষা করা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "ここで待ってください。",
+        "romaji": "Koko de matte kudasai.",
+        "english": "Please wait here.",
+        "bangla": "দয়া করে এখানে অপেক্ষা করুন।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "115",
+    "kanji": "止",
+    "meaning_en": "Stop",
+    "meaning_bn": "থামা",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [
+      "と.まる",
+      "-ど.まり",
+      "と.める",
+      "-と.める",
+      "-ど.め",
+      "とど.める",
+      "とど.め",
+      "とど.まる",
+      "や.める",
+      "や.む",
+      "-や.む",
+      "よ.す",
+      "-さ.す",
+      "-さ.し"
+    ],
+    "examples": [
+      {
+        "word": "止まる",
+        "reading": "とまる",
+        "meaning_en": "To stop",
+        "meaning_bn": "থামা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "車が止まります。",
+        "romaji": "Kuruma ga tomarimasu.",
+        "english": "The car stops.",
+        "bangla": "গাড়িটি থামবে।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "116",
+    "kanji": "思",
+    "meaning_en": "Think",
+    "meaning_bn": "ভাবা, মনে করা",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [
+      "おも.う",
+      "おも.えらく",
+      "おぼ.す"
+    ],
+    "examples": [
+      {
+        "word": "思う",
+        "reading": "おもう",
+        "meaning_en": "To think",
+        "meaning_bn": "ভাবা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "いいと思います。",
+        "romaji": "Ii to omoimasu.",
+        "english": "I think it is good.",
+        "bangla": "আমি মনে করি এটি ভালো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "117",
+    "kanji": "知",
+    "meaning_en": "Know",
+    "meaning_bn": "জানা",
+    "onyomi": [
+      "チ"
+    ],
+    "kunyomi": [
+      "し.る",
+      "し.らせる"
+    ],
+    "examples": [
+      {
+        "word": "知る",
+        "reading": "しる",
+        "meaning_en": "To know",
+        "meaning_bn": "জানা"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "その人を知りません。",
+        "romaji": "Sono hito o shirimasen.",
+        "english": "I don't know that person.",
+        "bangla": "আমি ঐ মানুষটিকে চিনি না।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "118",
+    "kanji": "歌",
+    "meaning_en": "Song, Sing",
+    "meaning_bn": "গান, গাওয়া",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [
+      "うた",
+      "うた.う"
+    ],
+    "examples": [
+      {
+        "word": "歌う",
+        "reading": "うたう",
+        "meaning_en": "To sing",
+        "meaning_bn": "গান গাওয়া"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "歌を歌います。",
+        "romaji": "Uta o utaimasu.",
+        "english": "I sing a song.",
+        "bangla": "আমি গান গাই।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "119",
+    "kanji": "音",
+    "meaning_en": "Sound",
+    "meaning_bn": "শব্দ",
+    "onyomi": [
+      "オン",
+      "イン",
+      "-ノン"
+    ],
+    "kunyomi": [
+      "おと",
+      "ね"
+    ],
+    "examples": [
+      {
+        "word": "音楽",
+        "reading": "おんがく",
+        "meaning_en": "Music",
+        "meaning_bn": "মিউজিক"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "いい音がします。",
+        "romaji": "Ii oto ga shimasu.",
+        "english": "It sounds good.",
+        "bangla": "এটার শব্দ ভালো।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
+  },
+  {
+    "id": "120",
+    "kanji": "楽",
+    "meaning_en": "Music, Fun",
+    "meaning_bn": "মজা, আনন্দ",
+    "onyomi": [
+      "ガク",
+      "ラク",
+      "ゴウ"
+    ],
+    "kunyomi": [
+      "たの.しい",
+      "たの.しむ",
+      "この.む"
+    ],
+    "examples": [
+      {
+        "word": "楽しい",
+        "reading": "たのしい",
+        "meaning_en": "Fun",
+        "meaning_bn": "মজার"
+      }
+    ],
+    "sentences": [
+      {
+        "japanese": "日本語は楽しいです。",
+        "romaji": "Nihongo wa tanoshii desu.",
+        "english": "Japanese is fun.",
+        "bangla": "জাপানি ভাষা অনেক মজার।"
+      }
+    ],
+    "level": "N5",
+    "lesson": 12,
+    "source_academy": "ARS ABDULLAH"
   }
 ]
