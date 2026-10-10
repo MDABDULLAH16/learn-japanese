@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress"
 import { signOut } from "@/auth"
 import Link from "next/link"
-import { BookA, Trophy, Flame, PlayCircle, Mic } from "lucide-react"
+import { BookA, Trophy, Flame, PlayCircle, Mic, Languages, PenTool } from "lucide-react"
 
 export default async function Dashboard() {
   const user = await getCurrentUser()
@@ -144,6 +144,34 @@ export default async function Dashboard() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">Uses speech recognition to verify if you are reading the characters correctly.</p>
+            </CardContent>
+          </Card>
+        </Link>
+        
+        <Link href="/kanji" className="block group">
+          <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                <Languages className="w-6 h-6" /> Kanji Library
+              </CardTitle>
+              <CardDescription>Master JLPT N5 Kanji characters.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Dedicated Kanji learning with Kunyomi, Onyomi, and vocabulary examples.</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/kanji-practice" className="block group">
+          <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                <PenTool className="w-6 h-6" /> Kanji Practice
+              </CardTitle>
+              <CardDescription>Test your memory with Kanji flashcards.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Interactive 3D flashcards to memorize meanings and readings of Kanji.</p>
             </CardContent>
           </Card>
         </Link>
