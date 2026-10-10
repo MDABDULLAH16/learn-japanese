@@ -12,6 +12,8 @@ export function VocabularyClient({ userId }: { userId: string }) {
   const [selectedLesson, setSelectedLesson] = useState<number>(VOCABULARY_DATA.lessons[0].lesson_number)
 
   const currentLesson = VOCABULARY_DATA.lessons.find(l => l.lesson_number === selectedLesson) || VOCABULARY_DATA.lessons[0]
+  
+  const totalVocabularies = VOCABULARY_DATA.lessons.reduce((acc, lesson) => acc + lesson.vocabularies.length, 0);
 
   return (
     <div className="max-w-5xl mx-auto mt-6 md:mt-12 mb-28 md:mb-12 space-y-8 px-4 w-full overflow-x-hidden sm:overflow-x-visible">
@@ -20,7 +22,10 @@ export function VocabularyClient({ userId }: { userId: string }) {
           <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-2">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-extrabold tracking-tight">Vocabulary Practice</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-extrabold tracking-tight">Vocabulary Practice</h1>
+            <Badge variant="secondary" className="px-2.5 py-0.5 rounded-full text-xs font-semibold">Total: {totalVocabularies}</Badge>
+          </div>
           <p className="text-muted-foreground mt-1">Learn new words and practice your memory.</p>
         </div>
       </div>
