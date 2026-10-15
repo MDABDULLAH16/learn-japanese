@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { saveQuizScore } from '@/lib/actions'
 import Link from 'next/link'
-import { ArrowLeft, CheckCircle2, XCircle, Loader2, RotateCcw, ChevronLeft, ChevronRight, Trophy, Volume2 } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, XCircle, Loader2, RotateCcw, ChevronLeft, ChevronRight, Trophy, Volume2, Bookmark } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import confetti from 'canvas-confetti'
 import { VOCABULARY_DATA, VocabularyItem } from '@/lib/vocabularyData'
+import { useRecapVocabularies, getRecapVocabularies } from '@/lib/recapStorage'
 
-const shuffle = (array: any[]) => [...array].sort(() => Math.random() - 0.5)
+const shuffle = <T,>(array: T[]): T[] => [...array].sort(() => Math.random() - 0.5)
 
 type Question = {
   vocab: VocabularyItem
@@ -20,9 +21,42 @@ type Question = {
 
 type QuizMode = 'ja-bn' | 'bn-ja'
 
+const getWrongOptions = (
+  vocab: VocabularyItem, 
+  allVocabs: VocabularyItem[], 
+  mode: QuizMode
+): VocabularyItem[] => {
+  const wrongOptions: VocabularyItem[] = []
+  const usedKeys = new Set<string>()
+
+  // Exclude correct answer's key
+  const correctKey = mode === 'ja-bn' 
+    ? vocab.bangla.trim().toLowerCase() 
+    : vocab.nihongo.trim()
+  usedKeys.add(correctKey)
+
+  const shuffledPool = shuffle(allVocabs)
+  for (const candidate of shuffledPool) {
+    if (!candidate.nihongo?.trim() || !candidate.bangla?.trim()) continue
+
+    const key = mode === 'ja-bn' 
+      ? candidate.bangla.trim().toLowerCase() 
+      : candidate.nihongo.trim()
+
+    if (usedKeys.has(key)) continue
+
+    usedKeys.add(key)
+    wrongOptions.push(candidate)
+
+    if (wrongOptions.length === 3) break
+  }
+
+  return wrongOptions
+}
+
 export function VocabQuizClient({ userId }: { userId: string }) {
   const [quizMode, setQuizMode] = useState<QuizMode>('ja-bn')
-  const [selectedLesson, setSelectedLesson] = useState<number | null>(null)
+  const [selectedLesson, setSelectedLesson] = useState<number | 'recap' | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [score, setScore] = useState(0)
@@ -32,32 +66,31 @@ export function VocabQuizClient({ userId }: { userId: string }) {
   const [isPending, startTransition] = useTransition()
   const [isLoaded, setIsLoaded] = useState(false)
 
+  const { recapList, isSaved, toggle } = useRecapVocabularies()
+
   const selectedAnswer = answersHistory[currentQuestion]
   const hasAnswered = selectedAnswer !== undefined
 
-  useEffect(() => {
-    setIsLoaded(true)
-  }, [])
-
-  const generateQuiz = (lessonNumber: number, mode: QuizMode = quizMode) => {
+  const generateQuiz = (lessonNumber: number | 'recap', mode: QuizMode = quizMode) => {
     setSelectedLesson(lessonNumber)
     setQuizMode(mode)
     
-    const lesson = VOCABULARY_DATA.lessons.find(l => l.lesson_number === lessonNumber)
-    if (!lesson) return
-    
-    const sourceData = lesson.vocabularies
-    // Select up to 20 random words for the quiz
-    const selectedVocabs = shuffle(sourceData).slice(0, 20)
+    let selectedVocabs: VocabularyItem[] = []
+    if (lessonNumber === 'recap') {
+      const recaps = recapList.length > 0 ? recapList : getRecapVocabularies()
+      if (recaps.length === 0) return
+      selectedVocabs = shuffle(recaps)
+    } else {
+      const lesson = VOCABULARY_DATA.lessons.find(l => l.lesson_number === lessonNumber)
+      if (!lesson) return
+      selectedVocabs = shuffle(lesson.vocabularies)
+    }
     
     // Create pool of all vocabularies to use as wrong options
     const allVocabs = VOCABULARY_DATA.lessons.flatMap(l => l.vocabularies)
     
     const generatedQuestions = selectedVocabs.map(vocab => {
-      // Find 3 wrong options
-      const wrongVocabs = shuffle(allVocabs.filter(v => 
-        mode === 'ja-bn' ? v.bangla !== vocab.bangla : v.nihongo !== vocab.nihongo
-      )).slice(0, 3)
+      const wrongVocabs = getWrongOptions(vocab, allVocabs, mode)
       return {
         vocab: vocab,
         options: shuffle([vocab, ...wrongVocabs])
@@ -68,13 +101,24 @@ export function VocabQuizClient({ userId }: { userId: string }) {
     resetState()
   }
 
+  useEffect(() => {
+    setIsLoaded(true)
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('lesson') === 'recap') {
+        const recaps = getRecapVocabularies()
+        if (recaps.length >= 4) {
+          generateQuiz('recap', 'ja-bn')
+        }
+      }
+    }
+  }, [])
+
   const startMistakesRetry = () => {
     const allVocabs = VOCABULARY_DATA.lessons.flatMap(l => l.vocabularies)
     
     const retriedQuestions = wrongQuestions.map(q => {
-      const wrongVocabs = shuffle(allVocabs.filter(v => 
-        quizMode === 'ja-bn' ? v.bangla !== q.vocab.bangla : v.nihongo !== q.vocab.nihongo
-      )).slice(0, 3)
+      const wrongVocabs = getWrongOptions(q.vocab, allVocabs, quizMode)
       return {
         ...q,
         options: shuffle([q.vocab, ...wrongVocabs])
@@ -99,15 +143,15 @@ export function VocabQuizClient({ userId }: { userId: string }) {
 
     const q = questions[currentQuestion]
     const isCorrect = quizMode === 'ja-bn' 
-      ? q.options[index].bangla === q.vocab.bangla 
-      : q.options[index].nihongo === q.vocab.nihongo
+      ? q.options[index].bangla.trim() === q.vocab.bangla.trim() 
+      : q.options[index].nihongo.trim() === q.vocab.nihongo.trim()
 
     if (isCorrect) {
       setScore(s => s + 10)
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
     } else {
       setWrongQuestions(prev => {
-        if (!prev.find(wq => wq.vocab.nihongo === q.vocab.nihongo)) {
+        if (!prev.find(wq => wq.vocab.nihongo.trim() === q.vocab.nihongo.trim())) {
           return [...prev, q]
         }
         return prev
@@ -174,26 +218,45 @@ export function VocabQuizClient({ userId }: { userId: string }) {
         <Card className="text-center p-8">
           <Trophy className="w-16 h-16 mx-auto mb-4 text-primary/80" />
           <h2 className="text-3xl font-bold mb-4">Vocabulary Quiz</h2>
-          <p className="text-muted-foreground mb-8">Select a lesson to test your vocabulary memory.</p>
+          <p className="text-muted-foreground mb-8">Select a lesson to test all vocabulary words with randomized questions.</p>
           <div className="flex justify-center gap-4 mb-8">
-            <div className="bg-secondary/20 p-1 rounded-lg inline-flex">
+            <div className="bg-secondary/20 p-1.5 rounded-lg inline-flex gap-1 border">
               <Button 
                 variant={quizMode === 'ja-bn' ? 'default' : 'ghost'} 
                 onClick={() => setQuizMode('ja-bn')}
-                className="rounded-md transition-all"
+                className="rounded-md transition-all font-semibold"
               >
-                Japanese ➔ Bangla
+                🇯🇵 Japanese ➔ 🇧🇩 Bangla
               </Button>
               <Button 
                 variant={quizMode === 'bn-ja' ? 'default' : 'ghost'} 
                 onClick={() => setQuizMode('bn-ja')}
-                className="rounded-md transition-all"
+                className="rounded-md transition-all font-semibold"
               >
-                Bangla ➔ Japanese
+                🇧🇩 Bangla ➔ 🇯🇵 Japanese
               </Button>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            <Button 
+              variant="outline" 
+              className={`h-24 flex flex-col gap-2 transition-all border-amber-500/40 relative ${
+                recapList.length >= 4 
+                  ? 'hover:bg-amber-500/10 hover:border-amber-500 text-amber-700 dark:text-amber-400 bg-amber-500/5' 
+                  : 'opacity-50 cursor-not-allowed border-dashed'
+              }`} 
+              disabled={recapList.length < 4}
+              onClick={() => recapList.length >= 4 && generateQuiz('recap', quizMode)}
+              title={recapList.length < 4 ? 'Save at least 4 words in Recap to take quiz' : 'Quiz your bookmarked Recap words'}
+            >
+              <span className="text-xl font-bold flex items-center gap-1.5">
+                <Bookmark className="w-5 h-5 fill-current text-amber-500" />
+                Recap
+              </span>
+              <span className="text-[10px] text-muted-foreground uppercase font-semibold">
+                {recapList.length} Saved {recapList.length === 1 ? 'Word' : 'Words'}
+              </span>
+            </Button>
             {VOCABULARY_DATA.lessons.map(lesson => (
               <Button 
                 key={lesson.lesson_number}
@@ -223,6 +286,9 @@ export function VocabQuizClient({ userId }: { userId: string }) {
           <div className="text-6xl font-bold text-primary">
             +{score} XP
           </div>
+          <div className="inline-block bg-primary/10 text-primary font-semibold px-4 py-1.5 rounded-full text-sm">
+            {questions.length - wrongQuestions.length} / {questions.length} Correct
+          </div>
           <p className="text-xl text-muted-foreground">
             {isPerfect ? "Flawless victory! You knew every word!" : `Great effort! You missed ${wrongQuestions.length} word(s).`}
           </p>
@@ -233,9 +299,12 @@ export function VocabQuizClient({ userId }: { userId: string }) {
         <CardFooter className="flex flex-col sm:flex-row justify-center gap-4">
           {!isPerfect && (
             <Button onClick={startMistakesRetry} className="bg-amber-500 hover:bg-amber-600 text-white">
-              <RotateCcw className="mr-2 h-4 w-4" /> Retry Mistakes
+              <RotateCcw className="mr-2 h-4 w-4" /> Retry Mistakes ({wrongQuestions.length})
             </Button>
           )}
+          <Button onClick={() => selectedLesson && generateQuiz(selectedLesson, quizMode)}>
+            <RotateCcw className="mr-2 h-4 w-4" /> Play Again
+          </Button>
           <Button variant="outline" onClick={handleBackToStart}>
             Choose Another Lesson
           </Button>
@@ -256,15 +325,31 @@ export function VocabQuizClient({ userId }: { userId: string }) {
   }
 
   // SCREEN 3: Active Quiz
-  const progress = ((currentQuestion) / questions.length) * 100
+  const progress = questions.length > 0 ? ((currentQuestion) / questions.length) * 100 : 0
 
   return (
     <div className="max-w-2xl mx-auto mt-4 md:mt-12 mb-28 md:mb-0 space-y-5 px-2 w-full overflow-x-hidden sm:overflow-x-visible">
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" onClick={handleBackToStart} className="text-muted-foreground">
+        <Button variant="ghost" size="sm" onClick={handleBackToStart} className="text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" /> Quit
         </Button>
-        <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full">Lesson {selectedLesson}</span>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="text-xs font-semibold px-2.5 py-1">
+            {quizMode === 'ja-bn' ? 'JA ➔ BN' : 'BN ➔ JA'}
+          </Badge>
+          <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full">
+            {selectedLesson === 'recap' ? 'Recap Lesson' : `Lesson ${selectedLesson}`}
+          </span>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => selectedLesson && generateQuiz(selectedLesson, quizMode)} 
+            className="text-muted-foreground hover:text-foreground h-7 px-2 text-xs"
+            title="Restart quiz with new shuffle"
+          >
+            <RotateCcw className="w-3.5 h-3.5 mr-1" /> Restart
+          </Button>
+        </div>
       </div>
 
       <div className="flex items-center justify-between text-sm font-medium text-muted-foreground px-1">
@@ -283,15 +368,30 @@ export function VocabQuizClient({ userId }: { userId: string }) {
           
           <div className="text-center relative w-full flex flex-col items-center justify-center min-h-[160px] bg-secondary/10 rounded-xl p-6 border">
             {quizMode === 'ja-bn' && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-3 right-3 text-primary/70 hover:text-primary hover:bg-primary/10 rounded-full h-10 w-10"
-                onClick={speakJapanese}
-                title="Listen to pronunciation"
-              >
-                <Volume2 className="w-5 h-5" />
-              </Button>
+              <div className="absolute top-3 right-3 flex items-center gap-1 z-10">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`rounded-full h-10 w-10 transition-all ${
+                    isSaved(question.vocab)
+                      ? 'text-amber-500 bg-amber-500/15 hover:bg-amber-500/25'
+                      : 'text-muted-foreground/60 hover:text-amber-500 hover:bg-amber-500/10'
+                  }`}
+                  onClick={() => toggle(question.vocab)}
+                  title={isSaved(question.vocab) ? "Remove from Recap" : "Add to Recap"}
+                >
+                  <Bookmark className={`w-5 h-5 transition-transform ${isSaved(question.vocab) ? 'fill-amber-500 scale-110' : ''}`} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary/70 hover:text-primary hover:bg-primary/10 rounded-full h-10 w-10"
+                  onClick={speakJapanese}
+                  title="Listen to pronunciation"
+                >
+                  <Volume2 className="w-5 h-5" />
+                </Button>
+              </div>
             )}
 
             <h2 className={`font-black text-primary leading-tight drop-shadow-sm mb-4 mt-2 break-words whitespace-normal px-2 ${quizMode === 'ja-bn' ? 'text-4xl sm:text-7xl' : 'text-3xl sm:text-5xl'}`}>
@@ -307,19 +407,29 @@ export function VocabQuizClient({ userId }: { userId: string }) {
           {(hasAnswered) && quizMode === 'ja-bn' && (
             <div className="w-full text-center space-y-1 bg-primary/5 border border-primary/10 p-3 rounded-xl animate-in fade-in zoom-in-95">
                <span className="text-xs font-bold text-muted-foreground uppercase">Romaji / Pronunciation</span>
-               <p className="text-lg font-bold text-primary">{question.vocab.romaji} <span className="text-muted-foreground font-normal">({question.vocab.uchharon})</span></p>
+               <p className="text-lg font-bold text-primary">
+                 {question.vocab.romaji || ''}
+                 {question.vocab.uchharon ? <span className="text-muted-foreground font-normal"> ({question.vocab.uchharon})</span> : null}
+               </p>
             </div>
           )}
           
           {(hasAnswered) && quizMode === 'bn-ja' && (
-            <div className="w-full flex items-center justify-center gap-2 bg-primary/5 border border-primary/10 p-3 rounded-xl animate-in fade-in zoom-in-95">
-               <Button variant="ghost" size="icon" onClick={speakJapanese} className="h-8 w-8 text-primary/70 hover:text-primary">
+            <div className="w-full flex items-center justify-center gap-3 bg-primary/5 border border-primary/10 p-3 rounded-xl animate-in fade-in zoom-in-95">
+               <Button variant="ghost" size="icon" onClick={speakJapanese} className="h-9 w-9 text-primary/70 hover:text-primary rounded-full bg-primary/10">
                  <Volume2 className="w-4 h-4" />
                </Button>
                <div>
-                 <span className="text-xs font-bold text-muted-foreground uppercase block text-center">Answer</span>
-                 <p className="text-lg font-bold text-primary">{question.vocab.nihongo} {question.vocab.kanji ? `(${question.vocab.kanji})` : ''}</p>
-                 <p className="text-sm text-primary/80">{question.vocab.romaji} <span className="text-muted-foreground font-normal">({question.vocab.uchharon})</span></p>
+                 <span className="text-xs font-bold text-muted-foreground uppercase block text-center">Correct Japanese</span>
+                 <p className="text-lg sm:text-xl font-bold text-primary">
+                   {question.vocab.nihongo} {question.vocab.kanji ? <span className="text-sm font-medium text-muted-foreground">({question.vocab.kanji})</span> : null}
+                 </p>
+                 {(question.vocab.romaji || question.vocab.uchharon) && (
+                   <p className="text-sm text-primary/80">
+                     {question.vocab.romaji}
+                     {question.vocab.uchharon ? <span className="text-muted-foreground font-normal"> ({question.vocab.uchharon})</span> : null}
+                   </p>
+                 )}
                </div>
             </div>
           )}
@@ -331,7 +441,9 @@ export function VocabQuizClient({ userId }: { userId: string }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 w-full">
             {question.options.map((option, index) => {
               const isSelected = selectedAnswer === index
-              const isCorrect = quizMode === 'ja-bn' ? question.vocab.bangla === option.bangla : question.vocab.nihongo === option.nihongo
+              const isCorrect = quizMode === 'ja-bn' 
+                ? question.vocab.bangla.trim() === option.bangla.trim() 
+                : question.vocab.nihongo.trim() === option.nihongo.trim()
               
               let variant: "default" | "outline" | "destructive" | "secondary" = "outline"
               if (hasAnswered) {
@@ -342,6 +454,14 @@ export function VocabQuizClient({ userId }: { userId: string }) {
                 variant = "default"
               }
 
+              const mainText = quizMode === 'ja-bn' 
+                ? (option.bangla || '—') 
+                : (option.nihongo || '—')
+
+              const subText = quizMode === 'ja-bn'
+                ? option.nihongo
+                : `${option.bangla}${option.kanji ? ` (${option.kanji})` : ''}`
+
               return (
                 <Button 
                   key={index} 
@@ -351,13 +471,12 @@ export function VocabQuizClient({ userId }: { userId: string }) {
                   disabled={hasAnswered}
                 >
                   <span className={`whitespace-normal break-words pr-8 w-full text-center ${hasAnswered && !isCorrect && !isSelected ? 'text-foreground' : ''}`}>
-                    {quizMode === 'ja-bn' ? option.bangla : option.nihongo}
+                    {mainText}
                   </span>
                   
-                  {hasAnswered && (
+                  {hasAnswered && subText && (
                     <span className={`text-sm font-normal opacity-100 block mt-1 pr-8 w-full text-center ${isCorrect ? 'text-primary-foreground/90' : isSelected ? 'text-destructive-foreground/90' : 'text-foreground/70'}`}>
-                      {quizMode === 'ja-bn' ? option.nihongo : option.bangla}
-                      {quizMode === 'bn-ja' && option.kanji ? ` (${option.kanji})` : ''}
+                      {subText}
                     </span>
                   )}
 

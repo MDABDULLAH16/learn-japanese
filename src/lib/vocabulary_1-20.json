@@ -363,30 +363,6 @@
         "bangla": "ব্রাজিল"
       },
       {
-        "nihongo": "",
-        "romaji": "",
-        "uchharon": "",
-        "kanji": "",
-        "english": "",
-        "bangla": "~সাহেব/মিস~ (ভদ্র"
-      },
-      {
-        "nihongo": "",
-        "romaji": "",
-        "uchharon": "",
-        "kanji": "",
-        "english": "",
-        "bangla": "~সাহেব/মিস~ (আরো"
-      },
-      {
-        "nihongo": "",
-        "romaji": "",
-        "uchharon": "",
-        "kanji": "",
-        "english": "",
-        "bangla": "পরিদর্শক শিক্ষক,"
-      },
-      {
         "nihongo": "けんきゅう しゃ",
         "romaji": "",
         "uchharon": "কেনকিউশা",
@@ -806,70 +782,6 @@
         "kanji": "",
         "english": "I am pleased to meet you.",
         "bangla": "আপনার সাথে দেখা করে সন্তুষ্ট হলাম"
-      },
-      {
-        "nihongo": "",
-        "romaji": "",
-        "uchharon": "",
-        "kanji": "",
-        "english": "",
-        "bangla": "এই ~"
-      },
-      {
-        "nihongo": "しんぶん ノート",
-        "romaji": "",
-        "uchharon": "শিনবুন নোতো-",
-        "kanji": "新聞",
-        "english": "Newspaper Notebook",
-        "bangla": "পত্রিকা নোটবুক / খাতা"
-      },
-      {
-        "nihongo": "シャープペンシル かぎ",
-        "romaji": "",
-        "uchharon": "শাপুপেনশিরু কাগি",
-        "kanji": "かぎ",
-        "english": "Mechanical pencil, propelling pencil Key",
-        "bangla": "যান্ত্রিক পেন্সিল, প্রপেলিং পেন্সিল চাবি"
-      },
-      {
-        "nihongo": "コンピュータ / $\\exists/k=-$",
-        "romaji": "",
-        "uchharon": "কোনপিউতা",
-        "kanji": "",
-        "english": "Computer",
-        "bangla": "কম্পিউটার"
-      },
-      {
-        "nihongo": "",
-        "romaji": "",
-        "uchharon": "",
-        "kanji": "",
-        "english": "",
-        "bangla": "দেশের ভাষা বুজায়"
-      },
-      {
-        "nihongo": "どうも] ありがとう [ございます]",
-        "romaji": "",
-        "uchharon": "[দৌমো] আরিগাতো গোজাইমাস)",
-        "kanji": "",
-        "english": "Thank you [very much].",
-        "bangla": "ধন্যবাদ আপনাকে (অসংখ্য)"
-      },
-      {
-        "nihongo": "これから おせわ になります",
-        "romaji": "",
-        "uchharon": "কোরে কারা ওসেওয়ানি নারিমাস",
-        "kanji": "これから 「お世話に なります",
-        "english": "I hope for your kind assistance hereafter.",
-        "bangla": "পরবর্তীতে আমি আপনার সাহায্য কামনা করি"
-      },
-      {
-        "nihongo": "こちらこそ 「よろしく",
-        "romaji": "",
-        "uchharon": "কোচিরা কোসো ইয়োরোশিকু",
-        "kanji": "☐☐",
-        "english": "I am pleased to meet you. (response to どうぞよろそく)",
-        "bangla": "আপনার সাথে দেখা করে সন্তুষ্ট হলাম।"
       }
     ]
   },
@@ -5101,14 +5013,6 @@
         "bangla": "ছুটি নেওয়া [কাজ থেকে~] এক (সাধারণ জিনিস গণনার ক্ষেত্রে বসে)"
       },
       {
-        "nihongo": "",
-        "romaji": "",
-        "uchharon": "",
-        "kanji": "",
-        "english": "",
-        "bangla": "ক্ষেত্রে ব্যবহার হয়"
-      },
-      {
         "nihongo": "りんご みかん サンドイッチ カレー [ライス] アイスクリーム きって",
         "romaji": "",
         "uchharon": "রিনগো মিকান সানদোইচ্চি কারে [রাইসু] আইসুকুরিমু কিত্তে",
@@ -6982,8 +6886,8 @@
         "bangla": "লম্বা [মানুষ]"
       },
       {
-        "nihongo": "",
-        "romaji": "",
+        "nihongo": "あたまがいい",
+        "romaji": "atama ga ii",
         "uchharon": "আতামাগাইই",
         "kanji": "頭がいい",
         "english": "Clever, smart",
@@ -6991,31 +6895,31 @@
       },
       {
         "nihongo": "みみ",
-        "romaji": "",
+        "romaji": "mimi",
         "uchharon": "মিমি",
         "kanji": "耳",
         "english": "Ear",
         "bangla": "কান"
       },
       {
-        "nihongo": "",
-        "romaji": "",
+        "nihongo": "くち",
+        "romaji": "kuchi",
         "uchharon": "কুচি",
-        "kanji": "Π",
+        "kanji": "口",
         "english": "Mouth",
         "bangla": "মুখ"
       },
       {
         "nihongo": "は",
-        "romaji": "",
+        "romaji": "ha",
         "uchharon": "হা",
-        "kanji": "葉",
+        "kanji": "歯",
         "english": "Tooth",
         "bangla": "দাঁত"
       },
       {
-        "nihongo": "",
-        "romaji": "",
+        "nihongo": "くび",
+        "romaji": "kubi",
         "uchharon": "কুবি",
         "kanji": "首",
         "english": "Neck",
@@ -7023,7 +6927,7 @@
       },
       {
         "nihongo": "おなか",
-        "romaji": "",
+        "romaji": "onaka",
         "uchharon": "ওনাকা",
         "kanji": "",
         "english": "Stomach",
@@ -7031,7 +6935,7 @@
       },
       {
         "nihongo": "あし",
-        "romaji": "",
+        "romaji": "ashi",
         "uchharon": "আশি",
         "kanji": "足",
         "english": "Leg, foot",
@@ -7039,27 +6943,19 @@
       },
       {
         "nihongo": "サービス",
-        "romaji": "",
+        "romaji": "saabisu",
         "uchharon": "সা-বিসু",
         "kanji": "",
         "english": "Service",
         "bangla": "সেবা"
       },
       {
-        "nihongo": "",
-        "romaji": "",
+        "nihongo": "ジョギング",
+        "romaji": "jogingu",
         "uchharon": "জোগিনগু",
         "kanji": "",
         "english": "Jogging",
         "bangla": "জগিং"
-      },
-      {
-        "nihongo": "あたまがいい くち くび ジョギング [お] てら じんじゃ りゅうがくせい シャワー みどり 一ばん",
-        "romaji": "",
-        "uchharon": "শাওয়া- মিদোরি [ও] তেরা জিনজা রিয়্যুগাকুসেই ~ বান",
-        "kanji": "緑 お寺 神社 留学生 一番",
-        "english": "Shower Green, greenery Buddhist temple Shinto shrine Foreign student Number ~",
-        "bangla": "গোসল সবুজ বৌদ্ধ মন্দির শিন্ত মন্দির বিদেশি ছাত্র ~ সংখ্যা"
       },
       {
         "nihongo": "どうやって",
@@ -7540,11 +7436,11 @@
       },
       {
         "nihongo": "2,3~",
-        "romaji": "",
+        "romaji": "ni, san ~",
         "uchharon": "নি, সান ~",
         "kanji": "2,3~",
         "english": "Two or three ~",
-        "bangla": ""
+        "bangla": "২, ৩ ~ (দুই বা তিন ~)"
       },
       {
         "nihongo": "までに ~ ですから",

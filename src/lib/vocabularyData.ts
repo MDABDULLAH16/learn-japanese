@@ -15,5 +15,10 @@ export type Lesson = {
 };
 
 export const VOCABULARY_DATA: { lessons: Lesson[] } = {
-  lessons: vocabularyRaw as Lesson[]
+  lessons: (vocabularyRaw as Lesson[]).map(lesson => ({
+    ...lesson,
+    vocabularies: lesson.vocabularies.filter(v => 
+      Boolean(v && v.nihongo && v.nihongo.trim() && v.bangla && v.bangla.trim())
+    )
+  }))
 };
