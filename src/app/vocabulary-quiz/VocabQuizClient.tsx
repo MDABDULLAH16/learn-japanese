@@ -54,7 +54,13 @@ const getWrongOptions = (
   return wrongOptions
 }
 
-export function VocabQuizClient({ userId }: { userId: string }) {
+export function VocabQuizClient({ 
+  userId,
+  initialRecapList 
+}: { 
+  userId: string
+  initialRecapList?: VocabularyItem[] 
+}) {
   const [quizMode, setQuizMode] = useState<QuizMode>('ja-bn')
   const [selectedLesson, setSelectedLesson] = useState<number | 'recap' | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
@@ -66,7 +72,7 @@ export function VocabQuizClient({ userId }: { userId: string }) {
   const [isPending, startTransition] = useTransition()
   const [isLoaded, setIsLoaded] = useState(false)
 
-  const { recapList, isSaved, toggle } = useRecapVocabularies()
+  const { recapList, isSaved, toggle } = useRecapVocabularies(initialRecapList, userId)
 
   const selectedAnswer = answersHistory[currentQuestion]
   const hasAnswered = selectedAnswer !== undefined
@@ -106,7 +112,7 @@ export function VocabQuizClient({ userId }: { userId: string }) {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       if (params.get('lesson') === 'recap') {
-        const recaps = getRecapVocabularies()
+        const recaps = (initialRecapList && initialRecapList.length > 0) ? initialRecapList : getRecapVocabularies()
         if (recaps.length >= 4) {
           generateQuiz('recap', 'ja-bn')
         }

@@ -16,6 +16,7 @@ model User {
   totalScore  Int            @default(0)
   lastLoginAt DateTime       @default(now())
   progress    UserProgress[]
+  recapItems  RecapItem[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 }
@@ -30,4 +31,21 @@ model UserProgress {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, item_id])
+}
+
+model RecapItem {
+  id          String   @id @default(uuid())
+  user_id     String
+  nihongo     String
+  romaji      String   @default("")
+  uchharon    String   @default("")
+  kanji       String   @default("")
+  english     String   @default("")
+  bangla      String
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, nihongo, bangla])
+  @@index([user_id])
 }

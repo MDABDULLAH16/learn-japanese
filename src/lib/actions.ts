@@ -101,6 +101,225 @@ export const saveQuizScore = async (userId: string, newScore: number) => {
   revalidatePath('/quiz')
 }
 
+import type { VocabularyItem } from './vocabularyData'
+
+export const getUserRecapItems = async (userId?: string): Promise<VocabularyItem[]> => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+    const items = await prisma.recapItem.findMany({
+      where: { user_id: targetUserId },
+      orderBy: { createdAt: 'desc' }
+    })
+    return items.map(item => ({
+      nihongo: item.nihongo,
+      romaji: item.romaji,
+      uchharon: item.uchharon,
+      kanji: item.kanji,
+      english: item.english,
+      bangla: item.bangla,
+    }))
+  } catch (error) {
+    console.error("Failed to get recap items:", error)
+    return []
+  }
+}
+
+export const toggleRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+    const nihongo = vocab.nihongo.trim()
+    const bangla = vocab.bangla.trim()
+
+    const existing = await prisma.recapItem.findUnique({
+      where: {
+        user_id_nihongo_bangla: {
+          user_id: targetUserId,
+          nihongo,
+          bangla
+        }
+      }
+    })
+
+    if (existing) {
+      await prisma.recapItem.delete({
+        where: { id: existing.id }
+      })
+      revalidatePath('/vocabulary')
+      revalidatePath('/vocabulary-quiz')
+      return { success: true, added: false }
+    } else {
+      await prisma.recapItem.create({
+        data: {
+          user_id: targetUserId,
+          nihongo,
+          romaji: vocab.romaji || '',
+          uchharon: vocab.uchharon || '',
+          kanji: vocab.kanji || '',
+          english: vocab.english || '',
+          bangla
+        }
+      })
+      revalidatePath('/vocabulary')
+      revalidatePath('/vocabulary-quiz')
+      return { success: true, added: true }
+    }
+  } catch (error) {
+    console.error("Failed to toggle recap item:", error)
+    return { success: false, added: false }
+  }
+}
+
+export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+    const nihongo = vocab.nihongo.trim()
+    const bangla = vocab.bangla.trim()
+
+    await prisma.recapItem.upsert({
+      where: {
+        user_id_nihongo_bangla: {
+          user_id: targetUserId,
+          nihongo,
+          bangla
+        }
+      },
+      update: {
+        romaji: vocab.romaji || '',
+        uchharon: vocab.uchharon || '',
+        kanji: vocab.kanji || '',
+        english: vocab.english || ''
+      },
+      create: {
+        user_id: targetUserId,
+        nihongo,
+        romaji: vocab.romaji || '',
+        uchharon: vocab.uchharon || '',
+        kanji: vocab.kanji || '',
+        english: vocab.english || '',
+        bangla
+      }
+    })
+    revalidatePath('/vocabulary')
+    revalidatePath('/vocabulary-quiz')
+    return { success: true }
+  } catch (error) {
+    console.error("Failed to add recap item:", error)
+    return { success: false }
+  }
+}
+
+export const removeRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+    await prisma.recapItem.deleteMany({
+      where: {
+        user_id: targetUserId,
+        nihongo: vocab.nihongo.trim(),
+        bangla: vocab.bangla.trim()
+      }
+    })
+    revalidatePath('/vocabulary')
+    revalidatePath('/vocabulary-quiz')
+    return { success: true }
+  } catch (error) {
+    console.error("Failed to remove recap item:", error)
+    return { success: false }
+  }
+}
+
+export const clearRecapItemsAction = async (userId?: string) => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+    await prisma.recapItem.deleteMany({
+      where: { user_id: targetUserId }
+    })
+    revalidatePath('/vocabulary')
+    revalidatePath('/vocabulary-quiz')
+    return { success: true }
+  } catch (error) {
+    console.error("Failed to clear recap items:", error)
+    return { success: false }
+  }
+}
+
+export const syncRecapItemsAction = async (localItems: VocabularyItem[], userId?: string): Promise<VocabularyItem[]> => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+
+    if (localItems && localItems.length > 0) {
+      const validItems = localItems.filter(item => Boolean(item && item.nihongo?.trim() && item.bangla?.trim()))
+      
+      for (const item of validItems) {
+        await prisma.recapItem.upsert({
+          where: {
+            user_id_nihongo_bangla: {
+              user_id: targetUserId,
+              nihongo: item.nihongo.trim(),
+              bangla: item.bangla.trim()
+            }
+          },
+          update: {
+            romaji: item.romaji || '',
+            uchharon: item.uchharon || '',
+            kanji: item.kanji || '',
+            english: item.english || ''
+          },
+          create: {
+            user_id: targetUserId,
+            nihongo: item.nihongo.trim(),
+            romaji: item.romaji || '',
+            uchharon: item.uchharon || '',
+            kanji: item.kanji || '',
+            english: item.english || '',
+            bangla: item.bangla.trim()
+          }
+        })
+      }
+    }
+
+    const dbItems = await prisma.recapItem.findMany({
+      where: { user_id: targetUserId },
+      orderBy: { createdAt: 'desc' }
+    })
+
+    return dbItems.map(item => ({
+      nihongo: item.nihongo,
+      romaji: item.romaji,
+      uchharon: item.uchharon,
+      kanji: item.kanji,
+      english: item.english,
+      bangla: item.bangla,
+    }))
+  } catch (error) {
+    console.error("Failed to sync recap items:", error)
+    return []
+  }
+}
+
 let kuroshiroInstance: any = null
 
 export const convertToRomaji = async (japaneseText: string) => {

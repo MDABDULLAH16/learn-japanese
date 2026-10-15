@@ -1,6 +1,6 @@
 export const instant = false
 
-import { getCurrentUser } from "@/lib/actions"
+import { getCurrentUser, getUserRecapItems } from "@/lib/actions"
 import { redirect } from "next/navigation"
 import { VocabularyClient } from "./VocabularyClient"
 
@@ -8,5 +8,7 @@ export default async function VocabularyPage() {
   const user = await getCurrentUser()
   if (!user) redirect("/login")
 
-  return <VocabularyClient userId={user.id} />
+  const initialRecaps = await getUserRecapItems(user.id)
+
+  return <VocabularyClient userId={user.id} initialRecapList={initialRecaps} />
 }

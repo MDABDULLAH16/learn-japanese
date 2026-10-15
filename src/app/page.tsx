@@ -1,15 +1,16 @@
 export const instant = false
 
-import { getCurrentUser, getUserProgress } from "@/lib/actions"
+import { getCurrentUser, getUserProgress, getUserRecapItems } from "@/lib/actions"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { signOut } from "@/auth"
 import Link from "next/link"
-import { BookA, Trophy, Flame, PlayCircle, Mic, Languages, PenTool } from "lucide-react"
+import { BookA, Trophy, Flame, PlayCircle, Mic, Languages, PenTool, Bookmark } from "lucide-react"
 
 export default async function Dashboard() {
   const user = await getCurrentUser()
   const progress = await getUserProgress(user.id)
+  const recapItems = await getUserRecapItems(user.id)
   
   const hiraganaLearned = progress.filter(p => p.item_type === 'hiragana').length
   const katakanaLearned = progress.filter(p => p.item_type === 'katakana').length
@@ -109,10 +110,17 @@ export default async function Dashboard() {
         <Link href="/vocabulary" className="block group">
           <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
-                <BookA className="w-6 h-6" /> Vocabulary Library
-              </CardTitle>
-              <CardDescription>Learn vocabulary for all lessons.</CardDescription>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                  <BookA className="w-6 h-6" /> Vocabulary Library
+                </CardTitle>
+                {recapItems.length > 0 && (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                    <Bookmark className="w-3 h-3 fill-current" /> {recapItems.length} Recap
+                  </span>
+                )}
+              </div>
+              <CardDescription>Learn vocabulary for all lessons and access your cross-device recap list.</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">Explore comprehensive word lists with pronunciation, meaning, and Kanji.</p>
@@ -123,9 +131,16 @@ export default async function Dashboard() {
         <Link href="/vocabulary-quiz" className="block group">
           <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
-                <Trophy className="w-6 h-6" /> Vocabulary Quiz
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                  <Trophy className="w-6 h-6" /> Vocabulary Quiz
+                </CardTitle>
+                {recapItems.length >= 4 && (
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                    Recap Quiz Ready
+                  </span>
+                )}
+              </div>
               <CardDescription>Practice words with multiple-choice questions.</CardDescription>
             </CardHeader>
             <CardContent>

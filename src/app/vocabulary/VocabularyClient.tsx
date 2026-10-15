@@ -21,11 +21,17 @@ import {
 } from 'lucide-react'
 import { useRecapVocabularies } from '@/lib/recapStorage'
 
-export function VocabularyClient({ userId }: { userId: string }) {
+export function VocabularyClient({ 
+  userId, 
+  initialRecapList 
+}: { 
+  userId: string
+  initialRecapList?: VocabularyItem[] 
+}) {
   const [selectedLesson, setSelectedLesson] = useState<number | 'recap'>(VOCABULARY_DATA.lessons[0].lesson_number)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   
-  const { recapList, isSaved, toggle, clear, isLoaded } = useRecapVocabularies()
+  const { recapList, isSaved, toggle, clear, isLoaded } = useRecapVocabularies(initialRecapList, userId)
 
   const currentLesson = typeof selectedLesson === 'number'
     ? VOCABULARY_DATA.lessons.find(l => l.lesson_number === selectedLesson) || VOCABULARY_DATA.lessons[0]
