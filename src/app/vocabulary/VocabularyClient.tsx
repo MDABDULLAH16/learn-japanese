@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { VOCABULARY_DATA, Lesson, VocabularyItem } from '@/lib/vocabularyData'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,10 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { 
   ArrowLeft, 
+  ArrowUp,
   BookOpen, 
+  ChevronLeft,
+  ChevronRight,
   Eye, 
   EyeOff, 
   Volume2, 
@@ -30,6 +33,31 @@ export function VocabularyClient({
 }) {
   const [selectedLesson, setSelectedLesson] = useState<number | 'recap'>(VOCABULARY_DATA.lessons[0].lesson_number)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
+  const [showScrollLessonBar, setShowScrollLessonBar] = useState(false)
+  const lastScrollY = useRef(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const diff = currentScrollY - lastScrollY.current
+
+      // When near top (<= 160px), hide sticky bar since static lesson bar is visible
+      if (currentScrollY <= 160) {
+        setShowScrollLessonBar(false)
+      } else if (diff < -8) {
+        // User scrolled UP
+        setShowScrollLessonBar(true)
+      } else if (diff > 8) {
+        // User scrolled DOWN
+        setShowScrollLessonBar(false)
+      }
+
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   
   const { recapList, isSaved, toggle, clear, isLoaded } = useRecapVocabularies(initialRecapList, userId)
 
@@ -39,8 +67,106 @@ export function VocabularyClient({
   
   const totalVocabularies = VOCABULARY_DATA.lessons.reduce((acc, lesson) => acc + lesson.vocabularies.length, 0);
 
+  const handleSelectLesson = (lesson: number | 'recap') => {
+    setSelectedLesson(lesson)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
-    <div className="max-w-5xl mx-auto mt-6 md:mt-12 mb-28 md:mb-12 space-y-8 px-4 w-full overflow-x-hidden sm:overflow-x-visible">
+    <div className="relative w-full">
+      {/* Sticky Floating Lesson Navbar on Scroll UP */}
+      <div 
+        className={`fixed top-16 left-0 right-0 z-40 bg-background/90 dark:bg-background/95 backdrop-blur-md border-b border-border/80 shadow-md shadow-black/5 dark:shadow-black/20 transition-all duration-300 ease-out ${
+          showScrollLessonBar ? 'translate-y-0 opacity-100 pointer-events-auto' : '-translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between gap-2.5">
+          {/* Active Lesson indicator */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground hidden sm:inline">
+              Lesson:
+            </span>
+            <Badge 
+              variant="secondary" 
+              className="font-bold text-xs px-2.5 py-0.5 bg-primary/10 text-primary border-primary/20 shrink-0"
+            >
+              {selectedLesson === 'recap' ? (
+                <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                  <Bookmark className="w-3 h-3 fill-current" /> Recap
+                </span>
+              ) : (
+                <span>Lesson {selectedLesson}</span>
+              )}
+            </Badge>
+          </div>
+
+          {/* Horizontal scrollable lesson buttons */}
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-0.5 px-1 flex-1">
+            <Button
+              variant={selectedLesson === 'recap' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleSelectLesson('recap')}
+              className={`h-7 px-2.5 text-xs rounded-full whitespace-nowrap shrink-0 gap-1 font-semibold transition-all ${
+                selectedLesson === 'recap'
+                  ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm ring-1 ring-amber-500/40'
+                  : 'border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10'
+              }`}
+            >
+              <Bookmark className={`w-3 h-3 ${selectedLesson === 'recap' ? 'fill-current' : ''}`} />
+              Recap ({recapList.length})
+            </Button>
+
+            <div className="h-4 w-px bg-border/60 mx-0.5 shrink-0" />
+
+            {VOCABULARY_DATA.lessons.map(lesson => {
+              const isActive = selectedLesson === lesson.lesson_number
+              return (
+                <Button
+                  key={`sticky_lesson_${lesson.lesson_number}`}
+                  variant={isActive ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleSelectLesson(lesson.lesson_number)}
+                  className={`h-7 px-2.5 text-xs rounded-full whitespace-nowrap shrink-0 transition-all ${
+                    isActive 
+                      ? 'font-bold shadow-sm ring-1 ring-primary/40' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  L-{lesson.lesson_number}
+                </Button>
+              )
+            })}
+          </div>
+
+          {/* Quick Quiz & Scroll to Top */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Link href={selectedLesson === 'recap' ? '/vocabulary-quiz?lesson=recap' : `/vocabulary-quiz?lesson=${selectedLesson}`}>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="h-7 px-2 text-xs font-semibold gap-1 text-primary border-primary/20 hover:bg-primary/10"
+                title="Start Quiz"
+              >
+                <Trophy className="w-3 h-3 text-amber-500" />
+                <span className="hidden md:inline">Quiz</span>
+              </Button>
+            </Link>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              title="Scroll to Top"
+              aria-label="Scroll to top"
+            >
+              <ArrowUp className="w-3.5 h-3.5" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto mt-6 md:mt-12 mb-28 md:mb-12 space-y-8 px-4 w-full overflow-x-hidden sm:overflow-x-visible">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -227,14 +353,81 @@ export function VocabularyClient({
             )}
           </div>
         ) : (
-          <LearnSection
-            lesson={currentLesson!}
-            isSaved={isSaved}
-            onToggleRecap={toggle}
-          />
+          <div className="space-y-8">
+            <LearnSection
+              lesson={currentLesson!}
+              isSaved={isSaved}
+              onToggleRecap={toggle}
+            />
+
+            {/* Bottom Lesson Navigation Card */}
+            {typeof selectedLesson === 'number' && (
+              <div className="p-6 rounded-2xl border border-border/80 bg-gradient-to-br from-secondary/40 via-card to-secondary/20 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3 text-center sm:text-left">
+                  <div className="h-11 w-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black text-lg border border-primary/20 shrink-0">
+                    {selectedLesson}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base">Lesson {selectedLesson} Complete!</h3>
+                    <p className="text-xs text-muted-foreground">
+                      Completed all {currentLesson?.vocabularies.length || 0} words in this lesson
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-end">
+                  {selectedLesson > 1 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleSelectLesson(selectedLesson - 1)}
+                      className="gap-1 font-semibold text-xs"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                      Prev Lesson
+                    </Button>
+                  )}
+
+                  <Link href={`/vocabulary-quiz?lesson=${selectedLesson}`}>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="gap-1.5 font-semibold text-xs border-amber-500/30 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10"
+                    >
+                      <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                      Quiz Lesson {selectedLesson}
+                    </Button>
+                  </Link>
+
+                  {selectedLesson < VOCABULARY_DATA.lessons.length && (
+                    <Button
+                      size="sm"
+                      onClick={() => handleSelectLesson(selectedLesson + 1)}
+                      className="gap-1 font-semibold text-xs bg-primary text-primary-foreground shadow-sm"
+                    >
+                      Next Lesson ({selectedLesson + 1})
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="gap-1 text-xs text-muted-foreground hover:text-foreground ml-1"
+                    title="Back to Top"
+                  >
+                    <ArrowUp className="w-3.5 h-3.5" />
+                    Top
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>
+  </div>
   )
 }
 
@@ -279,7 +472,7 @@ function LearnCard({
   const [showMeaning, setShowMeaning] = useState(false)
   const [showPronunciation, setShowPronunciation] = useState(false)
   const [showKanjiModal, setShowKanjiModal] = useState(false)
-  const [showModalRomaji, setShowModalRomaji] = useState(true)
+  const [showModalRomaji, setShowModalRomaji] = useState(false)
 
   const speakJapanese = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -295,9 +488,9 @@ function LearnCard({
 
   return (
     <>
-    <Card className="overflow-hidden border transition-all duration-200 hover:shadow-md hover:border-primary/50 group flex flex-col w-full relative">
+    <Card className="rounded-2xl border transition-all duration-200 hover:shadow-md hover:border-primary/50 group flex flex-col w-full relative">
       <CardContent className="p-0 flex-1 flex flex-col w-full">
-        <div className="p-6 flex flex-col items-center justify-center min-h-[140px] bg-gradient-to-br from-secondary/30 to-secondary/10 relative border-b w-full pt-10">
+        <div className="p-6 flex flex-col items-center justify-center min-h-[140px] bg-gradient-to-br from-secondary/30 to-secondary/10 relative border-b w-full pt-10 rounded-t-2xl">
           
           <div className="absolute top-2 left-1/2 -translate-x-1/2">
             <Badge variant="outline" className="bg-background/80 backdrop-blur-sm text-xs font-bold text-muted-foreground shadow-sm px-2 py-0.5">
@@ -339,7 +532,11 @@ function LearnCard({
           </h3>
           {vocab.kanji && (
             <button 
-              onClick={(e) => { e.stopPropagation(); setShowKanjiModal(true); }} 
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                setShowModalRomaji(false);
+                setShowKanjiModal(true); 
+              }} 
               className="absolute top-3 left-3 hover:scale-105 transition-transform"
               title="View Kanji Details"
             >
@@ -386,17 +583,43 @@ function LearnCard({
               )}
             </div>
             
-            {/* Meaning Section */}
+            {/* Meaning Section with Modern Hover Title Tag / Tooltip */}
             <div className="space-y-2 pt-2 border-t border-border/50">
               {!showMeaning ? (
-                <Button 
-                  variant="secondary" 
-                  size="sm"
-                  className="w-full text-muted-foreground hover:text-primary transition-all font-medium" 
-                  onClick={() => setShowMeaning(true)}
-                >
-                  <Eye className="w-4 h-4 mr-2" /> Reveal Meaning
-                </Button>
+                <div className="relative group/meaning-tooltip w-full">
+                  <Button 
+                    variant="secondary" 
+                    size="sm"
+                    className="w-full text-muted-foreground hover:text-primary transition-all font-medium cursor-pointer" 
+                    onClick={() => setShowMeaning(true)}
+                    title={`${vocab.bangla} (${vocab.english})`}
+                  >
+                    <Eye className="w-4 h-4 mr-2" /> Reveal Meaning
+                  </Button>
+
+                  {/* Modern Floating Hover Meaning Tooltip / Title Tag */}
+                  <div 
+                    role="tooltip"
+                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 w-auto min-w-[200px] max-w-[280px] pointer-events-none z-30
+                               opacity-0 scale-95 translate-y-1 group-hover/meaning-tooltip:opacity-100 group-hover/meaning-tooltip:scale-100 group-hover/meaning-tooltip:translate-y-0
+                               transition-all duration-200 ease-out"
+                  >
+                    <div className="relative px-3.5 py-2.5 rounded-xl bg-popover/95 dark:bg-zinc-900/95 backdrop-blur-md border border-primary/30 shadow-xl shadow-black/20 text-center">
+                      <div className="flex items-center justify-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary/80 mb-0.5">
+                        <Sparkles className="w-3 h-3 text-amber-500" />
+                        <span>Meaning Preview</span>
+                      </div>
+                      <div className="text-base font-extrabold text-blue-600 dark:text-blue-400 leading-tight">
+                        {vocab.bangla}
+                      </div>
+                      <div className="text-xs font-medium text-foreground/80 leading-tight mt-0.5">
+                        {vocab.english}
+                      </div>
+                      {/* Downward triangle arrow */}
+                      <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-popover/95 dark:bg-zinc-900/95 border-r border-b border-primary/30" />
+                    </div>
+                  </div>
+                </div>
               ) : (
                 <div className="space-y-3 p-3 bg-primary/5 rounded-lg animate-in zoom-in-95 duration-200 border border-primary/10">
                   <div>
@@ -437,7 +660,13 @@ function LearnCard({
             >
               <X className="w-4 h-4" />
             </Button>
-            <h2 className="text-7xl font-black text-primary mb-4 mt-2">{vocab.kanji}</h2>
+            <h2 
+              className="text-7xl font-black text-primary mb-4 mt-2 cursor-pointer hover:scale-105 active:scale-95 transition-all select-none"
+              onClick={() => setShowModalRomaji(!showModalRomaji)}
+              title="Click Kanji to toggle Romaji spelling"
+            >
+              {vocab.kanji}
+            </h2>
             <div className="flex items-center gap-2">
               <p className="text-2xl font-bold text-muted-foreground">{vocab.nihongo}</p>
               <Button
@@ -473,20 +702,25 @@ function LearnCard({
               </div>
 
               <div 
-                className="bg-secondary/30 hover:bg-secondary/50 transition-colors cursor-pointer p-4 rounded-xl border border-border/50 flex flex-col items-center justify-center text-center group"
+                className="bg-secondary/30 hover:bg-secondary/50 transition-all cursor-pointer p-4 rounded-xl border border-border/50 flex flex-col items-center justify-center text-center group select-none relative overflow-hidden"
                 onClick={() => setShowModalRomaji(!showModalRomaji)}
                 title={showModalRomaji ? "Click to hide Romaji" : "Click to show Romaji"}
               >
-                <div className="flex items-center justify-center gap-2 mb-1.5">
+                <div className="flex items-center justify-center gap-1.5 mb-1.5">
                   <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Romaji</p>
-                  <div className="h-5 w-5 flex items-center justify-center text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity">
-                    {showModalRomaji ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                  <div className="h-4 w-4 flex items-center justify-center text-muted-foreground/70 group-hover:text-primary transition-colors">
+                    {showModalRomaji ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   </div>
                 </div>
                 {showModalRomaji ? (
-                  <p className="font-bold text-foreground transition-all">{vocab.romaji}</p>
+                  <p className="font-extrabold text-foreground text-base tracking-wide animate-in fade-in zoom-in-95 duration-150">
+                    {vocab.romaji}
+                  </p>
                 ) : (
-                  <p className="font-bold text-muted-foreground/20 select-none blur-[3px] transition-all">{vocab.romaji}</p>
+                  <div className="flex items-center gap-1.5 py-0.5 px-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold hover:bg-primary/20 transition-colors">
+                    <Eye className="w-3 h-3" />
+                    <span>Click to show</span>
+                  </div>
                 )}
               </div>
             </div>
