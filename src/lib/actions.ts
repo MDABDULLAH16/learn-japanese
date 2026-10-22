@@ -101,7 +101,7 @@ export const saveQuizScore = async (userId: string, newScore: number) => {
   revalidatePath('/quiz')
 }
 
-import type { VocabularyItem } from './vocabularyData'
+import type { VocabularyItem, WhitelistLevel } from './vocabularyData'
 
 export const getUserRecapItems = async (userId?: string): Promise<VocabularyItem[]> => {
   try {
@@ -121,6 +121,7 @@ export const getUserRecapItems = async (userId?: string): Promise<VocabularyItem
       kanji: item.kanji,
       english: item.english,
       bangla: item.bangla,
+      level: (['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal') as WhitelistLevel,
     }))
   } catch (error) {
     console.error("Failed to get recap items:", error)
@@ -128,7 +129,11 @@ export const getUserRecapItems = async (userId?: string): Promise<VocabularyItem
   }
 }
 
-export const toggleRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
+export const setRecapItemLevelAction = async (
+  vocab: VocabularyItem, 
+  targetLevel: WhitelistLevel, 
+  userId?: string
+): Promise<{ success: boolean; activeLevel: WhitelistLevel | null }> => {
   try {
     let targetUserId = userId
     if (!targetUserId) {
@@ -149,13 +154,26 @@ export const toggleRecapItemAction = async (vocab: VocabularyItem, userId?: stri
     })
 
     if (existing) {
-      await prisma.recapItem.delete({
-        where: { id: existing.id }
-      })
-      revalidatePath('/vocabulary')
-      revalidatePath('/vocabulary-quiz')
-      return { success: true, added: false }
+      if (existing.level === targetLevel) {
+        // Toggle off / remove if clicking currently active level
+        await prisma.recapItem.delete({
+          where: { id: existing.id }
+        })
+        revalidatePath('/vocabulary')
+        revalidatePath('/vocabulary-quiz')
+        return { success: true, activeLevel: null }
+      } else {
+        // Switch difficulty level
+        await prisma.recapItem.update({
+          where: { id: existing.id },
+          data: { level: targetLevel }
+        })
+        revalidatePath('/vocabulary')
+        revalidatePath('/vocabulary-quiz')
+        return { success: true, activeLevel: targetLevel }
+      }
     } else {
+      // Add to whitelist at targetLevel
       await prisma.recapItem.create({
         data: {
           user_id: targetUserId,
@@ -164,17 +182,24 @@ export const toggleRecapItemAction = async (vocab: VocabularyItem, userId?: stri
           uchharon: vocab.uchharon || '',
           kanji: vocab.kanji || '',
           english: vocab.english || '',
-          bangla
+          bangla,
+          level: targetLevel
         }
       })
       revalidatePath('/vocabulary')
       revalidatePath('/vocabulary-quiz')
-      return { success: true, added: true }
+      return { success: true, activeLevel: targetLevel }
     }
   } catch (error) {
-    console.error("Failed to toggle recap item:", error)
-    return { success: false, added: false }
+    console.error("Failed to set recap item level:", error)
+    return { success: false, activeLevel: null }
   }
+}
+
+export const toggleRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
+  const targetLevel = vocab.level || 'normal'
+  const res = await setRecapItemLevelAction(vocab, targetLevel, userId)
+  return { success: res.success, added: res.activeLevel !== null }
 }
 
 export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
@@ -186,6 +211,7 @@ export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string)
     }
     const nihongo = vocab.nihongo.trim()
     const bangla = vocab.bangla.trim()
+    const level = vocab.level || 'normal'
 
     await prisma.recapItem.upsert({
       where: {
@@ -199,7 +225,8 @@ export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string)
         romaji: vocab.romaji || '',
         uchharon: vocab.uchharon || '',
         kanji: vocab.kanji || '',
-        english: vocab.english || ''
+        english: vocab.english || '',
+        level
       },
       create: {
         user_id: targetUserId,
@@ -208,7 +235,8 @@ export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string)
         uchharon: vocab.uchharon || '',
         kanji: vocab.kanji || '',
         english: vocab.english || '',
-        bangla
+        bangla,
+        level
       }
     })
     revalidatePath('/vocabulary')
@@ -243,7 +271,7 @@ export const removeRecapItemAction = async (vocab: VocabularyItem, userId?: stri
   }
 }
 
-export const clearRecapItemsAction = async (userId?: string) => {
+export const clearRecapItemsAction = async (userId?: string, level?: WhitelistLevel) => {
   try {
     let targetUserId = userId
     if (!targetUserId) {
@@ -251,7 +279,10 @@ export const clearRecapItemsAction = async (userId?: string) => {
       targetUserId = user.id
     }
     await prisma.recapItem.deleteMany({
-      where: { user_id: targetUserId }
+      where: { 
+        user_id: targetUserId,
+        ...(level ? { level } : {})
+      }
     })
     revalidatePath('/vocabulary')
     revalidatePath('/vocabulary-quiz')
@@ -274,6 +305,7 @@ export const syncRecapItemsAction = async (localItems: VocabularyItem[], userId?
       const validItems = localItems.filter(item => Boolean(item && item.nihongo?.trim() && item.bangla?.trim()))
       
       for (const item of validItems) {
+        const itemLevel = (['normal', 'medium', 'hard'].includes(item.level || '') ? item.level : 'normal') as WhitelistLevel
         await prisma.recapItem.upsert({
           where: {
             user_id_nihongo_bangla: {
@@ -286,7 +318,8 @@ export const syncRecapItemsAction = async (localItems: VocabularyItem[], userId?
             romaji: item.romaji || '',
             uchharon: item.uchharon || '',
             kanji: item.kanji || '',
-            english: item.english || ''
+            english: item.english || '',
+            level: itemLevel
           },
           create: {
             user_id: targetUserId,
@@ -295,7 +328,8 @@ export const syncRecapItemsAction = async (localItems: VocabularyItem[], userId?
             uchharon: item.uchharon || '',
             kanji: item.kanji || '',
             english: item.english || '',
-            bangla: item.bangla.trim()
+            bangla: item.bangla.trim(),
+            level: itemLevel
           }
         })
       }
@@ -313,6 +347,7 @@ export const syncRecapItemsAction = async (localItems: VocabularyItem[], userId?
       kanji: item.kanji,
       english: item.english,
       bangla: item.bangla,
+      level: (['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal') as WhitelistLevel,
     }))
   } catch (error) {
     console.error("Failed to sync recap items:", error)

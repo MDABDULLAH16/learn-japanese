@@ -42,6 +42,7 @@ model RecapItem {
   kanji       String   @default("")
   english     String   @default("")
   bangla      String
+  level       String   @default("normal")
   createdAt   DateTime @default(now())
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)

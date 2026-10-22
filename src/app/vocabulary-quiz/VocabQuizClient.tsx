@@ -6,10 +6,24 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { saveQuizScore } from '@/lib/actions'
 import Link from 'next/link'
-import { ArrowLeft, CheckCircle2, XCircle, Loader2, RotateCcw, ChevronLeft, ChevronRight, Trophy, Volume2, Bookmark } from 'lucide-react'
+import { 
+  ArrowLeft, 
+  CheckCircle2, 
+  XCircle, 
+  Loader2, 
+  RotateCcw, 
+  ChevronLeft, 
+  ChevronRight, 
+  Trophy, 
+  Volume2, 
+  Bookmark, 
+  Clock, 
+  Flame,
+  Sparkles
+} from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import confetti from 'canvas-confetti'
-import { VOCABULARY_DATA, VocabularyItem } from '@/lib/vocabularyData'
+import { VOCABULARY_DATA, VocabularyItem, WhitelistLevel } from '@/lib/vocabularyData'
 import { useRecapVocabularies, getRecapVocabularies } from '@/lib/recapStorage'
 
 const shuffle = <T,>(array: T[]): T[] => [...array].sort(() => Math.random() - 0.5)
@@ -55,7 +69,7 @@ const getWrongOptions = (
 }
 
 export function VocabQuizClient({ 
-  userId,
+  userId, 
   initialRecapList 
 }: { 
   userId: string
@@ -63,6 +77,7 @@ export function VocabQuizClient({
 }) {
   const [quizMode, setQuizMode] = useState<QuizMode>('ja-bn')
   const [selectedLesson, setSelectedLesson] = useState<number | 'recap' | null>(null)
+  const [recapLevel, setRecapLevel] = useState<'all' | WhitelistLevel>('all')
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [score, setScore] = useState(0)
@@ -71,21 +86,43 @@ export function VocabQuizClient({
   const [wrongQuestions, setWrongQuestions] = useState<Question[]>([])
   const [isPending, startTransition] = useTransition()
   const [isLoaded, setIsLoaded] = useState(false)
+  const [mistakesSavedToHard, setMistakesSavedToHard] = useState(false)
 
-  const { recapList, isSaved, toggle } = useRecapVocabularies(initialRecapList, userId)
+  const { 
+    recapList, 
+    normalList, 
+    mediumList, 
+    hardList, 
+    getItemLevel, 
+    setLevel 
+  } = useRecapVocabularies(initialRecapList, userId)
 
   const selectedAnswer = answersHistory[currentQuestion]
   const hasAnswered = selectedAnswer !== undefined
 
-  const generateQuiz = (lessonNumber: number | 'recap', mode: QuizMode = quizMode) => {
+  const generateQuiz = (
+    lessonNumber: number | 'recap', 
+    mode: QuizMode = quizMode,
+    level: 'all' | WhitelistLevel = recapLevel
+  ) => {
     setSelectedLesson(lessonNumber)
     setQuizMode(mode)
+    setRecapLevel(level)
+    setMistakesSavedToHard(false)
     
     let selectedVocabs: VocabularyItem[] = []
     if (lessonNumber === 'recap') {
       const recaps = recapList.length > 0 ? recapList : getRecapVocabularies()
-      if (recaps.length === 0) return
-      selectedVocabs = shuffle(recaps)
+      let pool = recaps
+      if (level === 'normal') {
+        pool = recaps.filter(i => (i.level || 'normal') === 'normal')
+      } else if (level === 'medium') {
+        pool = recaps.filter(i => i.level === 'medium')
+      } else if (level === 'hard') {
+        pool = recaps.filter(i => i.level === 'hard')
+      }
+      if (pool.length === 0) return
+      selectedVocabs = shuffle(pool)
     } else {
       const lesson = VOCABULARY_DATA.lessons.find(l => l.lesson_number === lessonNumber)
       if (!lesson) return
@@ -112,9 +149,22 @@ export function VocabQuizClient({
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       if (params.get('lesson') === 'recap') {
+        const lvlParam = params.get('level') as WhitelistLevel | null
+        const targetLvl = (lvlParam && ['normal', 'medium', 'hard'].includes(lvlParam)) ? lvlParam : 'all'
+        setRecapLevel(targetLvl)
+        
         const recaps = (initialRecapList && initialRecapList.length > 0) ? initialRecapList : getRecapVocabularies()
-        if (recaps.length >= 4) {
-          generateQuiz('recap', 'ja-bn')
+        let pool = recaps
+        if (targetLvl === 'normal') {
+          pool = recaps.filter(i => (i.level || 'normal') === 'normal')
+        } else if (targetLvl === 'medium') {
+          pool = recaps.filter(i => i.level === 'medium')
+        } else if (targetLvl === 'hard') {
+          pool = recaps.filter(i => i.level === 'hard')
+        }
+        
+        if (pool.length >= 4) {
+          generateQuiz('recap', 'ja-bn', targetLvl)
         }
       }
     }
@@ -135,6 +185,13 @@ export function VocabQuizClient({
     resetState()
   }
 
+  const handleSaveMistakesToHard = () => {
+    wrongQuestions.forEach(q => {
+      setLevel(q.vocab, 'hard')
+    })
+    setMistakesSavedToHard(true)
+  }
+
   const resetState = () => {
     setCurrentQuestion(0)
     setScore(0)
@@ -148,130 +205,259 @@ export function VocabQuizClient({
     setAnswersHistory(prev => ({...prev, [currentQuestion]: index}))
 
     const q = questions[currentQuestion]
-    const isCorrect = quizMode === 'ja-bn' 
-      ? q.options[index].bangla.trim() === q.vocab.bangla.trim() 
-      : q.options[index].nihongo.trim() === q.vocab.nihongo.trim()
+    const chosen = q.options[index]
+    const isCorrect = chosen.bangla === q.vocab.bangla
 
     if (isCorrect) {
       setScore(s => s + 10)
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
     } else {
-      setWrongQuestions(prev => {
-        if (!prev.find(wq => wq.vocab.nihongo.trim() === q.vocab.nihongo.trim())) {
-          return [...prev, q]
-        }
-        return prev
-      })
+      setWrongQuestions(prev => [...prev, q])
     }
   }
 
-  const nextQuestion = () => {
-    if (currentQuestion + 1 < questions.length) {
-      setCurrentQuestion(currentQuestion + 1)
+  const handleNext = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(c => c + 1)
     } else {
+      setShowResults(true)
+      if (wrongQuestions.length === 0) {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        })
+      }
       startTransition(async () => {
-        if (score > 0) await saveQuizScore(userId, score)
-        setShowResults(true)
+        try {
+          await saveQuizScore(userId, score)
+        } catch (error) {
+          console.error("Failed to save score:", error)
+        }
       })
     }
   }
 
-  const prevQuestion = () => {
+  const handlePrevious = () => {
     if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1)
+      setCurrentQuestion(c => c - 1)
     }
+  }
+
+  // Swipe support for mobile
+  const touchStartX = useRef<number | null>(null)
+  const touchEndX = useRef<number | null>(null)
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return
+    const distance = touchStartX.current - touchEndX.current
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe && hasAnswered) {
+      handleNext()
+    }
+    if (isRightSwipe && currentQuestion > 0) {
+      handlePrevious()
+    }
+
+    touchStartX.current = null
+    touchEndX.current = null
   }
 
   const handleBackToStart = () => {
     setSelectedLesson(null)
+    resetState()
   }
 
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedLesson === null || showResults) return
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  }
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  }
-
-  const onTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const diff = touchStartX.current - touchEndX.current;
-    
-    if (diff > 50 && hasAnswered) {
-      nextQuestion();
+      if (e.key >= '1' && e.key <= '4') {
+        const optionIndex = parseInt(e.key) - 1
+        if (!hasAnswered && questions[currentQuestion]?.options[optionIndex]) {
+          handleAnswer(optionIndex)
+        }
+      } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
+        if (hasAnswered) handleNext()
+      } else if (e.key === 'ArrowLeft') {
+        handlePrevious()
+      }
     }
-    if (diff < -50) {
-      prevQuestion();
-    }
-    
-    touchStartX.current = null;
-    touchEndX.current = null;
-  }
 
-  if (!isLoaded) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [selectedLesson, showResults, hasAnswered, currentQuestion, questions])
+
+  if (!isLoaded) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    )
+  }
 
   // SCREEN 1: Lesson Selection
-  if (!selectedLesson) {
+  if (selectedLesson === null) {
     return (
-      <div className="max-w-4xl mx-auto mt-12 space-y-6 px-4">
-        <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
-        </Link>
-        <Card className="text-center p-8">
-          <Trophy className="w-16 h-16 mx-auto mb-4 text-primary/80" />
-          <h2 className="text-3xl font-bold mb-4">Vocabulary Quiz</h2>
-          <p className="text-muted-foreground mb-8">Select a lesson to test all vocabulary words with randomized questions.</p>
-          <div className="flex justify-center gap-4 mb-8">
-            <div className="bg-secondary/20 p-1.5 rounded-lg inline-flex gap-1 border">
+      <div className="max-w-4xl mx-auto space-y-8 mt-6 md:mt-12 mb-28 md:mb-12 px-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-2">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+            </Link>
+            <h1 className="text-3xl font-extrabold tracking-tight">Vocabulary Quiz Challenge</h1>
+            <p className="text-muted-foreground mt-1">Select a lesson or practice your custom Whitelist by level.</p>
+          </div>
+          <Link href="/vocabulary">
+            <Button variant="outline" size="sm" className="gap-1.5 font-semibold">
+              <Bookmark className="w-4 h-4 text-amber-500" /> View Vocabulary
+            </Button>
+          </Link>
+        </div>
+
+        {/* Dedicated Whitelist Quiz Module Card */}
+        <div className="p-6 rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent space-y-4 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="h-10 w-10 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                <Bookmark className="w-5 h-5 fill-current" />
+              </span>
+              <div>
+                <h3 className="font-bold text-lg">Recap & Whitelist Quiz</h3>
+                <p className="text-xs text-muted-foreground">Test only the words you have added to your Whitelist across any device.</p>
+              </div>
+            </div>
+            <Badge variant="secondary" className="bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30 font-bold px-2.5 py-1">
+              {recapList.length} Total Saved
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+            {/* All Whitelist */}
+            <Button
+              variant="outline"
+              disabled={recapList.length < 4}
+              onClick={() => recapList.length >= 4 && generateQuiz('recap', quizMode, 'all')}
+              className={`h-20 flex flex-col items-center justify-center gap-1 border-amber-500/40 hover:bg-amber-500/10 text-center ${
+                recapList.length < 4 ? 'opacity-50 cursor-not-allowed' : 'font-bold'
+              }`}
+              title={recapList.length < 4 ? 'Needs at least 4 words in Whitelist' : 'Quiz all Whitelist words'}
+            >
+              <span className="text-sm font-black text-foreground">All Whitelist</span>
+              <span className="text-[11px] font-semibold text-amber-700 dark:text-amber-400">
+                {recapList.length} {recapList.length === 1 ? 'Word' : 'Words'}
+              </span>
+            </Button>
+
+            {/* Normal */}
+            <Button
+              variant="outline"
+              disabled={normalList.length < 4}
+              onClick={() => normalList.length >= 4 && generateQuiz('recap', quizMode, 'normal')}
+              className={`h-20 flex flex-col items-center justify-center gap-1 border-emerald-500/40 hover:bg-emerald-500/10 text-center ${
+                normalList.length < 4 ? 'opacity-50 cursor-not-allowed' : 'font-bold'
+              }`}
+              title={normalList.length < 4 ? 'Needs at least 4 words in Normal' : 'Quiz Normal words (একবার রিভিশন)'}
+            >
+              <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span className="text-sm font-black">Normal</span>
+              </div>
+              <span className="text-[11px] font-semibold text-muted-foreground">
+                {normalList.length} {normalList.length === 1 ? 'Word' : 'Words'}
+              </span>
+            </Button>
+
+            {/* Medium */}
+            <Button
+              variant="outline"
+              disabled={mediumList.length < 4}
+              onClick={() => mediumList.length >= 4 && generateQuiz('recap', quizMode, 'medium')}
+              className={`h-20 flex flex-col items-center justify-center gap-1 border-amber-500/40 hover:bg-amber-500/10 text-center ${
+                mediumList.length < 4 ? 'opacity-50 cursor-not-allowed' : 'font-bold'
+              }`}
+              title={mediumList.length < 4 ? 'Needs at least 4 words in Medium' : 'Quiz Medium words (মাঝারি)'}
+            >
+              <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                <Clock className="w-3.5 h-3.5" />
+                <span className="text-sm font-black">Medium</span>
+              </div>
+              <span className="text-[11px] font-semibold text-muted-foreground">
+                {mediumList.length} {mediumList.length === 1 ? 'Word' : 'Words'}
+              </span>
+            </Button>
+
+            {/* Hard */}
+            <Button
+              variant="outline"
+              disabled={hardList.length < 4}
+              onClick={() => hardList.length >= 4 && generateQuiz('recap', quizMode, 'hard')}
+              className={`h-20 flex flex-col items-center justify-center gap-1 border-rose-500/40 hover:bg-rose-500/10 text-center ${
+                hardList.length < 4 ? 'opacity-50 cursor-not-allowed' : 'font-bold'
+              }`}
+              title={hardList.length < 4 ? 'Needs at least 4 words in Hard' : 'Quiz Hard words (কঠিন)'}
+            >
+              <div className="flex items-center gap-1 text-rose-600 dark:text-rose-400">
+                <Flame className="w-3.5 h-3.5 fill-current" />
+                <span className="text-sm font-black">Hard</span>
+              </div>
+              <span className="text-[11px] font-semibold text-muted-foreground">
+                {hardList.length} {hardList.length === 1 ? 'Word' : 'Words'}
+              </span>
+            </Button>
+          </div>
+          {recapList.length < 4 && (
+            <p className="text-[11px] text-muted-foreground text-center sm:text-left">
+              * Note: Save at least 4 words in any Whitelist category from the Vocabulary section to unlock quiz mode.
+            </p>
+          )}
+        </div>
+
+        {/* Regular Lesson Quizzes */}
+        <Card className="p-6 space-y-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <h2 className="text-xl font-bold">Standard Lessons</h2>
+            {/* Quiz Mode Selector */}
+            <div className="flex items-center gap-2 bg-secondary/50 p-1 rounded-lg border border-border/50">
               <Button 
                 variant={quizMode === 'ja-bn' ? 'default' : 'ghost'} 
+                size="sm"
                 onClick={() => setQuizMode('ja-bn')}
-                className="rounded-md transition-all font-semibold"
+                className="rounded-md transition-all font-semibold text-xs"
               >
                 🇯🇵 Japanese ➔ 🇧🇩 Bangla
               </Button>
               <Button 
                 variant={quizMode === 'bn-ja' ? 'default' : 'ghost'} 
+                size="sm"
                 onClick={() => setQuizMode('bn-ja')}
-                className="rounded-md transition-all font-semibold"
+                className="rounded-md transition-all font-semibold text-xs"
               >
                 🇧🇩 Bangla ➔ 🇯🇵 Japanese
               </Button>
             </div>
           </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            <Button 
-              variant="outline" 
-              className={`h-24 flex flex-col gap-2 transition-all border-amber-500/40 relative ${
-                recapList.length >= 4 
-                  ? 'hover:bg-amber-500/10 hover:border-amber-500 text-amber-700 dark:text-amber-400 bg-amber-500/5' 
-                  : 'opacity-50 cursor-not-allowed border-dashed'
-              }`} 
-              disabled={recapList.length < 4}
-              onClick={() => recapList.length >= 4 && generateQuiz('recap', quizMode)}
-              title={recapList.length < 4 ? 'Save at least 4 words in Recap to take quiz' : 'Quiz your bookmarked Recap words'}
-            >
-              <span className="text-xl font-bold flex items-center gap-1.5">
-                <Bookmark className="w-5 h-5 fill-current text-amber-500" />
-                Recap
-              </span>
-              <span className="text-[10px] text-muted-foreground uppercase font-semibold">
-                {recapList.length} Saved {recapList.length === 1 ? 'Word' : 'Words'}
-              </span>
-            </Button>
             {VOCABULARY_DATA.lessons.map(lesson => (
               <Button 
                 key={lesson.lesson_number}
                 variant="outline" 
-                className="h-24 flex flex-col gap-2 hover:bg-primary/10 hover:border-primary/50 transition-colors" 
+                className="h-24 flex flex-col gap-1.5 hover:bg-primary/10 hover:border-primary/50 transition-colors" 
                 onClick={() => generateQuiz(lesson.lesson_number, quizMode)}
               >
-                <span className="text-2xl font-bold">L{lesson.lesson_number}</span>
-                <span className="text-[10px] text-muted-foreground uppercase">{lesson.vocabularies.length} Words</span>
+                <span className="text-2xl font-black">L-{lesson.lesson_number}</span>
+                <span className="text-[10px] text-muted-foreground uppercase font-bold">{lesson.vocabularies.length} Words</span>
               </Button>
             ))}
           </div>
@@ -301,14 +487,34 @@ export function VocabQuizClient({
           <p className="text-sm text-green-600 dark:text-green-400 font-medium bg-green-50 dark:bg-green-900/30 p-3 rounded-md">
             Your XP has been permanently saved to your profile!
           </p>
-        </CardContent>
-        <CardFooter className="flex flex-col sm:flex-row justify-center gap-4">
+
           {!isPerfect && (
-            <Button onClick={startMistakesRetry} className="bg-amber-500 hover:bg-amber-600 text-white">
+            <div className="pt-2">
+              {!mistakesSavedToHard ? (
+                <Button 
+                  variant="outline" 
+                  onClick={handleSaveMistakesToHard}
+                  className="gap-2 border-rose-500/40 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 font-bold"
+                >
+                  <Flame className="w-4 h-4 fill-current text-rose-500" />
+                  Save {wrongQuestions.length} Mistakes to Hard Whitelist
+                </Button>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400 bg-rose-500/15 border border-rose-500/30 px-3 py-1.5 rounded-full animate-in zoom-in-95">
+                  <CheckCircle2 className="w-4 h-4 text-rose-500" />
+                  Saved {wrongQuestions.length} words to Hard Whitelist!
+                </span>
+              )}
+            </div>
+          )}
+        </CardContent>
+        <CardFooter className="flex flex-col sm:flex-row justify-center gap-3">
+          {!isPerfect && (
+            <Button onClick={startMistakesRetry} className="bg-amber-500 hover:bg-amber-600 text-white font-semibold">
               <RotateCcw className="mr-2 h-4 w-4" /> Retry Mistakes ({wrongQuestions.length})
             </Button>
           )}
-          <Button onClick={() => selectedLesson && generateQuiz(selectedLesson, quizMode)}>
+          <Button onClick={() => selectedLesson && generateQuiz(selectedLesson, quizMode, recapLevel)}>
             <RotateCcw className="mr-2 h-4 w-4" /> Play Again
           </Button>
           <Button variant="outline" onClick={handleBackToStart}>
@@ -321,6 +527,7 @@ export function VocabQuizClient({
   }
 
   const question = questions[currentQuestion]
+  const currentQLevel = question ? getItemLevel(question.vocab) : null
 
   const speakJapanese = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -344,24 +551,27 @@ export function VocabQuizClient({
             {quizMode === 'ja-bn' ? 'JA ➔ BN' : 'BN ➔ JA'}
           </Badge>
           <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full">
-            {selectedLesson === 'recap' ? 'Recap Lesson' : `Lesson ${selectedLesson}`}
+            {selectedLesson === 'recap' 
+              ? (recapLevel === 'all' ? 'Whitelist Quiz' : `${recapLevel.toUpperCase()} Whitelist Quiz`)
+              : `Lesson ${selectedLesson}`}
           </span>
           <Button 
             variant="ghost" 
             size="sm" 
-            onClick={() => selectedLesson && generateQuiz(selectedLesson, quizMode)} 
-            className="text-muted-foreground hover:text-foreground h-7 px-2 text-xs"
-            title="Restart quiz with new shuffle"
+            onClick={() => generateQuiz(selectedLesson!, quizMode === 'ja-bn' ? 'bn-ja' : 'ja-bn', recapLevel)}
+            className="text-xs text-muted-foreground hover:text-foreground"
+            title="Switch Quiz Direction"
           >
-            <RotateCcw className="w-3.5 h-3.5 mr-1" /> Restart
+            Switch
           </Button>
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-sm font-medium text-muted-foreground px-1">
+      <div className="flex items-center justify-between text-sm font-semibold">
         <span>Question {currentQuestion + 1} of {questions.length}</span>
-        <span className="text-amber-500 font-bold bg-amber-500/10 px-3 py-1 rounded-full">XP: {score}</span>
+        <span className="text-primary font-bold">{score} XP</span>
       </div>
+
       <Progress value={progress} className="h-2" />
 
       <Card 
@@ -372,42 +582,97 @@ export function VocabQuizClient({
       >
         <CardContent className="space-y-6 flex flex-col items-center pt-8">
           
-          <div className="text-center relative w-full flex flex-col items-center justify-center min-h-[160px] bg-secondary/10 rounded-xl p-6 border">
-            {quizMode === 'ja-bn' && (
-              <div className="absolute top-3 right-3 flex items-center gap-1 z-10">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={`rounded-full h-10 w-10 transition-all ${
-                    isSaved(question.vocab)
-                      ? 'text-amber-500 bg-amber-500/15 hover:bg-amber-500/25'
-                      : 'text-muted-foreground/60 hover:text-amber-500 hover:bg-amber-500/10'
+          <div className="w-full flex flex-col rounded-2xl bg-secondary/10 border overflow-hidden">
+            {/* Top Bar with Quiz Actions (Never overlaps text) */}
+            <div className="w-full flex items-center justify-between px-4 py-2.5 bg-secondary/25 dark:bg-zinc-900/40 border-b border-border/40 select-none">
+              <div>
+                {quizMode === 'ja-bn' && question.vocab.kanji ? (
+                  <Badge variant="outline" className="text-xs py-0.5 px-2.5 font-bold text-primary bg-background shadow-2xs">
+                    漢字 {question.vocab.kanji}
+                  </Badge>
+                ) : (
+                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                    {quizMode === 'ja-bn' ? 'Japanese Word' : 'Bangla Meaning'}
+                  </span>
+                )}
+              </div>
+
+              {/* Pronunciation & 3-step Whitelist Action Buttons together */}
+              <div className="flex items-center gap-0.5 p-0.5 rounded-full bg-background/90 dark:bg-zinc-900/90 backdrop-blur-md border border-border/70 shadow-2xs">
+                {/* Normal */}
+                <button
+                  type="button"
+                  onClick={() => setLevel(question.vocab, 'normal')}
+                  title={currentQLevel === 'normal' ? 'Normal (Click to remove)' : 'Add to Normal: একবার রিভিশন'}
+                  aria-label="Normal: quick review"
+                  className={`h-7 w-7 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                    currentQLevel === 'normal'
+                      ? 'bg-emerald-500 text-white shadow-xs scale-105 ring-1 ring-emerald-400'
+                      : 'text-muted-foreground/60 hover:text-emerald-600 hover:bg-emerald-500/15'
                   }`}
-                  onClick={() => toggle(question.vocab)}
-                  title={isSaved(question.vocab) ? "Remove from Recap" : "Add to Recap"}
                 >
-                  <Bookmark className={`w-5 h-5 transition-transform ${isSaved(question.vocab) ? 'fill-amber-500 scale-110' : ''}`} />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-primary/70 hover:text-primary hover:bg-primary/10 rounded-full h-10 w-10"
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </button>
+
+                {/* Medium */}
+                <button
+                  type="button"
+                  onClick={() => setLevel(question.vocab, 'medium')}
+                  title={currentQLevel === 'medium' ? 'Medium (Click to remove)' : 'Add to Medium: মাঝারি প্র্যাকটিস'}
+                  aria-label="Medium: moderate practice"
+                  className={`h-7 w-7 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                    currentQLevel === 'medium'
+                      ? 'bg-amber-500 text-white shadow-xs scale-105 ring-1 ring-amber-400'
+                      : 'text-muted-foreground/60 hover:text-amber-600 hover:bg-amber-500/15'
+                  }`}
+                >
+                  <Clock className="w-3.5 h-3.5" />
+                </button>
+
+                {/* Hard */}
+                <button
+                  type="button"
+                  onClick={() => setLevel(question.vocab, 'hard')}
+                  title={currentQLevel === 'hard' ? 'Hard (Click to remove)' : 'Add to Hard: কঠিন শব্দ'}
+                  aria-label="Hard: needs focus"
+                  className={`h-7 w-7 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                    currentQLevel === 'hard'
+                      ? 'bg-rose-500 text-white shadow-xs scale-105 ring-1 ring-rose-400'
+                      : 'text-muted-foreground/60 hover:text-rose-600 hover:bg-rose-500/15'
+                  }`}
+                >
+                  <Flame className="w-3.5 h-3.5 fill-current" />
+                </button>
+
+                <div className="h-3.5 w-px bg-border/60 mx-0.5 shrink-0" />
+
+                {/* Pronounce on far right */}
+                <button
+                  type="button"
+                  className="h-7 w-7 rounded-full flex items-center justify-center text-primary/75 hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer shrink-0"
                   onClick={speakJapanese}
                   title="Listen to pronunciation"
+                  aria-label="Listen to pronunciation"
                 >
-                  <Volume2 className="w-5 h-5" />
-                </Button>
+                  <Volume2 className="w-3.5 h-3.5" />
+                </button>
               </div>
-            )}
+            </div>
 
-            <h2 className={`font-black text-primary leading-tight drop-shadow-sm mb-4 mt-2 break-words whitespace-normal px-2 ${quizMode === 'ja-bn' ? 'text-4xl sm:text-7xl' : 'text-3xl sm:text-5xl'}`}>
-              {quizMode === 'ja-bn' ? question.vocab.nihongo : question.vocab.bangla}
-            </h2>
-            {quizMode === 'ja-bn' && question.vocab.kanji && (
-              <Badge variant="outline" className="text-lg py-1 px-4 text-muted-foreground bg-background shadow-inner">
-                {question.vocab.kanji}
-              </Badge>
-            )}
+            {/* Question Text Box */}
+            <div 
+              onClick={speakJapanese}
+              className="p-6 sm:p-8 text-center w-full flex flex-col items-center justify-center min-h-[140px] cursor-pointer group/q transition-colors hover:bg-secondary/15 select-none"
+              title="Click to hear Japanese audio"
+            >
+              <h2 className={`font-black text-primary leading-tight drop-shadow-sm break-words whitespace-normal px-2 ${
+                quizMode === 'ja-bn' 
+                  ? (question.vocab.nihongo.length > 5 ? 'text-4xl sm:text-6xl' : 'text-5xl sm:text-7xl') 
+                  : 'text-3xl sm:text-5xl'
+              }`}>
+                {quizMode === 'ja-bn' ? question.vocab.nihongo : question.vocab.bangla}
+              </h2>
+            </div>
           </div>
           
           {(hasAnswered) && quizMode === 'ja-bn' && (
@@ -423,93 +688,76 @@ export function VocabQuizClient({
           {(hasAnswered) && quizMode === 'bn-ja' && (
             <div className="w-full flex items-center justify-center gap-3 bg-primary/5 border border-primary/10 p-3 rounded-xl animate-in fade-in zoom-in-95">
                <Button variant="ghost" size="icon" onClick={speakJapanese} className="h-9 w-9 text-primary/70 hover:text-primary rounded-full bg-primary/10">
-                 <Volume2 className="w-4 h-4" />
+                 <Volume2 className="w-5 h-5" />
                </Button>
-               <div>
-                 <span className="text-xs font-bold text-muted-foreground uppercase block text-center">Correct Japanese</span>
-                 <p className="text-lg sm:text-xl font-bold text-primary">
-                   {question.vocab.nihongo} {question.vocab.kanji ? <span className="text-sm font-medium text-muted-foreground">({question.vocab.kanji})</span> : null}
+               <div className="text-left">
+                 <span className="text-xs font-bold text-muted-foreground uppercase block">Japanese Reading</span>
+                 <p className="text-base font-bold text-primary">
+                   {question.vocab.romaji} {question.vocab.uchharon ? `(${question.vocab.uchharon})` : ''}
                  </p>
-                 {(question.vocab.romaji || question.vocab.uchharon) && (
-                   <p className="text-sm text-primary/80">
-                     {question.vocab.romaji}
-                     {question.vocab.uchharon ? <span className="text-muted-foreground font-normal"> ({question.vocab.uchharon})</span> : null}
-                   </p>
-                 )}
                </div>
             </div>
           )}
 
-          <p className="text-sm md:text-lg text-foreground font-medium w-full text-left md:text-center mt-2 px-1">
-            {quizMode === 'ja-bn' ? 'Select the correct Bangla meaning:' : 'Select the correct Japanese word:'}
-          </p>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 w-full">
-            {question.options.map((option, index) => {
-              const isSelected = selectedAnswer === index
-              const isCorrect = quizMode === 'ja-bn' 
-                ? question.vocab.bangla.trim() === option.bangla.trim() 
-                : question.vocab.nihongo.trim() === option.nihongo.trim()
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+            {question.options.map((option, idx) => {
+              const isSelected = selectedAnswer === idx
+              const isCorrect = option.bangla === question.vocab.bangla
               
-              let variant: "default" | "outline" | "destructive" | "secondary" = "outline"
+              let btnVariant: "outline" | "default" | "destructive" = "outline"
+              let borderClass = "border-border"
+
               if (hasAnswered) {
-                if (isCorrect) variant = "default" 
-                else if (isSelected && !isCorrect) variant = "destructive" 
-                else variant = "secondary" 
-              } else if (isSelected) {
-                variant = "default"
+                if (isCorrect) {
+                  btnVariant = "default"
+                  borderClass = "border-green-600 bg-green-600 hover:bg-green-600 text-white"
+                } else if (isSelected) {
+                  btnVariant = "destructive"
+                  borderClass = "border-destructive bg-destructive text-destructive-foreground"
+                }
               }
 
-              const mainText = quizMode === 'ja-bn' 
-                ? (option.bangla || '—') 
-                : (option.nihongo || '—')
-
-              const subText = quizMode === 'ja-bn'
-                ? option.nihongo
-                : `${option.bangla}${option.kanji ? ` (${option.kanji})` : ''}`
-
               return (
-                <Button 
-                  key={index} 
-                  variant={variant}
-                  className={`h-auto py-4 sm:py-5 text-lg sm:text-xl font-bold relative transition-all active:scale-[0.98] ${hasAnswered && isSelected && !isCorrect ? 'animate-in slide-in-from-left-1 slide-in-from-right-1 duration-100' : ''} ${variant === 'outline' ? 'hover:bg-primary/5 hover:border-primary/50' : ''} flex flex-col items-center justify-center gap-1 disabled:opacity-100`}
-                  onClick={() => handleAnswer(index)}
+                <Button
+                  key={idx}
+                  variant={btnVariant}
+                  className={`h-auto min-h-[4rem] text-left p-4 justify-between border-2 transition-all ${borderClass}`}
+                  onClick={() => handleAnswer(idx)}
                   disabled={hasAnswered}
                 >
-                  <span className={`whitespace-normal break-words pr-8 w-full text-center ${hasAnswered && !isCorrect && !isSelected ? 'text-foreground' : ''}`}>
-                    {mainText}
-                  </span>
-                  
-                  {hasAnswered && subText && (
-                    <span className={`text-sm font-normal opacity-100 block mt-1 pr-8 w-full text-center ${isCorrect ? 'text-primary-foreground/90' : isSelected ? 'text-destructive-foreground/90' : 'text-foreground/70'}`}>
-                      {subText}
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-lg font-bold">
+                      {quizMode === 'ja-bn' ? option.bangla : option.nihongo}
                     </span>
-                  )}
-
-                  {hasAnswered && isCorrect && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500 bg-white rounded-full flex-shrink-0 animate-in zoom-in" />}
-                  {hasAnswered && isSelected && !isCorrect && <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500 bg-white rounded-full flex-shrink-0 animate-in zoom-in" />}
+                    {quizMode === 'bn-ja' && option.kanji && (
+                      <span className="text-xs text-muted-foreground">{option.kanji}</span>
+                    )}
+                  </div>
+                  {hasAnswered && isCorrect && <CheckCircle2 className="w-6 h-6 shrink-0" />}
+                  {hasAnswered && isSelected && !isCorrect && <XCircle className="w-6 h-6 shrink-0" />}
                 </Button>
               )
             })}
           </div>
 
+          <div className="w-full flex items-center justify-between pt-2">
+            <Button
+              variant="outline"
+              onClick={handlePrevious}
+              disabled={currentQuestion === 0}
+              className="gap-2"
+            >
+              <ChevronLeft className="w-4 h-4" /> Previous
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={!hasAnswered}
+              className="gap-2"
+            >
+              {currentQuestion === questions.length - 1 ? 'Finish' : 'Next'} <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
         </CardContent>
-        <CardFooter className="flex justify-between border-t bg-slate-50 dark:bg-slate-900/50 rounded-b-xl p-4 fixed bottom-0 left-0 right-0 z-50 md:relative shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none gap-2">
-          <Button onClick={prevQuestion} disabled={currentQuestion === 0} variant="outline" size="lg" className="h-14 px-4 md:px-8">
-            <ChevronLeft className="w-5 h-5 md:mr-2" />
-            <span className="hidden md:inline">Previous</span>
-          </Button>
-
-          <Button onClick={nextQuestion} disabled={!hasAnswered || isPending} size="lg" className="flex-1 md:flex-none font-bold text-lg h-14 md:px-12 transition-all">
-            {isPending ? (
-              <><Loader2 className="mr-2 h-6 w-6 animate-spin" /> Saving...</>
-            ) : currentQuestion + 1 === questions.length ? (
-              'Finish Quiz'
-            ) : (
-              <>Next <ChevronRight className="w-5 h-5 ml-2" /></>
-            )}
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   )

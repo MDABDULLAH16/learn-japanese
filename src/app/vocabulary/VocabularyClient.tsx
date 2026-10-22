@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { VOCABULARY_DATA, Lesson, VocabularyItem } from '@/lib/vocabularyData'
+import { VOCABULARY_DATA, Lesson, VocabularyItem, WhitelistLevel } from '@/lib/vocabularyData'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -20,6 +20,10 @@ import {
   Bookmark, 
   Trash2, 
   Sparkles,
+  CheckCircle2,
+  Clock,
+  Flame,
+  ListFilter,
   Check
 } from 'lucide-react'
 import { useRecapVocabularies } from '@/lib/recapStorage'
@@ -32,6 +36,7 @@ export function VocabularyClient({
   initialRecapList?: VocabularyItem[] 
 }) {
   const [selectedLesson, setSelectedLesson] = useState<number | 'recap'>(VOCABULARY_DATA.lessons[0].lesson_number)
+  const [recapCategory, setRecapCategory] = useState<'all' | WhitelistLevel>('all')
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showScrollLessonBar, setShowScrollLessonBar] = useState(false)
   const lastScrollY = useRef(0)
@@ -93,13 +98,30 @@ export function VocabularyClient({
     }
   }
   
-  const { recapList, isSaved, toggle, clear, isLoaded } = useRecapVocabularies(initialRecapList, userId)
+  const { 
+    recapList, 
+    normalList, 
+    mediumList, 
+    hardList, 
+    getItemLevel, 
+    setLevel, 
+    clear, 
+    isLoaded 
+  } = useRecapVocabularies(initialRecapList, userId)
 
   const currentLesson = typeof selectedLesson === 'number'
     ? VOCABULARY_DATA.lessons.find(l => l.lesson_number === selectedLesson) || VOCABULARY_DATA.lessons[0]
     : null
   
   const totalVocabularies = VOCABULARY_DATA.lessons.reduce((acc, lesson) => acc + lesson.vocabularies.length, 0);
+
+  const displayedRecapList = recapCategory === 'all'
+    ? recapList
+    : recapCategory === 'normal'
+      ? normalList
+      : recapCategory === 'medium'
+        ? mediumList
+        : hardList
 
   const handleSelectLesson = (lesson: number | 'recap') => {
     setSelectedLesson(lesson)
@@ -126,7 +148,7 @@ export function VocabularyClient({
             >
               {selectedLesson === 'recap' ? (
                 <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
-                  <Bookmark className="w-3 h-3 fill-current" /> Recap
+                  <Bookmark className="w-3 h-3 fill-current" /> Recap ({recapList.length})
                 </span>
               ) : (
                 <span>Lesson {selectedLesson}</span>
@@ -234,20 +256,20 @@ export function VocabularyClient({
             <button
               onClick={() => setSelectedLesson('recap')}
               className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 border border-amber-500/20 transition-all cursor-pointer"
-              title="Click to view Recap / Whitelist Lesson"
+              title="Click to view Recap & Whitelist"
             >
               <Bookmark className="w-3 h-3 fill-current" />
-              Recap: {recapList.length}
+              Whitelist: {recapList.length}
             </button>
           </div>
-          <p className="text-muted-foreground mt-1">Learn new words and build your custom recap list.</p>
+          <p className="text-muted-foreground mt-1">Learn new words and classify them into Normal, Medium, or Hard for tailored revision.</p>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {recapList.length >= 4 && (
             <Link href="/vocabulary-quiz?lesson=recap">
               <Button variant="outline" className="gap-2 shadow-sm font-semibold border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10">
-                <Bookmark className="w-4 h-4 fill-current" /> Recap Quiz
+                <Bookmark className="w-4 h-4 fill-current" /> Whitelist Quiz ({recapList.length})
               </Button>
             </Link>
           )}
@@ -296,7 +318,7 @@ export function VocabularyClient({
             }`}
           >
             <Bookmark className={`w-3.5 h-3.5 ${selectedLesson === 'recap' ? 'fill-current' : ''}`} />
-            Recap Lesson
+            Recap & Whitelist
             <span 
               className={`ml-1 text-[11px] px-1.5 py-0.2 rounded-full font-bold ${
                 selectedLesson === 'recap' ? 'bg-black/20 text-white' : 'bg-amber-500/20 text-amber-800 dark:text-amber-300'
@@ -352,26 +374,26 @@ export function VocabularyClient({
                     <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400">
                       <Bookmark className="h-4 w-4 fill-current" />
                     </span>
-                    <h2 className="text-2xl font-bold tracking-tight">Recap & Whitelist Lesson</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">Recap & Whitelist Library</h2>
                     <Badge variant="secondary" className="bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/30 font-bold px-2.5 py-0.5">
-                      {recapList.length} {recapList.length === 1 ? 'Word' : 'Words'}
+                      {recapList.length} Total Words
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground max-w-xl">
-                    Your personal recap collection. Click the bookmark icon beside the speaker on any vocabulary card to add or remove words anytime.
+                    Every vocabulary card has 3 level icons: <strong className="text-emerald-600 dark:text-emerald-400 font-semibold">Normal</strong> (একবার রিভিশন), <strong className="text-amber-600 dark:text-amber-400 font-semibold">Medium</strong> (মাঝারি), and <strong className="text-rose-600 dark:text-rose-400 font-semibold">Hard</strong> (কঠিন). Practice each section separately below. All items are synced to your database across devices.
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
-                  {recapList.length >= 4 && (
-                    <Link href="/vocabulary-quiz?lesson=recap">
+                  {displayedRecapList.length >= 4 && (
+                    <Link href={`/vocabulary-quiz?lesson=recap${recapCategory !== 'all' ? `&level=${recapCategory}` : ''}`}>
                       <Button size="sm" className="gap-1.5 bg-amber-600 hover:bg-amber-700 text-white shadow-sm font-semibold">
-                        <Trophy className="w-3.5 h-3.5 text-amber-200" /> Quiz Recap Words
+                        <Trophy className="w-3.5 h-3.5 text-amber-200" /> Quiz {recapCategory === 'all' ? 'All' : recapCategory.toUpperCase()} ({displayedRecapList.length})
                       </Button>
                     </Link>
                   )}
 
-                  {recapList.length > 0 && (
+                  {displayedRecapList.length > 0 && (
                     !showClearConfirm ? (
                       <Button
                         size="sm"
@@ -379,17 +401,17 @@ export function VocabularyClient({
                         onClick={() => setShowClearConfirm(true)}
                         className="gap-1.5 text-muted-foreground hover:text-destructive hover:border-destructive/30"
                       >
-                        <Trash2 className="w-3.5 h-3.5" /> Clear List
+                        <Trash2 className="w-3.5 h-3.5" /> Clear {recapCategory === 'all' ? 'All' : recapCategory.toUpperCase()}
                       </Button>
                     ) : (
                       <div className="flex items-center gap-1.5 bg-destructive/10 border border-destructive/20 p-1 rounded-lg animate-in zoom-in-95">
-                        <span className="text-xs text-destructive font-medium px-1">Clear all {recapList.length} words?</span>
+                        <span className="text-xs text-destructive font-medium px-1">Clear {displayedRecapList.length} {recapCategory} words?</span>
                         <Button
                           size="sm"
                           variant="destructive"
                           className="h-7 px-2.5 text-xs font-semibold"
                           onClick={() => {
-                            clear()
+                            clear(recapCategory === 'all' ? undefined : recapCategory)
                             setShowClearConfirm(false)
                           }}
                         >
@@ -408,38 +430,198 @@ export function VocabularyClient({
                   )}
                 </div>
               </div>
+
+              {/* 3 Interactive Quick Stats Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5 pt-4 border-t border-amber-500/15">
+                {/* Normal Stat Card */}
+                <button
+                  type="button"
+                  onClick={() => setRecapCategory('normal')}
+                  className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                    recapCategory === 'normal'
+                      ? 'bg-emerald-500/15 border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-xs'
+                      : 'bg-background/60 hover:bg-emerald-500/5 border-emerald-500/20'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-8 w-8 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300">Normal</div>
+                      <div className="text-[11px] text-muted-foreground">একবার রিভিশন</div>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="font-extrabold text-xs px-2 py-0.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                    {normalList.length}
+                  </Badge>
+                </button>
+
+                {/* Medium Stat Card */}
+                <button
+                  type="button"
+                  onClick={() => setRecapCategory('medium')}
+                  className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                    recapCategory === 'medium'
+                      ? 'bg-amber-500/15 border-amber-500/50 ring-2 ring-amber-500/20 shadow-xs'
+                      : 'bg-background/60 hover:bg-amber-500/5 border-amber-500/20'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-8 w-8 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-amber-700 dark:text-amber-300">Medium</div>
+                      <div className="text-[11px] text-muted-foreground">মাঝারি প্র্যাকটিস</div>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="font-extrabold text-xs px-2 py-0.5 bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                    {mediumList.length}
+                  </Badge>
+                </button>
+
+                {/* Hard Stat Card */}
+                <button
+                  type="button"
+                  onClick={() => setRecapCategory('hard')}
+                  className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                    recapCategory === 'hard'
+                      ? 'bg-rose-500/15 border-rose-500/50 ring-2 ring-rose-500/20 shadow-xs'
+                      : 'bg-background/60 hover:bg-rose-500/5 border-rose-500/20'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-8 w-8 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                      <Flame className="w-4 h-4 fill-current" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-rose-700 dark:text-rose-300">Hard</div>
+                      <div className="text-[11px] text-muted-foreground">কঠিন / বিশেষ মনোযোগ</div>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="font-extrabold text-xs px-2 py-0.5 bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20">
+                    {hardList.length}
+                  </Badge>
+                </button>
+              </div>
+            </div>
+
+            {/* Whitelist Practice Filter Tabs */}
+            <div className="flex items-center justify-between flex-wrap gap-3 pb-1 border-b border-border/60">
+              <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-1">
+                <Button
+                  size="sm"
+                  variant={recapCategory === 'all' ? 'default' : 'outline'}
+                  onClick={() => setRecapCategory('all')}
+                  className={`rounded-full h-8 text-xs font-semibold gap-1.5 transition-all ${
+                    recapCategory === 'all' ? 'bg-foreground text-background' : ''
+                  }`}
+                >
+                  <ListFilter className="w-3.5 h-3.5" />
+                  All Whitelist ({recapList.length})
+                </Button>
+
+                <Button
+                  size="sm"
+                  variant={recapCategory === 'normal' ? 'default' : 'outline'}
+                  onClick={() => setRecapCategory('normal')}
+                  className={`rounded-full h-8 text-xs font-semibold gap-1.5 transition-all ${
+                    recapCategory === 'normal' 
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white ring-1 ring-emerald-500/40 shadow-xs' 
+                      : 'border-emerald-500/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10'
+                  }`}
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Normal ({normalList.length})
+                </Button>
+
+                <Button
+                  size="sm"
+                  variant={recapCategory === 'medium' ? 'default' : 'outline'}
+                  onClick={() => setRecapCategory('medium')}
+                  className={`rounded-full h-8 text-xs font-semibold gap-1.5 transition-all ${
+                    recapCategory === 'medium' 
+                      ? 'bg-amber-600 hover:bg-amber-700 text-white ring-1 ring-amber-500/40 shadow-xs' 
+                      : 'border-amber-500/30 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10'
+                  }`}
+                >
+                  <Clock className="w-3.5 h-3.5" />
+                  Medium ({mediumList.length})
+                </Button>
+
+                <Button
+                  size="sm"
+                  variant={recapCategory === 'hard' ? 'default' : 'outline'}
+                  onClick={() => setRecapCategory('hard')}
+                  className={`rounded-full h-8 text-xs font-semibold gap-1.5 transition-all ${
+                    recapCategory === 'hard' 
+                      ? 'bg-rose-600 hover:bg-rose-700 text-white ring-1 ring-rose-500/40 shadow-xs' 
+                      : 'border-rose-500/30 text-rose-700 dark:text-rose-300 hover:bg-rose-500/10'
+                  }`}
+                >
+                  <Flame className="w-3.5 h-3.5 fill-current" />
+                  Hard ({hardList.length})
+                </Button>
+              </div>
+
+              <div className="text-xs text-muted-foreground font-medium">
+                Showing <span className="font-bold text-foreground">{displayedRecapList.length}</span> {recapCategory === 'all' ? 'saved' : recapCategory} words
+              </div>
             </div>
 
             {/* Empty State vs List */}
-            {recapList.length === 0 ? (
+            {displayedRecapList.length === 0 ? (
               <div className="text-center py-16 px-6 border border-dashed rounded-2xl bg-secondary/10 flex flex-col items-center justify-center space-y-4">
                 <div className="h-16 w-16 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center border border-amber-500/20">
-                  <Bookmark className="w-8 h-8" />
+                  {recapCategory === 'normal' ? (
+                    <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+                  ) : recapCategory === 'medium' ? (
+                    <Clock className="w-8 h-8 text-amber-500" />
+                  ) : recapCategory === 'hard' ? (
+                    <Flame className="w-8 h-8 text-rose-500 fill-current" />
+                  ) : (
+                    <Bookmark className="w-8 h-8 text-amber-500" />
+                  )}
                 </div>
                 <div className="space-y-1.5 max-w-md">
-                  <h3 className="text-xl font-bold">No words in Recap list yet</h3>
+                  <h3 className="text-xl font-bold">
+                    {recapCategory === 'all'
+                      ? 'No words in Whitelist yet'
+                      : `No words in "${recapCategory.toUpperCase()}" Whitelist yet`}
+                  </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    When browsing any lesson, click the bookmark icon next to the pronunciation speaker on any card to add it to your custom Recap Lesson!
+                    {recapCategory === 'all'
+                      ? 'Browse any lesson and click Normal 🟢, Medium 🟡, or Hard 🔴 on any card to add it to your Whitelist!'
+                      : `Mark words with the ${recapCategory.toUpperCase()} icon on any card to practice them specifically in this section!`}
                   </p>
                 </div>
-                <Button
-                  variant="default"
-                  onClick={() => setSelectedLesson(VOCABULARY_DATA.lessons[0].lesson_number)}
-                  className="mt-2 font-semibold"
-                >
-                  <BookOpen className="w-4 h-4 mr-2" /> Start with Lesson {VOCABULARY_DATA.lessons[0].lesson_number}
-                </Button>
+                <div className="flex items-center gap-2 pt-2">
+                  {recapCategory !== 'all' && (
+                    <Button variant="outline" size="sm" onClick={() => setRecapCategory('all')}>
+                      View All Whitelist ({recapList.length})
+                    </Button>
+                  )}
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => setSelectedLesson(VOCABULARY_DATA.lessons[0].lesson_number)}
+                    className="font-semibold"
+                  >
+                    <BookOpen className="w-4 h-4 mr-1.5" /> Start with Lesson {VOCABULARY_DATA.lessons[0].lesson_number}
+                  </Button>
+                </div>
               </div>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {recapList.map((vocab, index) => (
+                {displayedRecapList.map((vocab, index) => (
                   <LearnCard
-                    key={`${vocab.nihongo}_${vocab.bangla}_${index}`}
+                    key={`recap_${vocab.nihongo}_${vocab.bangla}_${index}`}
                     vocab={vocab}
                     index={index}
-                    total={recapList.length}
-                    isSaved={isSaved(vocab)}
-                    onToggleRecap={toggle}
+                    total={displayedRecapList.length}
+                    currentLevel={getItemLevel(vocab)}
+                    onSetLevel={setLevel}
                   />
                 ))}
               </div>
@@ -449,8 +631,8 @@ export function VocabularyClient({
           <div className="space-y-8">
             <LearnSection
               lesson={currentLesson!}
-              isSaved={isSaved}
-              onToggleRecap={toggle}
+              getItemLevel={getItemLevel}
+              onSetLevel={setLevel}
             />
 
             {/* Bottom Lesson Navigation Card */}
@@ -540,12 +722,12 @@ export function VocabularyClient({
 
 function LearnSection({
   lesson,
-  isSaved,
-  onToggleRecap,
+  getItemLevel,
+  onSetLevel,
 }: {
   lesson: Lesson
-  isSaved: (vocab: VocabularyItem) => boolean
-  onToggleRecap: (vocab: VocabularyItem) => void
+  getItemLevel: (vocab: VocabularyItem) => WhitelistLevel | null
+  onSetLevel: (vocab: VocabularyItem, level: WhitelistLevel) => void
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -555,8 +737,8 @@ function LearnSection({
           vocab={vocab}
           index={index}
           total={lesson.vocabularies.length}
-          isSaved={isSaved(vocab)}
-          onToggleRecap={onToggleRecap}
+          currentLevel={getItemLevel(vocab)}
+          onSetLevel={onSetLevel}
         />
       ))}
     </div>
@@ -567,14 +749,14 @@ function LearnCard({
   vocab, 
   index, 
   total,
-  isSaved,
-  onToggleRecap,
+  currentLevel,
+  onSetLevel,
 }: { 
   vocab: VocabularyItem
   index: number
   total: number
-  isSaved: boolean
-  onToggleRecap: (vocab: VocabularyItem) => void
+  currentLevel: WhitelistLevel | null
+  onSetLevel: (vocab: VocabularyItem, level: WhitelistLevel) => void
 }) {
   const [showMeaning, setShowMeaning] = useState(false)
   const [showPronunciation, setShowPronunciation] = useState(false)
@@ -588,70 +770,120 @@ function LearnCard({
     window.speechSynthesis.speak(utterance)
   }
 
-  const handleToggleRecap = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onToggleRecap(vocab)
-  }
-
   return (
     <>
-    <Card className="rounded-2xl border transition-all duration-200 hover:shadow-md hover:border-primary/50 group flex flex-col w-full relative">
+    <Card className="p-0 py-0 pt-0 gap-0 overflow-hidden rounded-2xl border transition-all duration-200 hover:shadow-md hover:border-primary/50 group flex flex-col w-full relative [--card-spacing:0px]">
       <CardContent className="p-0 flex-1 flex flex-col w-full">
-        <div className="p-6 flex flex-col items-center justify-center min-h-[140px] bg-gradient-to-br from-secondary/30 to-secondary/10 relative border-b w-full pt-10 rounded-t-2xl">
-          
-          <div className="absolute top-2 left-1/2 -translate-x-1/2">
-            <Badge variant="outline" className="bg-background/80 backdrop-blur-sm text-xs font-bold text-muted-foreground shadow-sm px-2 py-0.5">
-              {index + 1} / {total}
-            </Badge>
-          </div>
+        <div className="pt-2.5 px-3.5 sm:px-4 pb-4 sm:pb-5 flex flex-col justify-between min-h-[140px] bg-gradient-to-br from-secondary/30 to-secondary/10 relative border-b w-full">
+          {/* Top Row: Kanji on Left, Action Pill on Right (Natural flow - Never overlaps text!) */}
+          <div className="w-full flex items-center justify-between min-h-[30px] mb-1.5 z-10">
+            {vocab.kanji ? (
+              <button 
+                onClick={(e) => { 
+                  e.stopPropagation(); 
+                  setShowModalRomaji(false);
+                  setShowKanjiModal(true); 
+                }} 
+                className="hover:scale-105 transition-transform cursor-pointer"
+                title="View Kanji Details"
+              >
+                <Badge variant="secondary" className="text-xs sm:text-sm px-2.5 py-1 h-auto bg-background/90 backdrop-blur-md shadow-sm border-primary/20 font-bold cursor-pointer hover:bg-primary/10">
+                  {vocab.kanji}
+                </Badge>
+              </button>
+            ) : (
+              <div />
+            )}
 
-          {/* Right Action Icons: Bookmark (Recap/Whitelist) + Pronounce */}
-          <div className="absolute top-2 right-2 flex items-center gap-1 z-10">
-            <Button
-              variant="ghost"
-              size="icon"
-              className={`h-8 w-8 rounded-full transition-all duration-200 ${
-                isSaved 
-                  ? 'text-amber-500 bg-amber-500/15 hover:bg-amber-500/25 hover:text-amber-600 dark:text-amber-400' 
-                  : 'text-muted-foreground/60 hover:text-amber-500 hover:bg-amber-500/10'
-              }`}
-              onClick={handleToggleRecap}
-              title={isSaved ? "Remove from Recap / Whitelist" : "Add to Recap / Whitelist"}
-              aria-label={isSaved ? "Remove from Recap" : "Add to Recap"}
-            >
-              <Bookmark className={`w-4 h-4 transition-transform duration-200 ${isSaved ? 'fill-amber-500 scale-110' : 'hover:scale-110'}`} />
-            </Button>
+            {/* Top-Right Action Controls: 3 Whitelist Level Icons + Audio Pronunciation on the far right */}
+            <div className="flex items-center gap-0.5 p-0.5 rounded-full bg-background/90 dark:bg-zinc-900/90 backdrop-blur-md border border-border/70 shadow-xs">
+              {/* Normal Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onSetLevel(vocab, 'normal')
+                }}
+                title={
+                  currentLevel === 'normal'
+                    ? 'Normal (Click to remove from Whitelist)'
+                    : 'Add to Normal: একবার রিভিশন করলেই হবে'
+                }
+                aria-label="Normal: quick review"
+                className={`h-7 w-7 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                  currentLevel === 'normal'
+                    ? 'bg-emerald-500 text-white shadow-xs ring-1 ring-emerald-400/60 scale-105'
+                    : 'text-muted-foreground/60 hover:text-emerald-600 hover:bg-emerald-500/15'
+                }`}
+              >
+                <CheckCircle2 className={`w-3.5 h-3.5 ${currentLevel === 'normal' ? 'stroke-[2.5]' : ''}`} />
+              </button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-primary/70 hover:text-primary hover:bg-primary/10 rounded-full h-8 w-8 transition-colors"
-              onClick={speakJapanese}
-              title="Listen to pronunciation"
-              aria-label="Listen to pronunciation"
-            >
-              <Volume2 className="w-4 h-4" />
-            </Button>
+              {/* Medium Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onSetLevel(vocab, 'medium')
+                }}
+                title={
+                  currentLevel === 'medium'
+                    ? 'Medium (Click to remove from Whitelist)'
+                    : 'Add to Medium: মাঝারি প্র্যাকটিস প্রয়োজন'
+                }
+                aria-label="Medium: moderate practice"
+                className={`h-7 w-7 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                  currentLevel === 'medium'
+                    ? 'bg-amber-500 text-white shadow-xs ring-1 ring-amber-400/60 scale-105'
+                    : 'text-muted-foreground/60 hover:text-amber-600 hover:bg-amber-500/15'
+                }`}
+              >
+                <Clock className={`w-3.5 h-3.5 ${currentLevel === 'medium' ? 'stroke-[2.5]' : ''}`} />
+              </button>
+
+              {/* Hard Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onSetLevel(vocab, 'hard')
+                }}
+                title={
+                  currentLevel === 'hard'
+                    ? 'Hard (Click to remove from Whitelist)'
+                    : 'Add to Hard: কঠিন, বারবার প্র্যাকটিস লাগবে'
+                }
+                aria-label="Hard: needs practice"
+                className={`h-7 w-7 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                  currentLevel === 'hard'
+                    ? 'bg-rose-500 text-white shadow-xs ring-1 ring-rose-400/60 scale-105'
+                    : 'text-muted-foreground/60 hover:text-rose-600 hover:bg-rose-500/15'
+                }`}
+              >
+                <Flame className={`w-3.5 h-3.5 ${currentLevel === 'hard' ? 'fill-white stroke-[2.5]' : ''}`} />
+              </button>
+
+              <div className="h-4 w-px bg-border/60 mx-0.5 shrink-0" />
+
+              {/* Audio pronunciation on the far right */}
+              <button
+                type="button"
+                className="h-7 w-7 rounded-full flex items-center justify-center text-primary/75 hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer shrink-0"
+                onClick={speakJapanese}
+                title="Listen to pronunciation"
+                aria-label="Listen to pronunciation"
+              >
+                <Volume2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
           
-          <h3 className="text-5xl sm:text-6xl font-black text-primary mb-2 text-center drop-shadow-sm break-words whitespace-normal px-2 leading-tight">
-            {vocab.nihongo}
-          </h3>
-          {vocab.kanji && (
-            <button 
-              onClick={(e) => { 
-                e.stopPropagation(); 
-                setShowModalRomaji(false);
-                setShowKanjiModal(true); 
-              }} 
-              className="absolute top-3 left-3 hover:scale-105 transition-transform"
-              title="View Kanji Details"
-            >
-              <Badge variant="secondary" className="text-xs sm:text-sm px-2.5 py-1 h-auto bg-background/90 backdrop-blur-md shadow-sm border-primary/20 font-bold cursor-pointer hover:bg-primary/10">
-                {vocab.kanji}
-              </Badge>
-            </button>
-          )}
+          {/* Centered Japanese Word */}
+          <div className="w-full flex-1 flex items-center justify-center py-2">
+            <h3 className="text-5xl sm:text-6xl font-black text-primary mb-2 text-center drop-shadow-sm break-words whitespace-normal px-2 leading-tight">
+              {vocab.nihongo}
+            </h3>
+          </div>
         </div>
         
         <div className="p-5 flex-1 bg-card flex flex-col justify-between">
@@ -663,7 +895,7 @@ function LearnCard({
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="w-full text-muted-foreground hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all" 
+                  className="w-full text-muted-foreground hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer" 
                   onClick={() => setShowPronunciation(true)}
                 >
                   <Eye className="w-4 h-4 mr-2" /> Reveal Pronunciation
@@ -681,7 +913,7 @@ function LearnCard({
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="w-full h-6 mt-1 text-[10px] text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/10 uppercase tracking-widest" 
+                    className="w-full h-6 mt-1 text-[10px] text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/10 uppercase tracking-widest cursor-pointer" 
                     onClick={() => setShowPronunciation(false)}
                   >
                     <EyeOff className="w-3 h-3 mr-1" /> Hide
@@ -741,7 +973,7 @@ function LearnCard({
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="w-full h-6 mt-1 text-[10px] text-muted-foreground hover:text-foreground hover:bg-primary/10 uppercase tracking-widest" 
+                    className="w-full h-6 mt-1 text-[10px] text-muted-foreground hover:text-foreground hover:bg-primary/10 uppercase tracking-widest cursor-pointer" 
                     onClick={() => setShowMeaning(false)}
                   >
                     <EyeOff className="w-3 h-3 mr-1" /> Hide
@@ -751,6 +983,14 @@ function LearnCard({
             </div>
 
           </div>
+        </div>
+
+        {/* Card Numbering Footer at the bottom */}
+        <div className="px-5 py-2.5 flex items-center justify-between text-xs border-t border-border/40 bg-muted/20 rounded-b-2xl">
+          <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">WORD</span>
+          <span className="font-bold text-xs text-foreground/80 bg-background/80 px-2 py-0.5 rounded-full border border-border/60 shadow-2xs">
+            {index + 1} / {total}
+          </span>
         </div>
       </CardContent>
     </Card>
@@ -776,28 +1016,58 @@ function LearnCard({
             </h2>
             <div className="flex items-center gap-2">
               <p className="text-2xl font-bold text-muted-foreground">{vocab.nihongo}</p>
-              <Button
-                variant="ghost"
-                size="icon"
-                className={`h-8 w-8 rounded-full transition-all ${
-                  isSaved
-                    ? 'text-amber-500 bg-amber-500/15 hover:bg-amber-500/25'
-                    : 'text-muted-foreground/70 hover:text-amber-500 hover:bg-amber-500/10'
+            </div>
+
+            {/* 3 Whitelist Level Pill Buttons + Audio Pronunciation on far right */}
+            <div className="mt-3 flex items-center gap-1 p-1 rounded-full bg-background/90 dark:bg-zinc-900/90 backdrop-blur-md border border-border/70 shadow-xs">
+              <button
+                type="button"
+                onClick={() => onSetLevel(vocab, 'normal')}
+                title={currentLevel === 'normal' ? 'Normal (Click to remove)' : 'Add to Normal: একবার রিভিশন'}
+                className={`h-8 w-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                  currentLevel === 'normal'
+                    ? 'bg-emerald-500 text-white shadow-xs ring-1 ring-emerald-400/60 scale-105'
+                    : 'text-muted-foreground/60 hover:text-emerald-600 hover:bg-emerald-500/15'
                 }`}
-                onClick={handleToggleRecap}
-                title={isSaved ? "Remove from Recap" : "Add to Recap"}
               >
-                <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-amber-500' : ''}`} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-primary/70 hover:text-primary rounded-full bg-primary/5 hover:bg-primary/10"
+                <CheckCircle2 className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onSetLevel(vocab, 'medium')}
+                title={currentLevel === 'medium' ? 'Medium (Click to remove)' : 'Add to Medium: মাঝারি প্র্যাকটিস'}
+                className={`h-8 w-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                  currentLevel === 'medium'
+                    ? 'bg-amber-500 text-white shadow-xs ring-1 ring-amber-400/60 scale-105'
+                    : 'text-muted-foreground/60 hover:text-amber-600 hover:bg-amber-500/15'
+                }`}
+              >
+                <Clock className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onSetLevel(vocab, 'hard')}
+                title={currentLevel === 'hard' ? 'Hard (Click to remove)' : 'Add to Hard: কঠিন শব্দ'}
+                className={`h-8 w-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                  currentLevel === 'hard'
+                    ? 'bg-rose-500 text-white shadow-xs ring-1 ring-rose-400/60 scale-105'
+                    : 'text-muted-foreground/60 hover:text-rose-600 hover:bg-rose-500/15'
+                }`}
+              >
+                <Flame className="w-4 h-4 fill-current" />
+              </button>
+
+              <div className="h-4 w-px bg-border/60 mx-0.5" />
+
+              <button
+                type="button"
+                className="h-8 w-8 text-primary/75 hover:text-primary rounded-full hover:bg-primary/10 flex items-center justify-center transition-colors cursor-pointer"
                 onClick={speakJapanese}
                 title="Listen Pronunciation"
+                aria-label="Listen to pronunciation"
               >
                 <Volume2 className="w-4 h-4" />
-              </Button>
+              </button>
             </div>
           </div>
           

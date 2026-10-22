@@ -1,5 +1,7 @@
 import vocabularyRaw from './vocabulary_1-20.json';
 
+export type WhitelistLevel = 'normal' | 'medium' | 'hard';
+
 export type VocabularyItem = {
   nihongo: string;
   romaji: string;
@@ -7,6 +9,7 @@ export type VocabularyItem = {
   kanji: string;
   english: string;
   bangla: string;
+  level?: WhitelistLevel;
 };
 
 export type Lesson = {

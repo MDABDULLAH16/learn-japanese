@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { VocabularyItem } from './vocabularyData'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { VocabularyItem, WhitelistLevel } from './vocabularyData'
 import { 
+  setRecapItemLevelAction,
   toggleRecapItemAction, 
   removeRecapItemAction, 
   clearRecapItemsAction, 
@@ -23,7 +24,12 @@ export const getRecapVocabularies = (): VocabularyItem[] => {
     if (!raw) return []
     const parsed = JSON.parse(raw)
     if (Array.isArray(parsed)) {
-      return parsed.filter(item => Boolean(item && item.nihongo && item.bangla))
+      return parsed
+        .filter(item => Boolean(item && item.nihongo && item.bangla))
+        .map(item => ({
+          ...item,
+          level: (['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal') as WhitelistLevel
+        }))
     }
     return []
   } catch (error) {
@@ -48,29 +54,72 @@ export const isRecapVocabulary = (vocab: VocabularyItem, list?: VocabularyItem[]
   return currentList.some(item => getVocabKey(item) === key)
 }
 
-export const toggleRecapVocabulary = (
-  vocab: VocabularyItem, 
+export const getVocabLevel = (vocab: VocabularyItem, list?: VocabularyItem[]): WhitelistLevel | null => {
+  const currentList = list ?? getRecapVocabularies()
+  const key = getVocabKey(vocab)
+  const item = currentList.find(i => getVocabKey(i) === key)
+  if (!item) return null
+  return (['normal', 'medium', 'hard'].includes(item.level || '') ? item.level : 'normal') as WhitelistLevel
+}
+
+export const setLevelRecapVocabulary = (
+  vocab: VocabularyItem,
+  targetLevel: WhitelistLevel,
   userId?: string
-): { items: VocabularyItem[]; added: boolean } => {
+): { items: VocabularyItem[]; activeLevel: WhitelistLevel | null } => {
   const current = getRecapVocabularies()
   const key = getVocabKey(vocab)
-  const exists = current.some(item => getVocabKey(item) === key)
-  
+  const existingIndex = current.findIndex(item => getVocabKey(item) === key)
+
   let updated: VocabularyItem[]
-  if (exists) {
-    updated = current.filter(item => getVocabKey(item) !== key)
+  let activeLevel: WhitelistLevel | null = null
+
+  if (existingIndex >= 0) {
+    const existing = current[existingIndex]
+    const currentLevel = (['normal', 'medium', 'hard'].includes(existing.level || '') ? existing.level : 'normal') as WhitelistLevel
+
+    if (currentLevel === targetLevel) {
+      // Toggle off / remove from whitelist
+      updated = current.filter(item => getVocabKey(item) !== key)
+      activeLevel = null
+    } else {
+      // Switch difficulty level
+      updated = current.map((item, idx) => {
+        if (idx === existingIndex) {
+          return { ...item, level: targetLevel }
+        }
+        return item
+      })
+      activeLevel = targetLevel
+    }
   } else {
-    updated = [vocab, ...current]
+    // Add new to whitelist with targetLevel
+    const newItem: VocabularyItem = {
+      ...vocab,
+      level: targetLevel
+    }
+    updated = [newItem, ...current]
+    activeLevel = targetLevel
   }
 
   saveRecapVocabularies(updated)
 
   // Persist to database in background
-  toggleRecapItemAction(vocab, userId).catch(err => {
-    console.error('Failed to toggle recap in DB:', err)
+  setRecapItemLevelAction(vocab, targetLevel, userId).catch(err => {
+    console.error('Failed to set recap level in DB:', err)
   })
 
-  return { items: updated, added: !exists }
+  return { items: updated, activeLevel }
+}
+
+export const toggleRecapVocabulary = (
+  vocab: VocabularyItem, 
+  userId?: string
+): { items: VocabularyItem[]; added: boolean } => {
+  const currentLevel = getVocabLevel(vocab)
+  const targetLevel = currentLevel || 'normal'
+  const res = setLevelRecapVocabulary(vocab, targetLevel, userId)
+  return { items: res.items, added: res.activeLevel !== null }
 }
 
 export const removeRecapVocabulary = (
@@ -90,11 +139,17 @@ export const removeRecapVocabulary = (
   return updated
 }
 
-export const clearRecapVocabularies = (userId?: string): void => {
-  saveRecapVocabularies([])
+export const clearRecapVocabularies = (userId?: string, level?: WhitelistLevel): void => {
+  if (level) {
+    const current = getRecapVocabularies()
+    const updated = current.filter(item => (item.level || 'normal') !== level)
+    saveRecapVocabularies(updated)
+  } else {
+    saveRecapVocabularies([])
+  }
 
   // Persist to database in background
-  clearRecapItemsAction(userId).catch(err => {
+  clearRecapItemsAction(userId, level).catch(err => {
     console.error('Failed to clear recap from DB:', err)
   })
 }
@@ -102,7 +157,10 @@ export const clearRecapVocabularies = (userId?: string): void => {
 export function useRecapVocabularies(initialItems?: VocabularyItem[], userId?: string) {
   const [recapList, setRecapList] = useState<VocabularyItem[]>(() => {
     if (initialItems && initialItems.length > 0) {
-      return initialItems
+      return initialItems.map(item => ({
+        ...item,
+        level: (['normal', 'medium', 'hard'].includes(item.level || '') ? item.level : 'normal') as WhitelistLevel
+      }))
     }
     return getRecapVocabularies()
   })
@@ -119,7 +177,6 @@ export function useRecapVocabularies(initialItems?: VocabularyItem[], userId?: s
         
         // If we have initial items from server
         if (initialItems && initialItems.length > 0) {
-          // If local items exist that might not be in DB, sync them
           const dbKeys = new Set(initialItems.map(getVocabKey))
           const unSyncedLocal = localItems.filter(item => !dbKeys.has(getVocabKey(item)))
 
@@ -130,7 +187,6 @@ export function useRecapVocabularies(initialItems?: VocabularyItem[], userId?: s
               saveRecapVocabularies(merged)
             }
           } else {
-            // Initial items from DB are the source of truth
             if (isMounted) {
               setRecapList(initialItems)
               saveRecapVocabularies(initialItems)
@@ -179,6 +235,28 @@ export function useRecapVocabularies(initialItems?: VocabularyItem[], userId?: s
     }
   }, [initialItems, userId])
 
+  const normalList = useMemo(() => {
+    return recapList.filter(item => (item.level || 'normal') === 'normal')
+  }, [recapList])
+
+  const mediumList = useMemo(() => {
+    return recapList.filter(item => item.level === 'medium')
+  }, [recapList])
+
+  const hardList = useMemo(() => {
+    return recapList.filter(item => item.level === 'hard')
+  }, [recapList])
+
+  const getItemLevel = useCallback(
+    (vocab: VocabularyItem): WhitelistLevel | null => {
+      const key = getVocabKey(vocab)
+      const found = recapList.find(item => getVocabKey(item) === key)
+      if (!found) return null
+      return (['normal', 'medium', 'hard'].includes(found.level || '') ? found.level : 'normal') as WhitelistLevel
+    },
+    [recapList]
+  )
+
   const isSaved = useCallback(
     (vocab: VocabularyItem): boolean => {
       const key = getVocabKey(vocab)
@@ -186,6 +264,10 @@ export function useRecapVocabularies(initialItems?: VocabularyItem[], userId?: s
     },
     [recapList]
   )
+
+  const setLevel = useCallback((vocab: VocabularyItem, level: WhitelistLevel) => {
+    return setLevelRecapVocabulary(vocab, level, userId)
+  }, [userId])
 
   const toggle = useCallback((vocab: VocabularyItem) => {
     return toggleRecapVocabulary(vocab, userId)
@@ -195,14 +277,19 @@ export function useRecapVocabularies(initialItems?: VocabularyItem[], userId?: s
     return removeRecapVocabulary(vocab, userId)
   }, [userId])
 
-  const clear = useCallback(() => {
-    clearRecapVocabularies(userId)
+  const clear = useCallback((level?: WhitelistLevel) => {
+    clearRecapVocabularies(userId, level)
   }, [userId])
 
   return {
     recapList,
+    normalList,
+    mediumList,
+    hardList,
     isLoaded,
     isSaved,
+    getItemLevel,
+    setLevel,
     toggle,
     remove,
     clear,
