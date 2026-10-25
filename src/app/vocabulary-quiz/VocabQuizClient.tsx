@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useEffect, useRef } from 'react'
+import { useState, useTransition, useEffect, useRef, useSyncExternalStore } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -62,6 +62,8 @@ const getWrongOptions = (
   return wrongOptions
 }
 
+const emptySubscribe = () => () => {}
+
 export function VocabQuizClient({
   userId,
   initialRecapList,
@@ -71,7 +73,14 @@ export function VocabQuizClient({
 }) {
   const [quizMode, setQuizMode] = useState<QuizMode>('ja-bn')
   const [selectedLesson, setSelectedLesson] = useState<number | 'recap' | null>(null)
-  const [recapLevel, setRecapLevel] = useState<'all' | WhitelistLevel>('all')
+  const [recapLevel, setRecapLevel] = useState<'all' | WhitelistLevel>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const lvl = params.get('level') as WhitelistLevel | null
+      if (lvl && ['normal', 'medium', 'hard'].includes(lvl)) return lvl
+    }
+    return 'all'
+  })
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [score, setScore] = useState(0)
@@ -79,7 +88,11 @@ export function VocabQuizClient({
   const [answersHistory, setAnswersHistory] = useState<Record<number, number>>({})
   const [wrongQuestions, setWrongQuestions] = useState<Question[]>([])
   const [, startTransition] = useTransition()
-  const [isLoaded, setIsLoaded] = useState(false)
+  const isLoaded = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  )
   const [mistakesSavedToHard, setMistakesSavedToHard] = useState(false)
 
   const { recapList, normalList, mediumList, hardList, getItemLevel, setLevel } =
@@ -141,14 +154,12 @@ export function VocabQuizClient({
   }
 
   useEffect(() => {
-    setIsLoaded(true)
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       if (params.get('lesson') === 'recap') {
         const lvlParam = params.get('level') as WhitelistLevel | null
         const targetLvl =
           lvlParam && ['normal', 'medium', 'hard'].includes(lvlParam) ? lvlParam : 'all'
-        setRecapLevel(targetLvl)
 
         const recaps =
           initialRecapList && initialRecapList.length > 0

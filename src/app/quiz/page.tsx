@@ -1,10 +1,14 @@
 export const instant = false
 
 import { getCurrentUser } from '@/lib/actions'
+import { redirect } from 'next/navigation'
 import { QuizClient } from './QuizClient'
 
 export default async function QuizPage() {
   const user = await getCurrentUser()
+  if (!user) {
+    redirect('/login')
+  }
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 p-6">

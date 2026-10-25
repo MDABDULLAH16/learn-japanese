@@ -148,7 +148,10 @@ export function KanjiDetailClient({
 
         {/* Level, Lesson & Index Badge */}
         <div className="flex items-center gap-3">
-          <Badge variant="outline" className="font-bold border-primary/30 text-primary px-3 py-1 text-xs">
+          <Badge
+            variant="outline"
+            className="font-bold border-primary/30 text-primary px-3 py-1 text-xs"
+          >
             {selectedKanji.level} • Lesson {selectedKanji.lesson}
           </Badge>
           <span className="text-xs sm:text-sm font-semibold text-muted-foreground">
@@ -259,7 +262,9 @@ export function KanjiDetailClient({
                         : 'text-muted-foreground/70 hover:text-rose-600 hover:bg-rose-500/15'
                     }`}
                   >
-                    <Flame className={`w-3.5 h-3.5 ${currentLevel === 'hard' ? 'fill-white' : ''}`} />
+                    <Flame
+                      className={`w-3.5 h-3.5 ${currentLevel === 'hard' ? 'fill-white' : ''}`}
+                    />
                     <span>Hard</span>
                   </button>
                 </div>
@@ -347,10 +352,7 @@ export function KanjiDetailClient({
                               size="icon"
                               className="h-7 w-7 text-blue-500 hover:text-blue-600 rounded-full hover:bg-blue-500/10 shrink-0"
                               onClick={(e) =>
-                                speakJapanese(
-                                  extractKana(selectedKanji.kun_yomi_new!.reading),
-                                  e
-                                )
+                                speakJapanese(extractKana(selectedKanji.kun_yomi_new!.reading), e)
                               }
                               title="Kunyomi উচ্চারণ শুনুন"
                             >
@@ -444,10 +446,7 @@ export function KanjiDetailClient({
                               size="icon"
                               className="h-7 w-7 text-rose-500 hover:text-rose-600 rounded-full hover:bg-rose-500/10 shrink-0"
                               onClick={(e) =>
-                                speakJapanese(
-                                  extractKana(selectedKanji.on_yomi_new!.reading),
-                                  e
-                                )
+                                speakJapanese(extractKana(selectedKanji.on_yomi_new!.reading), e)
                               }
                               title="Onyomi উচ্চারণ শুনুন"
                             >
@@ -528,9 +527,7 @@ export function KanjiDetailClient({
                 <div className="flex items-center justify-between pb-1 border-b border-border/50">
                   <div className="flex items-center gap-2">
                     <BookOpen className="w-5 h-5 text-primary" />
-                    <h2 className="text-base sm:text-lg font-bold">
-                      Vocabulary Words (関連語彙)
-                    </h2>
+                    <h2 className="text-base sm:text-lg font-bold">Vocabulary Words (関連語彙)</h2>
                   </div>
                   <Badge variant="secondary" className="font-semibold text-xs">
                     {selectedKanji.examples.length} words
@@ -615,9 +612,7 @@ export function KanjiDetailClient({
                       </div>
                       <div className="h-px w-full bg-border/60 my-3"></div>
                       <div className="space-y-0.5">
-                        <p className="text-sm font-medium text-muted-foreground">
-                          {sent.english}
-                        </p>
+                        <p className="text-sm font-medium text-muted-foreground">{sent.english}</p>
                         <p className="text-base font-bold text-blue-600 dark:text-blue-400">
                           {sent.bangla}
                         </p>
@@ -644,7 +639,9 @@ export function KanjiDetailClient({
         </Button>
 
         <div className="hidden sm:flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-          <span>Kanji {currentIndex >= 0 ? currentIndex + 1 : 1} of {filteredKanji.length}</span>
+          <span>
+            Kanji {currentIndex >= 0 ? currentIndex + 1 : 1} of {filteredKanji.length}
+          </span>
         </div>
 
         <Button

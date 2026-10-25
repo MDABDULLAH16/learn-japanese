@@ -5,6 +5,8 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
+import { Suspense } from 'react'
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -51,7 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
+          <Suspense fallback={<div className="h-16 border-b bg-background/95 w-full" />}>
+            <Header />
+          </Suspense>
           <ServiceWorkerRegister />
           <main className="flex-1 flex flex-col w-full h-full pb-8">{children}</main>
           <Footer />

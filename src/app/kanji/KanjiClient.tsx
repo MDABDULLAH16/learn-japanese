@@ -49,8 +49,10 @@ export function KanjiClient({
   const mainLessonsRef = useRef<HTMLDivElement>(null)
   const lastScrollY = useRef(0)
 
-  const { recapList, normalList, mediumList, hardList, getItemLevel, setLevel } =
-    useRecapKanji(initialRecapList, userId)
+  const { recapList, normalList, mediumList, hardList, getItemLevel, setLevel } = useRecapKanji(
+    initialRecapList,
+    userId
+  )
 
   // Scroll listener: shows sticky lesson bar when scrolling UP
   useEffect(() => {
@@ -171,7 +173,16 @@ export function KanjiClient({
     }
 
     return KANJI_DATA.filter((k) => k.level === selectedLevel && k.lesson === selectedLesson)
-  }, [selectedLesson, recapCategory, recapList, normalList, mediumList, hardList, kanjiMap, selectedLevel])
+  }, [
+    selectedLesson,
+    recapCategory,
+    recapList,
+    normalList,
+    mediumList,
+    hardList,
+    kanjiMap,
+    selectedLevel,
+  ])
 
   const totalLevelKanji = useMemo(
     () => KANJI_DATA.filter((k) => k.level === selectedLevel).length,
@@ -335,7 +346,10 @@ export function KanjiClient({
             </Link>
             <div className="flex items-center gap-3 flex-wrap">
               <h1 className="text-3xl font-extrabold tracking-tight">Dedicated Kanji</h1>
-              <Badge variant="secondary" className="px-2.5 py-0.5 rounded-full text-xs font-semibold">
+              <Badge
+                variant="secondary"
+                className="px-2.5 py-0.5 rounded-full text-xs font-semibold"
+              >
                 Total: {totalLevelKanji} Kanji
               </Badge>
               <button
@@ -348,7 +362,8 @@ export function KanjiClient({
               </button>
             </div>
             <p className="text-muted-foreground mt-1">
-              Learn individual Kanji characters, stroke mnemonics, and classify them into difficulty levels for revision.
+              Learn individual Kanji characters, stroke mnemonics, and classify them into difficulty
+              levels for revision.
             </p>
           </div>
 
@@ -433,7 +448,9 @@ export function KanjiClient({
                   : 'border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10'
               }`}
             >
-              <Bookmark className={`w-3.5 h-3.5 ${selectedLesson === 'recap' ? 'fill-current' : ''}`} />
+              <Bookmark
+                className={`w-3.5 h-3.5 ${selectedLesson === 'recap' ? 'fill-current' : ''}`}
+              />
               Recap ({recapList.length})
             </Button>
 
@@ -488,7 +505,8 @@ export function KanjiClient({
                     </h2>
                   </div>
                   <p className="text-xs sm:text-sm text-muted-foreground">
-                    Your personal practice list for difficult or important Kanji. Filter by difficulty level below.
+                    Your personal practice list for difficult or important Kanji. Filter by
+                    difficulty level below.
                   </p>
                 </div>
               </div>
@@ -513,7 +531,9 @@ export function KanjiClient({
                       <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
                         Normal
                       </div>
-                      <div className="text-[11px] text-muted-foreground">একবার রিভিশন করলেই হবে</div>
+                      <div className="text-[11px] text-muted-foreground">
+                        একবার রিভিশন করলেই হবে
+                      </div>
                     </div>
                   </div>
                   <Badge
@@ -542,7 +562,9 @@ export function KanjiClient({
                       <div className="text-xs font-bold text-amber-700 dark:text-amber-300">
                         Medium
                       </div>
-                      <div className="text-[11px] text-muted-foreground">মাঝারি প্র্যাকটিস প্রয়োজন</div>
+                      <div className="text-[11px] text-muted-foreground">
+                        মাঝারি প্র্যাকটিস প্রয়োজন
+                      </div>
                     </div>
                   </div>
                   <Badge
@@ -568,9 +590,7 @@ export function KanjiClient({
                       <Flame className="w-4 h-4 fill-current" />
                     </span>
                     <div>
-                      <div className="text-xs font-bold text-rose-700 dark:text-rose-300">
-                        Hard
-                      </div>
+                      <div className="text-xs font-bold text-rose-700 dark:text-rose-300">Hard</div>
                       <div className="text-[11px] text-muted-foreground">কঠিন / বিশেষ মনোযোগ</div>
                     </div>
                   </div>
@@ -643,7 +663,8 @@ export function KanjiClient({
               </div>
 
               <div className="text-xs text-muted-foreground font-medium">
-                Showing <span className="font-bold text-foreground">{displayedKanjiList.length}</span>{' '}
+                Showing{' '}
+                <span className="font-bold text-foreground">{displayedKanjiList.length}</span>{' '}
                 {recapCategory === 'all' ? 'saved' : recapCategory} Kanji
               </div>
             </div>
@@ -657,7 +678,8 @@ export function KanjiClient({
                 <div className="space-y-1">
                   <h3 className="font-bold text-lg">No Kanji in this category yet</h3>
                   <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                    Browse any lesson and click on the Normal, Medium, or Hard pill buttons on a Kanji card to add it to your Whitelist!
+                    Browse any lesson and click on the Normal, Medium, or Hard pill buttons on a
+                    Kanji card to add it to your Whitelist!
                   </p>
                 </div>
                 <Button
@@ -850,7 +872,9 @@ export function KanjiClient({
                           }`}
                           onClick={(e) => toggleReading(kanji.id, e)}
                           title={
-                            isReadingShown ? 'Hide reading (রিডিং লুকান)' : 'Show reading (রিডিং দেখান)'
+                            isReadingShown
+                              ? 'Hide reading (রিডিং লুকান)'
+                              : 'Show reading (রিডিং দেখান)'
                           }
                         >
                           {isReadingShown ? (
@@ -870,7 +894,9 @@ export function KanjiClient({
                           }`}
                           onClick={(e) => toggleMeaning(kanji.id, e)}
                           title={
-                            isMeaningShown ? 'Hide meaning (অর্থ লুকান)' : 'Show meaning (অর্থ দেখান)'
+                            isMeaningShown
+                              ? 'Hide meaning (অর্থ লুকান)'
+                              : 'Show meaning (অর্থ দেখান)'
                           }
                         >
                           {isMeaningShown ? (

@@ -1,9 +1,14 @@
 export const instant = false
 import { getCurrentUser } from '@/lib/actions'
+import { redirect } from 'next/navigation'
 import ReadingClient from './ReadingClient'
 
 export default async function ReadingPage() {
   const user = await getCurrentUser()
+  if (!user) {
+    redirect('/login')
+  }
+
   return (
     <main className="max-w-4xl mx-auto p-6 md:p-12 space-y-8">
       <header>

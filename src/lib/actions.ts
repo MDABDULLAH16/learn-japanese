@@ -7,33 +7,45 @@ import { revalidatePath } from 'next/cache'
 import { auth } from '@/auth'
 
 export const getCurrentUser = async () => {
-  const session = await auth()
-  if (!session?.user?.email) {
-    throw new Error('Not authenticated')
+  try {
+    const session = await auth()
+    if (!session?.user?.email) {
+      return null
+    }
+
+    let user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    })
+
+    if (!user) {
+      return null
+    }
+
+    const now = new Date()
+    const lastLogin = new Date(user.lastLoginAt)
+    const diffDays = Math.floor((now.getTime() - lastLogin.getTime()) / (1000 * 3600 * 24))
+
+    if (diffDays === 1) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { streak: user.streak + 1, lastLoginAt: now },
+      })
+    } else if (diffDays > 1) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { streak: 1, lastLoginAt: now },
+      })
+    }
+    return user
+  } catch {
+    return null
   }
+}
 
-  let user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  })
-
+export const requireCurrentUser = async () => {
+  const user = await getCurrentUser()
   if (!user) {
-    throw new Error('User not found')
-  }
-
-  const now = new Date()
-  const lastLogin = new Date(user.lastLoginAt)
-  const diffDays = Math.floor((now.getTime() - lastLogin.getTime()) / (1000 * 3600 * 24))
-
-  if (diffDays === 1) {
-    user = await prisma.user.update({
-      where: { id: user.id },
-      data: { streak: user.streak + 1, lastLoginAt: now },
-    })
-  } else if (diffDays > 1) {
-    user = await prisma.user.update({
-      where: { id: user.id },
-      data: { streak: 1, lastLoginAt: now },
-    })
+    throw new Error('Not authenticated')
   }
   return user
 }
@@ -107,7 +119,7 @@ export const getUserRecapItems = async (userId?: string): Promise<VocabularyItem
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
     const items = await prisma.recapItem.findMany({
@@ -142,7 +154,7 @@ export const setRecapItemLevelAction = async (
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
     const nihongo = vocab.nihongo.trim()
@@ -211,7 +223,7 @@ export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string)
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
     const nihongo = vocab.nihongo.trim()
@@ -257,7 +269,7 @@ export const removeRecapItemAction = async (vocab: VocabularyItem, userId?: stri
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
     await prisma.recapItem.deleteMany({
@@ -280,7 +292,7 @@ export const clearRecapItemsAction = async (userId?: string, level?: WhitelistLe
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
     await prisma.recapItem.deleteMany({
@@ -305,7 +317,7 @@ export const syncRecapItemsAction = async (
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
 
@@ -414,7 +426,7 @@ export const getUserKanjiRecapItems = async (userId?: string): Promise<KanjiReca
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
     const items = await prisma.recapItem.findMany({
@@ -454,7 +466,7 @@ export const setKanjiRecapLevelAction = async (
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
     const nihongoKey = `[KANJI]${kanji.id}`
@@ -514,7 +526,7 @@ export const clearKanjiRecapsAction = async (userId?: string): Promise<{ success
   try {
     let targetUserId = userId
     if (!targetUserId) {
-      const user = await getCurrentUser()
+      const user = await requireCurrentUser()
       targetUserId = user.id
     }
     await prisma.recapItem.deleteMany({
@@ -530,4 +542,3 @@ export const clearKanjiRecapsAction = async (userId?: string): Promise<{ success
     return { success: false }
   }
 }
-

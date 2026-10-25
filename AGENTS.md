@@ -9,5 +9,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 <!-- END:nextjs-agent-rules -->
 
 ## User Preferences & Rules
+
 - Do NOT test in browser on localhost (no browser subagents or automated browser testing on localhost).
 - When the requested task is completed, inform the user directly so they can review it themselves.

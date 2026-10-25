@@ -8,17 +8,21 @@ datasource db {
 }
 
 model User {
-  id          String         @id @default(uuid())
-  name        String?
-  email       String         @unique
-  password    String
-  streak      Int            @default(0)
-  totalScore  Int            @default(0)
-  lastLoginAt DateTime       @default(now())
-  progress    UserProgress[]
-  recapItems  RecapItem[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id               String         @id @default(uuid())
+  name             String?
+  email            String         @unique
+  password         String?
+  image            String?
+  role             String         @default("USER") // 'SUPER_ADMIN', 'ADMIN', 'USER'
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  streak           Int            @default(0)
+  totalScore       Int            @default(0)
+  lastLoginAt      DateTime       @default(now())
+  progress         UserProgress[]
+  recapItems       RecapItem[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 }
 
 model UserProgress {
@@ -49,4 +53,14 @@ model RecapItem {
 
   @@unique([user_id, nihongo, bangla])
   @@index([user_id])
+}
+
+model SiteVisit {
+  id        String   @id @default(uuid())
+  date      String   // Format: YYYY-MM-DD
+  path      String   @default("/")
+  userId    String?
+  createdAt DateTime @default(now())
+
+  @@index([date])
 }

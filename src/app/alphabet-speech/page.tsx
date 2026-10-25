@@ -13,7 +13,7 @@ export default async function AlphabetSpeechPage() {
         </p>
       </header>
 
-      <AlphabetSpeechClient userId={user.id} />
+      <AlphabetSpeechClient userId={user?.id || ''} />
     </main>
   )
 }
