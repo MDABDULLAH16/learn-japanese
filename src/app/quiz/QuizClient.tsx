@@ -556,7 +556,7 @@ function QuizGame({ userId }: { userId: string }) {
                 <Button
                   key={index}
                   variant={variant}
-                  className={`h-auto py-5 sm:py-6 text-xl sm:text-2xl font-medium relative lowercase transition-all active:scale-[0.98] ${hasAnswered && isSelected && !isCorrect ? 'animate-in slide-in-from-left-1 slide-in-from-right-1 duration-100' : ''} ${variant === 'outline' ? 'hover:bg-primary/5 hover:border-primary/50' : ''}`}
+                  className={`h-auto min-h-[3.5rem] w-full min-w-0 py-4 sm:py-5 text-xl sm:text-2xl font-medium relative lowercase transition-all active:scale-[0.98] whitespace-normal break-words overflow-hidden ${hasAnswered && isSelected && !isCorrect ? 'animate-in slide-in-from-left-1 slide-in-from-right-1 duration-100' : ''} ${variant === 'outline' ? 'hover:bg-primary/5 hover:border-primary/50' : ''}`}
                   onClick={() => handleAnswer(index)}
                   disabled={hasAnswered}
                 >

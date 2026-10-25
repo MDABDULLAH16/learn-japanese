@@ -170,7 +170,7 @@ export function KanaMiniQuiz() {
                   key={opt}
                   onClick={() => handleSelect(opt)}
                   disabled={selectedAnswer !== null}
-                  className={`p-3.5 rounded-2xl border text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm ${btnStyle}`}
+                  className={`p-3.5 rounded-2xl border text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm min-w-0 break-words whitespace-normal ${btnStyle}`}
                 >
                   {selectedAnswer !== null && isCorrect && (
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
@@ -178,7 +178,7 @@ export function KanaMiniQuiz() {
                   {selectedAnswer !== null && isSelected && !isCorrect && (
                     <XCircle className="w-4 h-4 text-rose-500 shrink-0" />
                   )}
-                  <span>{opt}</span>
+                  <span className="min-w-0 break-words text-center leading-snug">{opt}</span>
                 </button>
               )
             })}

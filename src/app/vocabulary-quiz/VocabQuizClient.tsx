@@ -800,16 +800,18 @@ export function VocabQuizClient({
                 <Button
                   key={idx}
                   variant={btnVariant}
-                  className={`h-auto min-h-[4rem] text-left p-4 justify-between border-2 transition-all ${borderClass}`}
+                  className={`h-auto min-h-[4.25rem] w-full min-w-0 text-left p-3.5 sm:p-4 justify-between items-center gap-3 border-2 whitespace-normal break-words transition-all overflow-hidden ${borderClass}`}
                   onClick={() => handleAnswer(idx)}
                   disabled={hasAnswered}
                 >
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-lg font-bold">
+                  <div className="flex flex-col gap-0.5 min-w-0 flex-1 text-left">
+                    <span className="text-base sm:text-lg font-bold break-words whitespace-normal leading-snug">
                       {quizMode === 'ja-bn' ? option.bangla : option.nihongo}
                     </span>
                     {quizMode === 'bn-ja' && option.kanji && (
-                      <span className="text-xs text-muted-foreground">{option.kanji}</span>
+                      <span className="text-xs text-muted-foreground break-words whitespace-normal">
+                        {option.kanji}
+                      </span>
                     )}
                   </div>
                   {hasAnswered && isCorrect && <CheckCircle2 className="w-6 h-6 shrink-0" />}
