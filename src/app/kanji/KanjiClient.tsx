@@ -89,17 +89,38 @@ export function KanjiClient({ userId }: { userId: string }) {
     }
   }, [selectedKanji, isFullscreen, handlePrevKanji, handleNextKanji])
 
-  const speakText = (text: string, e?: React.MouseEvent) => {
+  const speakJapanese = (text: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation()
     if (!text) return
-    const cleanText = text.replace(/[-~]/g, '').trim()
+    // Extract only kana/kanji — strip romaji in parentheses and special chars
+    const cleanText = text
+      .replace(/\([^)]*\)/g, '')  // remove (romaji) parts
+      .replace(/[-~、。,]/g, '')   // remove separators
+      .trim()
+    if (!cleanText) return
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel()
       const utterance = new SpeechSynthesisUtterance(cleanText)
       utterance.lang = 'ja-JP'
-      utterance.rate = 0.9
+      utterance.rate = 0.85
+      utterance.pitch = 1.0
+      // Pick the best Japanese voice available
+      const voices = window.speechSynthesis.getVoices()
+      const jpVoice = 
+        voices.find(v => v.lang === 'ja-JP' && v.name.includes('Google')) ||
+        voices.find(v => v.lang === 'ja-JP' && !v.name.toLowerCase().includes('espeak')) ||
+        voices.find(v => v.lang === 'ja-JP') ||
+        voices.find(v => v.lang.startsWith('ja'))
+      if (jpVoice) utterance.voice = jpVoice
       window.speechSynthesis.speak(utterance)
     }
+  }
+
+  // Helper: extract first kana from reading string like "ふた (futa)" or "イチ (ichi), イツ (itsu)"
+  const extractKana = (reading: string): string => {
+    // Take only up to first comma (for multiple readings), then strip romaji in ()
+    const firstReading = reading.split(',')[0].trim()
+    return firstReading.replace(/\([^)]*\)/g, '').trim() || reading
   }
 
   return (
@@ -184,7 +205,7 @@ export function KanjiClient({ userId }: { userId: string }) {
               <div className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Badge variant="secondary" className="text-[10px] px-1.5 py-0.5">Details</Badge>
               </div>
-              <h3 className="text-5xl sm:text-6xl font-black text-primary mb-2.5 drop-shadow-sm group-hover:scale-110 transition-transform duration-200">
+              <h3 className="text-5xl sm:text-6xl font-black text-primary mb-2 drop-shadow-sm group-hover:scale-110 transition-transform duration-200">
                 {kanji.kanji}
               </h3>
               <p className="text-sm font-semibold text-foreground text-center truncate w-full px-1">
@@ -193,6 +214,27 @@ export function KanjiClient({ userId }: { userId: string }) {
               <p className="text-xs font-bold text-blue-600 dark:text-blue-400 text-center truncate w-full px-1 mt-0.5">
                 {kanji.meaning_bn}
               </p>
+              {/* Kunyomi & Onyomi quick-listen buttons */}
+              <div className="flex items-center gap-2 mt-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                {kanji.kunyomi.length > 0 && (
+                  <button
+                    className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 hover:bg-blue-500/30 active:scale-95 transition-all min-h-[32px]"
+                    onClick={(e) => { e.stopPropagation(); speakJapanese(kanji.kunyomi[0], e) }}
+                    title={`Kunyomi: ${kanji.kunyomi[0]}`}
+                  >
+                    <Volume2 className="w-3.5 h-3.5" /> 訓
+                  </button>
+                )}
+                {kanji.onyomi.length > 0 && (
+                  <button
+                    className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 hover:bg-rose-500/30 active:scale-95 transition-all min-h-[32px]"
+                    onClick={(e) => { e.stopPropagation(); speakJapanese(kanji.onyomi[0], e) }}
+                    title={`Onyomi: ${kanji.onyomi[0]}`}
+                  >
+                    <Volume2 className="w-3.5 h-3.5" /> 音
+                  </button>
+                )}
+              </div>
             </Card>
           ))}
         </div>
@@ -288,7 +330,7 @@ export function KanjiClient({ userId }: { userId: string }) {
                       variant="outline" 
                       size="sm"
                       className="rounded-full gap-2 text-primary font-bold border-primary/20 bg-primary/5 hover:bg-primary/10 shadow-xs mb-4" 
-                      onClick={(e) => speakText(selectedKanji.kanji, e)}
+                      onClick={(e) => speakJapanese(selectedKanji.kanji, e)}
                       title="Pronounce Kanji"
                     >
                       <Volume2 className="w-4 h-4" />
@@ -367,9 +409,20 @@ export function KanjiClient({ userId }: { userId: string }) {
                         {selectedKanji.kun_yomi_new ? (
                           <div className="space-y-3">
                             {selectedKanji.kun_yomi_new.reading && (
-                              <p className="font-black text-xl text-foreground">
-                                {selectedKanji.kun_yomi_new.reading}
-                              </p>
+                              <div className="flex items-center gap-2">
+                                <p className="font-black text-xl text-foreground">
+                                  {selectedKanji.kun_yomi_new.reading}
+                                </p>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7 text-blue-500 hover:text-blue-600 rounded-full hover:bg-blue-500/10 shrink-0"
+                                  onClick={(e) => speakJapanese(extractKana(selectedKanji.kun_yomi_new!.reading), e)}
+                                  title="Kunyomi উচ্চারণ শুনুন"
+                                >
+                                  <Volume2 className="w-3.5 h-3.5" />
+                                </Button>
+                              </div>
                             )}
                             {selectedKanji.kun_yomi_new.examples && selectedKanji.kun_yomi_new.examples.length > 0 && (
                               <div className="space-y-2 mt-3">
@@ -386,8 +439,8 @@ export function KanjiClient({ userId }: { userId: string }) {
                                       variant="ghost" 
                                       size="icon" 
                                       className="h-8 w-8 text-muted-foreground hover:text-primary rounded-full hover:bg-blue-500/10 shrink-0"
-                                      onClick={(e) => speakText(ex.word, e)}
-                                      title="Pronounce"
+                                      onClick={(e) => speakJapanese(extractKana(ex.reading), e)}
+                                      title="উচ্চারণ শুনুন"
                                     >
                                       <Volume2 className="w-4 h-4" />
                                     </Button>
@@ -406,7 +459,7 @@ export function KanjiClient({ userId }: { userId: string }) {
                                   variant="ghost"
                                   size="icon"
                                   className="h-6 w-6 text-muted-foreground hover:text-primary rounded-full -mr-1"
-                                  onClick={(e) => speakText(k, e)}
+                                  onClick={(e) => speakJapanese(k, e)}
                                 >
                                   <Volume2 className="w-3 h-3" />
                                 </Button>
@@ -429,9 +482,20 @@ export function KanjiClient({ userId }: { userId: string }) {
                         {selectedKanji.on_yomi_new ? (
                           <div className="space-y-3">
                             {selectedKanji.on_yomi_new.reading && (
-                              <p className="font-black text-xl text-foreground">
-                                {selectedKanji.on_yomi_new.reading}
-                              </p>
+                              <div className="flex items-center gap-2">
+                                <p className="font-black text-xl text-foreground">
+                                  {selectedKanji.on_yomi_new.reading}
+                                </p>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7 text-rose-500 hover:text-rose-600 rounded-full hover:bg-rose-500/10 shrink-0"
+                                  onClick={(e) => speakJapanese(extractKana(selectedKanji.on_yomi_new!.reading), e)}
+                                  title="Onyomi উচ্চারণ শুনুন"
+                                >
+                                  <Volume2 className="w-3.5 h-3.5" />
+                                </Button>
+                              </div>
                             )}
                             {selectedKanji.on_yomi_new.examples && selectedKanji.on_yomi_new.examples.length > 0 && (
                               <div className="space-y-2 mt-3">
@@ -448,8 +512,8 @@ export function KanjiClient({ userId }: { userId: string }) {
                                       variant="ghost" 
                                       size="icon" 
                                       className="h-8 w-8 text-muted-foreground hover:text-primary rounded-full hover:bg-rose-500/10 shrink-0"
-                                      onClick={(e) => speakText(ex.word, e)}
-                                      title="Pronounce"
+                                      onClick={(e) => speakJapanese(extractKana(ex.reading), e)}
+                                      title="উচ্চারণ শুনুন"
                                     >
                                       <Volume2 className="w-4 h-4" />
                                     </Button>
@@ -468,7 +532,7 @@ export function KanjiClient({ userId }: { userId: string }) {
                                   variant="ghost"
                                   size="icon"
                                   className="h-6 w-6 text-muted-foreground hover:text-primary rounded-full -mr-1"
-                                  onClick={(e) => speakText(o, e)}
+                                  onClick={(e) => speakJapanese(o, e)}
                                 >
                                   <Volume2 className="w-3 h-3" />
                                 </Button>
@@ -508,7 +572,7 @@ export function KanjiClient({ userId }: { userId: string }) {
                               variant="ghost" 
                               size="icon" 
                               className="h-8 w-8 text-muted-foreground hover:text-primary rounded-full bg-background/70 hover:bg-background shadow-xs shrink-0" 
-                              onClick={(e) => speakText(ex.word, e)}
+                              onClick={(e) => speakJapanese(ex.reading, e)}
                               title="Listen"
                             >
                               <Volume2 className="w-4 h-4" />
@@ -553,7 +617,7 @@ export function KanjiClient({ userId }: { userId: string }) {
                               variant="outline" 
                               size="icon" 
                               className="h-9 w-9 text-muted-foreground hover:text-primary rounded-full bg-background shrink-0 shadow-xs hover:scale-105 transition-transform" 
-                              onClick={(e) => speakText(sent.japanese, e)}
+                              onClick={(e) => speakJapanese(sent.japanese, e)}
                               title="Pronounce sentence"
                             >
                               <Volume2 className="w-4 h-4" />
