@@ -1,0 +1,1083 @@
+[
+  {
+    "lesson_number": 21,
+    "vocabularies": [
+      {
+        "nihongo": "おもいます",
+        "romaji": "omoimasu",
+        "uchharon": "ওমোইমাছ",
+        "kanji": "思います",
+        "english": "Think",
+        "bangla": "মনে করা, মনে হওয়া"
+      },
+      {
+        "nihongo": "いいます",
+        "romaji": "iimasu",
+        "uchharon": "ইইমাছ",
+        "kanji": "言います",
+        "english": "Say",
+        "bangla": "বলা"
+      },
+      {
+        "nihongo": "たります",
+        "romaji": "tarimasu",
+        "uchharon": "তারিমাছ",
+        "kanji": "足ります",
+        "english": "Be enough, be sufficient",
+        "bangla": "পর্যাপ্ত থাকা"
+      },
+      {
+        "nihongo": "かちます",
+        "romaji": "kachimasu",
+        "uchharon": "কাচিমাছ",
+        "kanji": "勝ちます",
+        "english": "Win",
+        "bangla": "জয়ী হওয়া"
+      },
+      {
+        "nihongo": "まけます",
+        "romaji": "makemasu",
+        "uchharon": "মাকেমাছ",
+        "kanji": "負けます",
+        "english": "Lose, be beaten",
+        "bangla": "হেরে যাওয়া"
+      },
+      {
+        "nihongo": "あります [おまつりが〜]",
+        "romaji": "arimasu [omatsuri ga~]",
+        "uchharon": "আরিমাছ [ওমাৎসুরি গা]",
+        "kanji": "あります [お祭りが〜]",
+        "english": "[a festival] be held, take place",
+        "bangla": "অনুষ্ঠিত হওয়া [উৎসব]"
+      },
+      {
+        "nihongo": "やくにたちます",
+        "romaji": "yaku ni tachimasu",
+        "uchharon": "ইয়াকুনি তাচিমাছ",
+        "kanji": "役に立ちます",
+        "english": "Be useful",
+        "bangla": "প্রয়োজনীয়, দরকারি"
+      },
+      {
+        "nihongo": "むだ [な]",
+        "romaji": "muda [na]",
+        "uchharon": "মুদা [না]",
+        "kanji": "",
+        "english": "Wasteful",
+        "bangla": "অপ্রয়োজনীয়, বৃথা"
+      },
+      {
+        "nihongo": "ふべん [な]",
+        "romaji": "fuben [na]",
+        "uchharon": "ফুবেন [না]",
+        "kanji": "不便 [な]",
+        "english": "Inconvenient",
+        "bangla": "অসুবিধাজনক"
+      },
+      {
+        "nihongo": "おなじ",
+        "romaji": "onaji",
+        "uchharon": "ওনাজি",
+        "kanji": "同じ",
+        "english": "The same",
+        "bangla": "একই"
+      },
+      {
+        "nihongo": "すごい",
+        "romaji": "sugoi",
+        "uchharon": "সুগোই",
+        "kanji": "",
+        "english": "Awful, great",
+        "bangla": "দুর্দান্ত, অসাধারণ"
+      },
+      {
+        "nihongo": "しゅしょう",
+        "romaji": "shushou",
+        "uchharon": "শুশো",
+        "kanji": "首相",
+        "english": "Prime minister",
+        "bangla": "প্রধানমন্ত্রী"
+      },
+      {
+        "nihongo": "だいとうりょう",
+        "romaji": "daitouryou",
+        "uchharon": "দাইতোরিওঁ",
+        "kanji": "大統領",
+        "english": "President",
+        "bangla": "রাষ্ট্রপতি"
+      },
+      {
+        "nihongo": "せいじ",
+        "romaji": "seiji",
+        "uchharon": "সেইজি",
+        "kanji": "政治",
+        "english": "Politics",
+        "bangla": "রাজনীতি"
+      },
+      {
+        "nihongo": "ニュース",
+        "romaji": "nyuusu",
+        "uchharon": "নিউ-ছু",
+        "kanji": "",
+        "english": "News",
+        "bangla": "সংবাদ"
+      },
+      {
+        "nihongo": "たぶん",
+        "romaji": "tabun",
+        "uchharon": "তাবুন",
+        "kanji": "多分",
+        "english": "Probably, perhaps, maybe",
+        "bangla": "সম্ভাবনা, হতে পারে"
+      },
+      {
+        "nihongo": "きっと",
+        "romaji": "kitto",
+        "uchharon": "কিত্তো",
+        "kanji": "",
+        "english": "Surely",
+        "bangla": "অবশ্যই"
+      },
+      {
+        "nihongo": "ほんとうに",
+        "romaji": "hontouni",
+        "uchharon": "হোন্তোনি",
+        "kanji": "本当に",
+        "english": "Really",
+        "bangla": "সত্যিই"
+      },
+      {
+        "nihongo": "そんなに",
+        "romaji": "sonnani",
+        "uchharon": "সোননানি",
+        "kanji": "",
+        "english": "Not so much (negatives)",
+        "bangla": "তেমন বেশি না"
+      },
+      {
+        "nihongo": "〜について",
+        "romaji": "~ni tsuite",
+        "uchharon": "〜নিৎসুইতে",
+        "kanji": "",
+        "english": "About~, concerning~",
+        "bangla": "~সম্পর্কে, সম্পর্কিত~"
+      },
+      {
+        "nihongo": "しかたが ありません",
+        "romaji": "shikata ga arimasen",
+        "uchharon": "শিকাতাগা আরিমাসেন",
+        "kanji": "",
+        "english": "There is no other choice./ It can't be helped.",
+        "bangla": "আর কোন অপশন নেই"
+      },
+      {
+        "nihongo": "しばらくですね",
+        "romaji": "shibaraku desu ne",
+        "uchharon": "শিবারাকুদেসনে",
+        "kanji": "",
+        "english": "It's been a long time (since I last saw you)./ Long time no see.",
+        "bangla": "অনেক দিন পর দেখা, দীর্ঘসময় দেখা না হওয়া"
+      },
+      {
+        "nihongo": "〜でも のみませんか",
+        "romaji": "~demo nomimasen ka",
+        "uchharon": "〜দেমো নোমিমাসেনকা?",
+        "kanji": "〜でも飲みませんか",
+        "english": "How about drinking~ or something?",
+        "bangla": "পানীয় কিছু পান করবেন কি না অন্য কিছু ~?"
+      },
+      {
+        "nihongo": "みないと...。",
+        "romaji": "minaito...",
+        "uchharon": "মিনাইতো... ...",
+        "kanji": "見ないと",
+        "english": "I've got to watch it.",
+        "bangla": "আমি দেখতে পেয়েছি (দেখতে হবে)"
+      },
+      {
+        "nihongo": "もちろん",
+        "romaji": "mochiron",
+        "uchharon": "মোচিরোন",
+        "kanji": "",
+        "english": "Of course",
+        "bangla": "অবশ্যই"
+      },
+      {
+        "nihongo": "カンガルー",
+        "romaji": "kangaruu",
+        "uchharon": "কানগারু-",
+        "kanji": "",
+        "english": "Kangaroo",
+        "bangla": "ক্যাঙ্গারু"
+      },
+      {
+        "nihongo": "キャプテン・クック",
+        "romaji": "kyaputen kukku",
+        "uchharon": "ক্যাপতেন কুকু",
+        "kanji": "",
+        "english": "Captain James Cook (1728-79)",
+        "bangla": "ক্যাপ্টেন কুক"
+      },
+      {
+        "nihongo": "スピーチ",
+        "romaji": "supiichi",
+        "uchharon": "ছুপি-চি",
+        "kanji": "",
+        "english": "Speech",
+        "bangla": "বক্তৃতা"
+      },
+      {
+        "nihongo": "しあい",
+        "romaji": "shiai",
+        "uchharon": "শিআই",
+        "kanji": "試合",
+        "english": "Game, match",
+        "bangla": "খেলা, ম্যাচ"
+      },
+      {
+        "nihongo": "アルバイト",
+        "romaji": "arubaito",
+        "uchharon": "আরুবাইতো",
+        "kanji": "",
+        "english": "Part time job",
+        "bangla": "খণ্ডকালীন চাকরি"
+      },
+      {
+        "nihongo": "いけん",
+        "romaji": "iken",
+        "uchharon": "ইকেন",
+        "kanji": "意見",
+        "english": "Opinion",
+        "bangla": "মতামত"
+      },
+      {
+        "nihongo": "[お]はなし",
+        "romaji": "[o]hanashi",
+        "uchharon": "[ও] হানাশি",
+        "kanji": "[お]話",
+        "english": "Talk, story, tell a story",
+        "bangla": "বলা, গল্প বলা"
+      },
+      {
+        "nihongo": "ユーモア",
+        "romaji": "yuumoa",
+        "uchharon": "ইউ-মোআ",
+        "kanji": "",
+        "english": "Humor",
+        "bangla": "মেজাজ, কৌতুকবোধ"
+      },
+      {
+        "nihongo": "むだ",
+        "romaji": "muda",
+        "uchharon": "মুদা",
+        "kanji": "",
+        "english": "Waste",
+        "bangla": "অপচয়"
+      },
+      {
+        "nihongo": "デザイン",
+        "romaji": "dezain",
+        "uchharon": "দেজাইন",
+        "kanji": "",
+        "english": "Design",
+        "bangla": "নকশা"
+      },
+      {
+        "nihongo": "こうつう",
+        "romaji": "koutsuu",
+        "uchharon": "কৌৎসু",
+        "kanji": "交通",
+        "english": "Transportation, traffic",
+        "bangla": "যানবাহন, ট্রাফিক"
+      },
+      {
+        "nihongo": "ラッシュ",
+        "romaji": "rasshu",
+        "uchharon": "রাশ্শু",
+        "kanji": "",
+        "english": "Rush hour",
+        "bangla": "ব্যস্ত সময়"
+      },
+      {
+        "nihongo": "さいきん",
+        "romaji": "saikin",
+        "uchharon": "ছাইকিন",
+        "kanji": "最近",
+        "english": "Recently, these days",
+        "bangla": "সাম্প্রতিক, এইদিনগুলি"
+      }
+    ]
+  },
+  {
+    "lesson_number": 22,
+    "vocabularies": [
+      {
+        "nihongo": "きます [シャツを〜]",
+        "romaji": "kimasu [shatsu o~]",
+        "uchharon": "কিমাছ [শাত্‍সু ও]",
+        "kanji": "着ます",
+        "english": "Put on [shirt, etc.]",
+        "bangla": "পরা, পরিধান করা [শার্ট]"
+      },
+      {
+        "nihongo": "はきます [くつを〜]",
+        "romaji": "hakimasu [kutsu o~]",
+        "uchharon": "হাকিমাছ [কুৎসু ও]",
+        "kanji": "履きます",
+        "english": "Put on [shoes, trousers, etc.]",
+        "bangla": "পরিধান করা [জুতা, ট্রাউজার ইত্যাদি]"
+      },
+      {
+        "nihongo": "かぶります [ぼうしを〜]",
+        "romaji": "kaburimasu [boushi o~]",
+        "uchharon": "কাবুরিমাছ [বোশি ও]",
+        "kanji": "帽子を〜",
+        "english": "Put on [a hat, etc.]",
+        "bangla": "পরিধান করা [টুপি]"
+      },
+      {
+        "nihongo": "かけます [めがねを〜]",
+        "romaji": "kakemasu [megane o~]",
+        "uchharon": "কাকেমাছ [মেগানে ও]",
+        "kanji": "眼鏡を〜",
+        "english": "Put on [glasses]",
+        "bangla": "পরিধান করা [চশমা, গ্লাসেস]"
+      },
+      {
+        "nihongo": "うまれます",
+        "romaji": "umaremasu",
+        "uchharon": "উমারেমাছ",
+        "kanji": "生まれます",
+        "english": "Be born",
+        "bangla": "জন্মগ্রহণ করা"
+      },
+      {
+        "nihongo": "コート",
+        "romaji": "kooto",
+        "uchharon": "কো-তো",
+        "kanji": "",
+        "english": "Coat",
+        "bangla": "কোট"
+      },
+      {
+        "nihongo": "スーツ",
+        "romaji": "suutsu",
+        "uchharon": "সূ-ৎসু",
+        "kanji": "",
+        "english": "Suit",
+        "bangla": "স্যুট"
+      },
+      {
+        "nihongo": "セーター",
+        "romaji": "seetaa",
+        "uchharon": "সে-তা",
+        "kanji": "",
+        "english": "Sweater",
+        "bangla": "সুয়েটার"
+      },
+      {
+        "nihongo": "ぼうし",
+        "romaji": "boushi",
+        "uchharon": "বোঁশি",
+        "kanji": "帽子",
+        "english": "Hat, cap",
+        "bangla": "টুপি, ক্যাপ"
+      },
+      {
+        "nihongo": "めがね",
+        "romaji": "megane",
+        "uchharon": "মেগানে",
+        "kanji": "眼鏡",
+        "english": "Glasses",
+        "bangla": "চশমা, গ্লাসেস"
+      },
+      {
+        "nihongo": "よく",
+        "romaji": "yoku",
+        "uchharon": "ইয়োকু",
+        "kanji": "",
+        "english": "Often",
+        "bangla": "প্রায়ই"
+      },
+      {
+        "nihongo": "おめでとう ございます",
+        "romaji": "omedetou gozaimasu",
+        "uchharon": "ওমেদেতো গোজাইমাছ",
+        "kanji": "",
+        "english": "Congratulations (at wedding, birthday, New year's day, etc.)",
+        "bangla": "অভিনন্দন [বিয়ে, জন্মদিন, নববর্ষ]"
+      },
+      {
+        "nihongo": "こちら",
+        "romaji": "kochira",
+        "uchharon": "কোচিরা",
+        "kanji": "",
+        "english": "This",
+        "bangla": "এইটা"
+      },
+      {
+        "nihongo": "やちん",
+        "romaji": "yachin",
+        "uchharon": "ইয়াচিন",
+        "kanji": "家賃",
+        "english": "House rent",
+        "bangla": "বাড়ি ভাড়া"
+      },
+      {
+        "nihongo": "ダイニングキッチン",
+        "romaji": "dainingu kicchin",
+        "uchharon": "দাইনিংগুকিচিন",
+        "kanji": "",
+        "english": "Kitchen with a dining area",
+        "bangla": "ডাইনিং এরিয়াসহ রান্নাঘর"
+      },
+      {
+        "nihongo": "わしつ",
+        "romaji": "washitsu",
+        "uchharon": "ওয়াশিৎস",
+        "kanji": "和室",
+        "english": "Japanese style room",
+        "bangla": "জাপানিজ রুম"
+      },
+      {
+        "nihongo": "おしいれ",
+        "romaji": "oshiire",
+        "uchharon": "ওশিইরে",
+        "kanji": "押し入れ",
+        "english": "Japanese style closet",
+        "bangla": "জাপানিজ স্টাইল আলমারি"
+      },
+      {
+        "nihongo": "ふとん",
+        "romaji": "futon",
+        "uchharon": "ফুতোন",
+        "kanji": "布団",
+        "english": "Japanese style mattress",
+        "bangla": "জাপানিজ লেপ-তোশক"
+      },
+      {
+        "nihongo": "アパート",
+        "romaji": "apaato",
+        "uchharon": "আপা-তো",
+        "kanji": "",
+        "english": "Apartment",
+        "bangla": "এপার্টমেন্ট"
+      },
+      {
+        "nihongo": "パリ",
+        "romaji": "pari",
+        "uchharon": "পারি",
+        "kanji": "",
+        "english": "Paris",
+        "bangla": "প্যারিস"
+      },
+      {
+        "nihongo": "ばんりの ちょうじょう",
+        "romaji": "banri no choujou",
+        "uchharon": "বানরি নো চোঁজো",
+        "kanji": "万里の長城",
+        "english": "The Great Wall of China",
+        "bangla": "চায়না ওয়াল"
+      },
+      {
+        "nihongo": "よかかいはつ センター",
+        "romaji": "yokakaihatsu sentaa",
+        "uchharon": "ইয়োকাকাইহাৎসু সেনতা-",
+        "kanji": "余暇開発センター",
+        "english": "Leisure Activities Development Center",
+        "bangla": "অবসর কার্যক্রম উন্নয়ন কেন্দ্র"
+      }
+    ]
+  },
+  {
+    "lesson_number": 23,
+    "vocabularies": [
+      {
+        "nihongo": "ききます [せんせいに〜]",
+        "romaji": "kikimasu [sensei ni~]",
+        "uchharon": "কিকিমাছ [সেনসেই নি]",
+        "kanji": "聞きます [先生に〜]",
+        "english": "Ask [the teacher]",
+        "bangla": "জিজ্ঞাসা করা [শিক্ষককে~]"
+      },
+      {
+        "nihongo": "まわします",
+        "romaji": "mawashimasu",
+        "uchharon": "মাওয়াশিমাছ",
+        "kanji": "回します",
+        "english": "Turn",
+        "bangla": "মোড় নেয়া"
+      },
+      {
+        "nihongo": "ひきます",
+        "romaji": "hikimasu",
+        "uchharon": "হিকিমাছ",
+        "kanji": "引きます",
+        "english": "Pull",
+        "bangla": "টান দেয়া"
+      },
+      {
+        "nihongo": "かえます",
+        "romaji": "kaemasu",
+        "uchharon": "কায়েমাছ",
+        "kanji": "変えます",
+        "english": "Change",
+        "bangla": "পরিবর্তন করা"
+      },
+      {
+        "nihongo": "さわります [ドアに〜]",
+        "romaji": "sawarimasu [doa ni~]",
+        "uchharon": "সাওয়ারিমাছ [দোআ নি]",
+        "kanji": "触ります",
+        "english": "Touch [a door]",
+        "bangla": "স্পর্শ করা [দরজা~]"
+      },
+      {
+        "nihongo": "でます [おつりが〜]",
+        "romaji": "demasu [otsuri ga~]",
+        "uchharon": "দেমাছ [ওৎসুরি গা]",
+        "kanji": "出ます [お釣りが〜]",
+        "english": "[Change] come out",
+        "bangla": "বাইরে আসা"
+      },
+      {
+        "nihongo": "うごきます [とけいが〜]",
+        "romaji": "ugokimasu [tokei ga~]",
+        "uchharon": "উগোকিমাছ [তোকেই গা]",
+        "kanji": "動きます [時計が〜]",
+        "english": "[a watch] move, work",
+        "bangla": "[ঘড়ি] চলাচল করা, কাজ করা"
+      },
+      {
+        "nihongo": "あるきます",
+        "romaji": "arukimasu",
+        "uchharon": "আরুকিমাছ",
+        "kanji": "歩きます",
+        "english": "Walk",
+        "bangla": "হাঁটাহাঁটি করা"
+      },
+      {
+        "nihongo": "わたります [はしを〜]",
+        "romaji": "watarimasu [hashi o~]",
+        "uchharon": "ওয়াতারিমাছ [হাশি ও]",
+        "kanji": "渡ります [橋を〜]",
+        "english": "Cross [a bridge]",
+        "bangla": "পার হওয়া [ব্রিজ]"
+      },
+      {
+        "nihongo": "きをつけます [くるまに〜]",
+        "romaji": "ki o tsukemasu [kuruma ni~]",
+        "uchharon": "কি ও ৎসুকেমাছ [কুরুমা নি]",
+        "kanji": "気を付けます [車に〜]",
+        "english": "Pay attention [to cars], take care",
+        "bangla": "মনোযোগ দেওয়া [গাড়ি~], যত্ন নেয়া"
+      },
+      {
+        "nihongo": "ひっこしします",
+        "romaji": "hikkoshishimasu",
+        "uchharon": "হিক্খোশিশিমাছ",
+        "kanji": "引越しします",
+        "english": "Move (house)",
+        "bangla": "স্থানান্তর করা [বাসা]"
+      },
+      {
+        "nihongo": "でんきや",
+        "romaji": "denkiya",
+        "uchharon": "দেনকিইয়া",
+        "kanji": "電気屋",
+        "english": "Electrician",
+        "bangla": "ইলেক্ট্রিশিয়ান"
+      },
+      {
+        "nihongo": "〜や",
+        "romaji": "~ya",
+        "uchharon": "〜ইয়া",
+        "kanji": "〜屋",
+        "english": "Person of ~ shop",
+        "bangla": "দোকানের লোক ~"
+      },
+      {
+        "nihongo": "サイズ",
+        "romaji": "saizu",
+        "uchharon": "সাইজু",
+        "kanji": "",
+        "english": "Size",
+        "bangla": "সাইজ"
+      },
+      {
+        "nihongo": "おと",
+        "romaji": "oto",
+        "uchharon": "ওতো",
+        "kanji": "音",
+        "english": "Sound",
+        "bangla": "শব্দ"
+      },
+      {
+        "nihongo": "きかい",
+        "romaji": "kikai",
+        "uchharon": "কিকাই",
+        "kanji": "機械",
+        "english": "Machine",
+        "bangla": "মেশিন, যন্ত্র"
+      },
+      {
+        "nihongo": "つまみ",
+        "romaji": "tsumami",
+        "uchharon": "ৎসু মামি",
+        "kanji": "摘み",
+        "english": "Knob",
+        "bangla": "হাতল, হ্যান্ডেল"
+      },
+      {
+        "nihongo": "こしょう",
+        "romaji": "koshou",
+        "uchharon": "কোশো",
+        "kanji": "故障",
+        "english": "Breakdown",
+        "bangla": "ভেঙ্গে পড়া"
+      },
+      {
+        "nihongo": "みち",
+        "romaji": "michi",
+        "uchharon": "মিচি",
+        "kanji": "道",
+        "english": "Road, way",
+        "bangla": "রাস্তা"
+      },
+      {
+        "nihongo": "こうさてん",
+        "romaji": "kousaten",
+        "uchharon": "কৌসাতেন",
+        "kanji": "交差点",
+        "english": "Crossroad",
+        "bangla": "ক্রসরোড"
+      },
+      {
+        "nihongo": "しんごう",
+        "romaji": "shingou",
+        "uchharon": "শিনগোঁ",
+        "kanji": "信号",
+        "english": "Traffic light",
+        "bangla": "সিগন্যাল"
+      },
+      {
+        "nihongo": "かど",
+        "romaji": "kado",
+        "uchharon": "কাদো",
+        "kanji": "角",
+        "english": "Corner",
+        "bangla": "কর্নার"
+      },
+      {
+        "nihongo": "はし",
+        "romaji": "hashi",
+        "uchharon": "হাশি",
+        "kanji": "橋",
+        "english": "Bridge",
+        "bangla": "ব্রিজ"
+      },
+      {
+        "nihongo": "ちゅうしゃじょう",
+        "romaji": "chuushajou",
+        "uchharon": "চ্যুশাজো",
+        "kanji": "駐車場",
+        "english": "Parking lot, car park",
+        "bangla": "পার্কিং এলাকা, গাড়ি পার্ক"
+      },
+      {
+        "nihongo": "〜め",
+        "romaji": "~me",
+        "uchharon": "〜মে",
+        "kanji": "〜目",
+        "english": "The~ th number",
+        "bangla": "〜নাম্বার"
+      },
+      {
+        "nihongo": "ごちそうさまでした",
+        "romaji": "gochisousama deshita",
+        "uchharon": "গোচিসৌ সামাদেশতা",
+        "kanji": "",
+        "english": "That was delicious. (said after eating or drinking)",
+        "bangla": "এটা সুস্বাদু ছিল। (খাবারের পরে বলতে হয়)"
+      },
+      {
+        "nihongo": "たてもの",
+        "romaji": "tatemono",
+        "uchharon": "তাতেমোনো",
+        "kanji": "建物",
+        "english": "Building",
+        "bangla": "বিল্ডিং"
+      },
+      {
+        "nihongo": "がいこくじん とうろくしょう",
+        "romaji": "gaikokujin tourokushou",
+        "uchharon": "গাইকোকুজিন তৌরোকুশো",
+        "kanji": "外国人登録証",
+        "english": "Alien registration card",
+        "bangla": "বিদেশি নিবন্ধন কার্ড"
+      },
+      {
+        "nihongo": "ざいりゅうカード",
+        "romaji": "zairyuu kaado",
+        "uchharon": "জাইরিয়ু কাদো",
+        "kanji": "在留カード",
+        "english": "Alien registration card",
+        "bangla": "বিদেশি নিবন্ধন কার্ড"
+      },
+      {
+        "nihongo": "しょうとくたいし",
+        "romaji": "shoutokutaishi",
+        "uchharon": "শৌতোকুতাইশি",
+        "kanji": "聖徳太子",
+        "english": "Prince Shotoku (574-622)",
+        "bangla": "প্রিন্স শোতোকু"
+      },
+      {
+        "nihongo": "[お]しょうがつ",
+        "romaji": "[o]shougatsu",
+        "uchharon": "[ও] শোগাৎসু",
+        "kanji": "お正月",
+        "english": "New Year's Day",
+        "bangla": "নববর্ষ"
+      },
+      {
+        "nihongo": "ほうりゅうじ",
+        "romaji": "houryuuji",
+        "uchharon": "হৌরিয়ুজি",
+        "kanji": "法隆寺",
+        "english": "Horyuji temple, a temple in Nara prefecture built by prince Shotoku at the beginning of the 7th century",
+        "bangla": "হোরিয়্যুজি মন্দির, এটা নারা শহরে প্রিন্স শোতোকু কর্তৃক ৭ম শতকের শুরুতে তৈরি করা হয়েছিল।"
+      },
+      {
+        "nihongo": "げんきちゃ",
+        "romaji": "genkicha",
+        "uchharon": "গেনকিচা",
+        "kanji": "元気茶",
+        "english": "Healthy tea",
+        "bangla": "কাল্পনিক চায়ের নাম"
+      },
+      {
+        "nihongo": "ほんだえき",
+        "romaji": "hondaeki",
+        "uchharon": "হোন্দাএকি",
+        "kanji": "本田駅",
+        "english": "Name of a station",
+        "bangla": "কাল্পনিক স্টেশনের নাম"
+      },
+      {
+        "nihongo": "としょかんまえ",
+        "romaji": "toshokanmae",
+        "uchharon": "তোশোকানমায়ে",
+        "kanji": "図書館前",
+        "english": "Name of bus stop",
+        "bangla": "কাল্পনিক বাসস্ট্যান্ড এর নাম"
+      }
+    ]
+  },
+  {
+    "lesson_number": 24,
+    "vocabularies": [
+      {
+        "nihongo": "くれます",
+        "romaji": "kuremasu",
+        "uchharon": "কুরেমাছ",
+        "kanji": "",
+        "english": "Give (me)",
+        "bangla": "দেওয়া (আমাকে)"
+      },
+      {
+        "nihongo": "つれて いきます",
+        "romaji": "tsurete ikimasu",
+        "uchharon": "ৎসুরেতে ইকিমাহ",
+        "kanji": "連れて 行きます",
+        "english": "Take (someone)",
+        "bangla": "কাউকে নিয়ে যাওয়া"
+      },
+      {
+        "nihongo": "つれて きます",
+        "romaji": "tsurete kimasu",
+        "uchharon": "ৎসুরেতে কিমাছ",
+        "kanji": "つれて 来ます",
+        "english": "Bring (someone)",
+        "bangla": "কাউকে নিয়ে আসা"
+      },
+      {
+        "nihongo": "おくります [ひとを〜]",
+        "romaji": "okurimasu [hito o~]",
+        "uchharon": "ওকুরিমাছ [হিতো ও]",
+        "kanji": "送ります [人を〜]",
+        "english": "Escort (someone), go with",
+        "bangla": "পৌঁছে দেওয়া, এগিয়ে দেওয়া"
+      },
+      {
+        "nihongo": "しょうかいします",
+        "romaji": "shoukaishimasu",
+        "uchharon": "শৌকাইশিমাছ",
+        "kanji": "紹介します",
+        "english": "Introduce",
+        "bangla": "পরিচয় করিয়ে দেওয়া"
+      },
+      {
+        "nihongo": "あんないします",
+        "romaji": "annaishimasu",
+        "uchharon": "আন্নাইশিমাছ",
+        "kanji": "案内します",
+        "english": "Show around",
+        "bangla": "কোনো স্থান ঘুরিয়ে দেখানো"
+      },
+      {
+        "nihongo": "せつめいします",
+        "romaji": "setsumeishimasu",
+        "uchharon": "সেৎসুমেইশিমাছ",
+        "kanji": "説明します",
+        "english": "Explain",
+        "bangla": "ব্যাখ্যা করা, বর্ণনা করা"
+      },
+      {
+        "nihongo": "いれます [コーヒーを〜]",
+        "romaji": "iremasu [koohii o~]",
+        "uchharon": "ইরেমাছ [কো-হি- ও]",
+        "kanji": "入れます",
+        "english": "Make [coffee]",
+        "bangla": "তৈরি করা [কফি]"
+      },
+      {
+        "nihongo": "おじいさん / おじいちゃん",
+        "romaji": "ojiisan / ojiichan",
+        "uchharon": "ওজিইসান / ওজিইচান",
+        "kanji": "",
+        "english": "Grandfather, old man",
+        "bangla": "দাদা, বৃদ্ধ মানুষ"
+      },
+      {
+        "nihongo": "おばあさん / おばあちゃん",
+        "romaji": "obaasan / obaachan",
+        "uchharon": "ওবাআসান / ওবাআচান",
+        "kanji": "",
+        "english": "Grandmother, old woman",
+        "bangla": "দাদী, বৃদ্ধ মহিলা"
+      },
+      {
+        "nihongo": "じゅんび",
+        "romaji": "junbi",
+        "uchharon": "জুনবি",
+        "kanji": "準備",
+        "english": "Preparation",
+        "bangla": "প্রস্তুতি"
+      },
+      {
+        "nihongo": "いみ",
+        "romaji": "imi",
+        "uchharon": "ইমি",
+        "kanji": "意味",
+        "english": "Meaning",
+        "bangla": "অর্থ"
+      },
+      {
+        "nihongo": "おかし",
+        "romaji": "okashi",
+        "uchharon": "ওকাশি",
+        "kanji": "お菓子",
+        "english": "Sweets, snacks",
+        "bangla": "মিষ্টিজাতীয় খাবার"
+      },
+      {
+        "nihongo": "ぜんぶ",
+        "romaji": "zenbu",
+        "uchharon": "জেনবু",
+        "kanji": "全部",
+        "english": "All",
+        "bangla": "সব, সবকিছু"
+      },
+      {
+        "nihongo": "じぶんで",
+        "romaji": "jibun de",
+        "uchharon": "জিবুনদে",
+        "kanji": "自分で",
+        "english": "By oneself",
+        "bangla": "নিজে নিজে"
+      },
+      {
+        "nihongo": "ほかに",
+        "romaji": "hokani",
+        "uchharon": "হোকানি",
+        "kanji": "",
+        "english": "Besides",
+        "bangla": "পাশাপাশি, এছাড়াও"
+      },
+      {
+        "nihongo": "ワゴンしゃ",
+        "romaji": "wagonsha",
+        "uchharon": "ওয়াগোনশা",
+        "kanji": "ワゴン車",
+        "english": "Station wagon",
+        "bangla": "ওয়াগন স্টেশন"
+      },
+      {
+        "nihongo": "[お]べんとう",
+        "romaji": "[o]bentou",
+        "uchharon": "[ও] বেনতো",
+        "kanji": "[お]弁当",
+        "english": "Box lunch",
+        "bangla": "বক্স খাবার"
+      },
+      {
+        "nihongo": "ははのひ",
+        "romaji": "haha no hi",
+        "uchharon": "হাহানো হি",
+        "kanji": "母の日",
+        "english": "Mother's day",
+        "bangla": "মা দিবস"
+      }
+    ]
+  },
+  {
+    "lesson_number": 25,
+    "vocabularies": [
+      {
+        "nihongo": "かんがえます",
+        "romaji": "kangaemasu",
+        "uchharon": "কানগায়েমাছ",
+        "kanji": "考えます",
+        "english": "Think, consider",
+        "bangla": "চিন্তা, বিবেচনা করা"
+      },
+      {
+        "nihongo": "つきます [えきに〜]",
+        "romaji": "tsukimasu [eki ni~]",
+        "uchharon": "ৎসুকিমাছ [একি নি]",
+        "kanji": "着きます [駅に〜]",
+        "english": "Arrive [a station]",
+        "bangla": "পৌঁছানো [স্টেশনে ~]"
+      },
+      {
+        "nihongo": "りゅうがくします",
+        "romaji": "ryuugakushimasu",
+        "uchharon": "রিয়্যুগাকুশিমাছ",
+        "kanji": "留学します",
+        "english": "Study abroad",
+        "bangla": "বিদেশে অধ্যয়ন"
+      },
+      {
+        "nihongo": "とります [としを〜]",
+        "romaji": "torimasu [toshi o~]",
+        "uchharon": "তোরিমাছ [তোশি ও]",
+        "kanji": "取ります [年を〜]",
+        "english": "Grow old",
+        "bangla": "বৃদ্ধি পাওয়া (বয়স~)"
+      },
+      {
+        "nihongo": "いなか",
+        "romaji": "inaka",
+        "uchharon": "ইনাকা",
+        "kanji": "田舎",
+        "english": "Countryside, hometown",
+        "bangla": "গ্রামের বাড়ি"
+      },
+      {
+        "nihongo": "たいしかん",
+        "romaji": "taishikan",
+        "uchharon": "তাইশিকান",
+        "kanji": "大使館",
+        "english": "Embassy",
+        "bangla": "এম্বাসি"
+      },
+      {
+        "nihongo": "グループ",
+        "romaji": "guruupu",
+        "uchharon": "গুরু-পু",
+        "kanji": "",
+        "english": "Group",
+        "bangla": "দল"
+      },
+      {
+        "nihongo": "チャンス",
+        "romaji": "chansu",
+        "uchharon": "চান্সু",
+        "kanji": "",
+        "english": "Chance",
+        "bangla": "সুযোগ"
+      },
+      {
+        "nihongo": "おく",
+        "romaji": "oku",
+        "uchharon": "ওকু",
+        "kanji": "億",
+        "english": "Hundred million",
+        "bangla": "শত মিলিয়ন"
+      },
+      {
+        "nihongo": "もし [〜たら]",
+        "romaji": "moshi [~tara]",
+        "uchharon": "মোশি [〜তারা]",
+        "kanji": "",
+        "english": "If~",
+        "bangla": "যদি ~"
+      },
+      {
+        "nihongo": "いくら [〜ても]",
+        "romaji": "ikura [~temo]",
+        "uchharon": "ইকুরা [〜তেমো]",
+        "kanji": "",
+        "english": "However~, even if~",
+        "bangla": "যাইহোক~, যদিও~"
+      },
+      {
+        "nihongo": "てんきん",
+        "romaji": "tenkin",
+        "uchharon": "তেনকিন",
+        "kanji": "転勤",
+        "english": "Transfer",
+        "bangla": "বদলি"
+      },
+      {
+        "nihongo": "こと",
+        "romaji": "koto",
+        "uchharon": "কোতো",
+        "kanji": "",
+        "english": "Thing, matter",
+        "bangla": "জিনিস, বিষয়"
+      },
+      {
+        "nihongo": "いっぱい のみましょう",
+        "romaji": "ippai nomimashou",
+        "uchharon": "ইপ্পাই নোমিমাশো",
+        "kanji": "一杯飲みましょう",
+        "english": "Let's have a drink together.",
+        "bangla": "একসাথে পানীয় পান করা যাক"
+      },
+      {
+        "nihongo": "[いろいろ] おせわに なりました",
+        "romaji": "[iroiro] osewani narimashita",
+        "uchharon": "[ইরোইরো] ওসেওয়ানি নারিমাশিতা",
+        "kanji": "[色々] お世話になりました",
+        "english": "Thank you for everything you have done for me.",
+        "bangla": "আপনি আমার জন্য যা করেছেন সেজন্য ধন্যবাদ"
+      },
+      {
+        "nihongo": "がんばります",
+        "romaji": "ganbarimasu",
+        "uchharon": "গানবারিমাছ",
+        "kanji": "頑張ります",
+        "english": "Do one's best",
+        "bangla": "সর্বোচ্চ চেষ্টা করা"
+      },
+      {
+        "nihongo": "どうぞおげんきで",
+        "romaji": "douzo ogenkide",
+        "uchharon": "দোযো ওগেনকিদে",
+        "kanji": "どうぞお元気で。",
+        "english": "Best of luck.",
+        "bangla": "শুভকামনা"
+      },
+      {
+        "nihongo": "かいわ",
+        "romaji": "kaiwa",
+        "uchharon": "কাইওয়া",
+        "kanji": "会話",
+        "english": "Conversation",
+        "bangla": "কথোপকথন"
+      }
+    ]
+  }
+]
