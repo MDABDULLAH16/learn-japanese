@@ -1,4 +1,4 @@
-import { Heart } from "lucide-react"
+import { Heart } from 'lucide-react'
 
 export function Footer() {
   return (
@@ -7,9 +7,7 @@ export function Footer() {
         <p className="text-sm text-muted-foreground font-medium flex items-center gap-1.5">
           Developed with <Heart className="h-4 w-4 text-red-500 fill-red-500" /> by
         </p>
-        <p className="text-base font-bold tracking-widest text-primary">
-          A R S ABDULLAH
-        </p>
+        <p className="text-base font-bold tracking-widest text-primary">A R S ABDULLAH</p>
       </div>
     </footer>
   )

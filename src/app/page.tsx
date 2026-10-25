@@ -1,19 +1,19 @@
 export const instant = false
 
-import { getCurrentUser, getUserProgress, getUserRecapItems } from "@/lib/actions"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { signOut } from "@/auth"
-import Link from "next/link"
-import { BookA, Trophy, Flame, PlayCircle, Mic, Languages, PenTool, Bookmark } from "lucide-react"
+import { getCurrentUser, getUserProgress, getUserRecapItems } from '@/lib/actions'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { signOut } from '@/auth'
+import Link from 'next/link'
+import { BookA, Trophy, Flame, PlayCircle, Mic, Languages, PenTool, Bookmark } from 'lucide-react'
 
 export default async function Dashboard() {
   const user = await getCurrentUser()
   const progress = await getUserProgress(user.id)
   const recapItems = await getUserRecapItems(user.id)
-  
-  const hiraganaLearned = progress.filter(p => p.item_type === 'hiragana').length
-  const katakanaLearned = progress.filter(p => p.item_type === 'katakana').length
+
+  const hiraganaLearned = progress.filter((p) => p.item_type === 'hiragana').length
+  const katakanaLearned = progress.filter((p) => p.item_type === 'katakana').length
   const totalAlphabets = 46
 
   const hiraganaProgress = (hiraganaLearned / totalAlphabets) * 100
@@ -24,18 +24,25 @@ export default async function Dashboard() {
       <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl font-extrabold tracking-tight">Welcome back, {user.name}!</h1>
-          <p className="text-muted-foreground text-lg mt-2">Ready to continue your Japanese journey?</p>
+          <p className="text-muted-foreground text-lg mt-2">
+            Ready to continue your Japanese journey?
+          </p>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-4 bg-orange-100 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400 px-4 py-2 rounded-lg font-bold">
             <Flame className="w-6 h-6" />
             <span>{user.streak} Day Streak</span>
           </div>
-          <form action={async () => {
-            "use server"
-            await signOut()
-          }}>
-            <button type="submit" className="px-4 py-2 bg-red-100 text-red-600 hover:bg-red-200 rounded-md font-medium text-sm transition-colors">
+          <form
+            action={async () => {
+              'use server'
+              await signOut()
+            }}
+          >
+            <button
+              type="submit"
+              className="px-4 py-2 bg-red-100 text-red-600 hover:bg-red-200 rounded-md font-medium text-sm transition-colors"
+            >
               Logout
             </button>
           </form>
@@ -53,14 +60,16 @@ export default async function Dashboard() {
             <p className="text-xs text-muted-foreground">Keep practicing to earn more!</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Hiragana Learned</CardTitle>
             <BookA className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{hiraganaLearned} / {totalAlphabets}</div>
+            <div className="text-2xl font-bold">
+              {hiraganaLearned} / {totalAlphabets}
+            </div>
             <Progress value={hiraganaProgress} className="h-2 mt-3" />
           </CardContent>
         </Card>
@@ -71,7 +80,9 @@ export default async function Dashboard() {
             <BookA className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{katakanaLearned} / {totalAlphabets}</div>
+            <div className="text-2xl font-bold">
+              {katakanaLearned} / {totalAlphabets}
+            </div>
             <Progress value={katakanaProgress} className="h-2 mt-3" />
           </CardContent>
         </Card>
@@ -88,11 +99,13 @@ export default async function Dashboard() {
               <CardDescription>Master the Hiragana and Katakana writing systems.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Interactive grid with Romaji, stroke order simulation, and progress tracking.</p>
+              <p className="text-sm text-muted-foreground">
+                Interactive grid with Romaji, stroke order simulation, and progress tracking.
+              </p>
             </CardContent>
           </Card>
         </Link>
-        
+
         <Link href="/quiz" className="block group">
           <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
             <CardHeader>
@@ -102,7 +115,9 @@ export default async function Dashboard() {
               <CardDescription>Test your alphabet knowledge and earn XP.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Multiple-choice quizzes for character recognition and reading practice.</p>
+              <p className="text-sm text-muted-foreground">
+                Multiple-choice quizzes for character recognition and reading practice.
+              </p>
             </CardContent>
           </Card>
         </Link>
@@ -120,10 +135,14 @@ export default async function Dashboard() {
                   </span>
                 )}
               </div>
-              <CardDescription>Learn vocabulary for all lessons and access your cross-device recap list.</CardDescription>
+              <CardDescription>
+                Learn vocabulary for all lessons and access your cross-device recap list.
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Explore comprehensive word lists with pronunciation, meaning, and Kanji.</p>
+              <p className="text-sm text-muted-foreground">
+                Explore comprehensive word lists with pronunciation, meaning, and Kanji.
+              </p>
             </CardContent>
           </Card>
         </Link>
@@ -144,7 +163,9 @@ export default async function Dashboard() {
               <CardDescription>Practice words with multiple-choice questions.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Select a lesson and test your memory by choosing the correct Bangla meaning.</p>
+              <p className="text-sm text-muted-foreground">
+                Select a lesson and test your memory by choosing the correct Bangla meaning.
+              </p>
             </CardContent>
           </Card>
         </Link>
@@ -158,11 +179,13 @@ export default async function Dashboard() {
               <CardDescription>Practice reading Japanese words aloud.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Uses speech recognition to verify if you are reading the characters correctly.</p>
+              <p className="text-sm text-muted-foreground">
+                Uses speech recognition to verify if you are reading the characters correctly.
+              </p>
             </CardContent>
           </Card>
         </Link>
-        
+
         <Link href="/kanji" className="block group">
           <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-primary/50">
             <CardHeader>
@@ -172,7 +195,9 @@ export default async function Dashboard() {
               <CardDescription>Master JLPT N5 Kanji characters.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Dedicated Kanji learning with Kunyomi, Onyomi, and vocabulary examples.</p>
+              <p className="text-sm text-muted-foreground">
+                Dedicated Kanji learning with Kunyomi, Onyomi, and vocabulary examples.
+              </p>
             </CardContent>
           </Card>
         </Link>
@@ -186,7 +211,9 @@ export default async function Dashboard() {
               <CardDescription>Test your memory with Kanji flashcards.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Interactive 3D flashcards to memorize meanings and readings of Kanji.</p>
+              <p className="text-sm text-muted-foreground">
+                Interactive 3D flashcards to memorize meanings and readings of Kanji.
+              </p>
             </CardContent>
           </Card>
         </Link>

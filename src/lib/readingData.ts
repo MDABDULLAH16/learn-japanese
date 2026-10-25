@@ -1,14 +1,54 @@
-export type ReadingLevel = 
-  | 'level1' | 'level2' | 'level3' | 'level4' | 'level5' 
-  | 'level6' | 'level7' | 'level8' | 'level9' | 'level10'
-  | 'level11' | 'level12' | 'level13' | 'level14' | 'level15'
-  | 'level16' | 'level17' | 'level18' | 'level19' | 'level20'
-  | 'level21' | 'level22' | 'level23' | 'level24' | 'level25'
-  | 'level26' | 'level27' | 'level28' | 'level29' | 'level30'
-  | 'level31' | 'level32' | 'level33' | 'level34' | 'level35'
-  | 'level36' | 'level37' | 'level38' | 'level39' | 'level40'
-  | 'level41' | 'level42' | 'level43' | 'level44' | 'level45'
-  | 'level46' | 'level47' | 'level48' | 'level49' | 'level50'
+export type ReadingLevel =
+  | 'level1'
+  | 'level2'
+  | 'level3'
+  | 'level4'
+  | 'level5'
+  | 'level6'
+  | 'level7'
+  | 'level8'
+  | 'level9'
+  | 'level10'
+  | 'level11'
+  | 'level12'
+  | 'level13'
+  | 'level14'
+  | 'level15'
+  | 'level16'
+  | 'level17'
+  | 'level18'
+  | 'level19'
+  | 'level20'
+  | 'level21'
+  | 'level22'
+  | 'level23'
+  | 'level24'
+  | 'level25'
+  | 'level26'
+  | 'level27'
+  | 'level28'
+  | 'level29'
+  | 'level30'
+  | 'level31'
+  | 'level32'
+  | 'level33'
+  | 'level34'
+  | 'level35'
+  | 'level36'
+  | 'level37'
+  | 'level38'
+  | 'level39'
+  | 'level40'
+  | 'level41'
+  | 'level42'
+  | 'level43'
+  | 'level44'
+  | 'level45'
+  | 'level46'
+  | 'level47'
+  | 'level48'
+  | 'level49'
+  | 'level50'
 
 export type ReadingItem = {
   id: string
@@ -29,17 +69,27 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
     title: 'Greetings & Basics',
     description: 'Essential everyday greetings and basic expressions.',
     items: [
-      { id: 'l1_1', japanese: 'こんにちは', romaji: 'konnichiwa', meaning: 'Hello / Good afternoon' },
+      {
+        id: 'l1_1',
+        japanese: 'こんにちは',
+        romaji: 'konnichiwa',
+        meaning: 'Hello / Good afternoon',
+      },
       { id: 'l1_2', japanese: 'さようなら', romaji: 'sayounara', meaning: 'Goodbye' },
       { id: 'l1_3', japanese: 'ありがとう', romaji: 'arigatou', meaning: 'Thank you' },
       { id: 'l1_4', japanese: 'おはよう', romaji: 'ohayou', meaning: 'Good morning' },
       { id: 'l1_5', japanese: 'こんばんは', romaji: 'konbanwa', meaning: 'Good evening' },
       { id: 'l1_6', japanese: 'はい', romaji: 'hai', meaning: 'Yes' },
       { id: 'l1_7', japanese: 'いいえ', romaji: 'iie', meaning: 'No' },
-      { id: 'l1_8', japanese: 'すみません', romaji: 'sumimasen', meaning: 'Excuse me / I am sorry' },
+      {
+        id: 'l1_8',
+        japanese: 'すみません',
+        romaji: 'sumimasen',
+        meaning: 'Excuse me / I am sorry',
+      },
       { id: 'l1_9', japanese: 'ごめんなさい', romaji: 'gomennasai', meaning: 'I am sorry' },
       { id: 'l1_10', japanese: 'おねがいします', romaji: 'onegaishimasu', meaning: 'Please' },
-    ]
+    ],
   },
   level2: {
     title: 'Numbers & Counters',
@@ -55,7 +105,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l2_8', japanese: 'はち', romaji: 'hachi', meaning: 'Eight (8)' },
       { id: 'l2_9', japanese: 'きゅう', romaji: 'kyuu', meaning: 'Nine (9)' },
       { id: 'l2_10', japanese: 'じゅう', romaji: 'juu', meaning: 'Ten (10)' },
-    ]
+    ],
   },
   level3: {
     title: 'People & Family',
@@ -71,7 +121,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l3_8', japanese: 'あに', romaji: 'ani', meaning: 'Older brother (my)' },
       { id: 'l3_9', japanese: 'あね', romaji: 'ane', meaning: 'Older sister (my)' },
       { id: 'l3_10', japanese: 'せんせい', romaji: 'sensei', meaning: 'Teacher' },
-    ]
+    ],
   },
   level4: {
     title: 'Time & Days',
@@ -87,7 +137,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l4_8', japanese: 'まいにち', romaji: 'mainichi', meaning: 'Every day' },
       { id: 'l4_9', japanese: 'じかん', romaji: 'jikan', meaning: 'Time / Hours' },
       { id: 'l4_10', japanese: 'とけい', romaji: 'tokei', meaning: 'Clock / Watch' },
-    ]
+    ],
   },
   level5: {
     title: 'Food & Drink',
@@ -103,7 +153,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l5_8', japanese: 'やさい', romaji: 'yasai', meaning: 'Vegetable' },
       { id: 'l5_9', japanese: 'くだもの', romaji: 'kudamono', meaning: 'Fruit' },
       { id: 'l5_10', japanese: 'りんご', romaji: 'ringo', meaning: 'Apple' },
-    ]
+    ],
   },
   level6: {
     title: 'Nature & Elements',
@@ -119,7 +169,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l6_8', japanese: 'き', romaji: 'ki', meaning: 'Tree / Wood' },
       { id: 'l6_9', japanese: 'つき', romaji: 'tsuki', meaning: 'Moon' },
       { id: 'l6_10', japanese: 'てんき', romaji: 'tenki', meaning: 'Weather' },
-    ]
+    ],
   },
   level7: {
     title: 'Places & Transport',
@@ -135,7 +185,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l7_8', japanese: 'ひこうき', romaji: 'hikouki', meaning: 'Airplane' },
       { id: 'l7_9', japanese: 'みち', romaji: 'michi', meaning: 'Road / Street' },
       { id: 'l7_10', japanese: 'びょういん', romaji: 'byouin', meaning: 'Hospital' },
-    ]
+    ],
   },
   level8: {
     title: 'Things & Items',
@@ -151,7 +201,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l8_8', japanese: 'おかね', romaji: 'okane', meaning: 'Money' },
       { id: 'l8_9', japanese: 'かみ', romaji: 'kami', meaning: 'Paper' },
       { id: 'l8_10', japanese: 'しゃしん', romaji: 'shashin', meaning: 'Photograph' },
-    ]
+    ],
   },
   level9: {
     title: 'Basic Verbs',
@@ -167,7 +217,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l9_8', japanese: 'かく', romaji: 'kaku', meaning: 'To write' },
       { id: 'l9_9', japanese: 'はなす', romaji: 'hanasu', meaning: 'To speak' },
       { id: 'l9_10', japanese: 'かう', romaji: 'kau', meaning: 'To buy' },
-    ]
+    ],
   },
   level10: {
     title: 'Basic Adjectives',
@@ -183,7 +233,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l10_8', japanese: 'さむい', romaji: 'samui', meaning: 'Cold' },
       { id: 'l10_9', japanese: 'たかい', romaji: 'takai', meaning: 'High / Expensive' },
       { id: 'l10_10', japanese: 'やすい', romaji: 'yasui', meaning: 'Cheap' },
-    ]
+    ],
   },
   level11: {
     title: 'Daily Routine Verbs',
@@ -199,7 +249,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l11_8', japanese: 'あそぶ', romaji: 'asobu', meaning: 'To play / hang out' },
       { id: 'l11_9', japanese: 'べんきょうする', romaji: 'benkyousuru', meaning: 'To study' },
       { id: 'l11_10', japanese: 'しごとをする', romaji: 'shigoto o suru', meaning: 'To work' },
-    ]
+    ],
   },
   level12: {
     title: 'Motion & Action Verbs',
@@ -215,7 +265,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l12_8', japanese: 'でる', romaji: 'deru', meaning: 'To exit / leave' },
       { id: 'l12_9', japanese: 'たつ', romaji: 'tatsu', meaning: 'To stand' },
       { id: 'l12_10', japanese: 'すわる', romaji: 'suwaru', meaning: 'To sit' },
-    ]
+    ],
   },
   level13: {
     title: 'Adjectives (Feelings)',
@@ -231,7 +281,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l13_8', japanese: 'いそがしい', romaji: 'isogashii', meaning: 'Busy' },
       { id: 'l13_9', japanese: 'ひま', romaji: 'hima', meaning: 'Free (time)' },
       { id: 'l13_10', japanese: 'げんき', romaji: 'genki', meaning: 'Healthy / Energetic' },
-    ]
+    ],
   },
   level14: {
     title: 'Adjectives (Appearance)',
@@ -247,7 +297,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l14_8', japanese: 'ひろい', romaji: 'hiroi', meaning: 'Wide / Spacious' },
       { id: 'l14_9', japanese: 'せまい', romaji: 'semai', meaning: 'Narrow' },
       { id: 'l14_10', japanese: 'あかるい', romaji: 'akarui', meaning: 'Bright' },
-    ]
+    ],
   },
   level15: {
     title: 'Positions & Directions',
@@ -263,7 +313,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l15_8', japanese: 'そと', romaji: 'soto', meaning: 'Outside' },
       { id: 'l15_9', japanese: 'となり', romaji: 'tonari', meaning: 'Next to' },
       { id: 'l15_10', japanese: 'ちかく', romaji: 'chikaku', meaning: 'Near' },
-    ]
+    ],
   },
   level16: {
     title: 'Animals',
@@ -279,7 +329,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l16_8', japanese: 'くま', romaji: 'kuma', meaning: 'Bear' },
       { id: 'l16_9', japanese: 'むし', romaji: 'mushi', meaning: 'Insect / Bug' },
       { id: 'l16_10', japanese: 'どうぶつ', romaji: 'doubutsu', meaning: 'Animal' },
-    ]
+    ],
   },
   level17: {
     title: 'Colors',
@@ -295,7 +345,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l17_8', japanese: 'ピンク', romaji: 'pinku', meaning: 'Pink' },
       { id: 'l17_9', japanese: 'オレンジ', romaji: 'orenji', meaning: 'Orange' },
       { id: 'l17_10', japanese: 'いろ', romaji: 'iro', meaning: 'Color' },
-    ]
+    ],
   },
   level18: {
     title: 'Body Parts',
@@ -311,7 +361,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l18_8', japanese: 'て', romaji: 'te', meaning: 'Hand' },
       { id: 'l18_9', japanese: 'あし', romaji: 'ashi', meaning: 'Leg / Foot' },
       { id: 'l18_10', japanese: 'かみ', romaji: 'kami', meaning: 'Hair' },
-    ]
+    ],
   },
   level19: {
     title: 'Family (Extended)',
@@ -327,7 +377,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l19_8', japanese: 'おじいさん', romaji: 'ojiisan', meaning: 'Grandfather' },
       { id: 'l19_9', japanese: 'おばあさん', romaji: 'obaasan', meaning: 'Grandmother' },
       { id: 'l19_10', japanese: 'りょうしん', romaji: 'ryoushin', meaning: 'Parents' },
-    ]
+    ],
   },
   level20: {
     title: 'Occupations',
@@ -343,7 +393,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l20_8', japanese: 'ぎんこういん', romaji: 'ginkouin', meaning: 'Bank employee' },
       { id: 'l20_9', japanese: 'しゅふ', romaji: 'shufu', meaning: 'Housewife' },
       { id: 'l20_10', japanese: 'しごと', romaji: 'shigoto', meaning: 'Job / Work' },
-    ]
+    ],
   },
   level21: {
     title: 'Adverbs of Degree',
@@ -356,10 +406,20 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l21_5', japanese: 'たいてい', romaji: 'taitei', meaning: 'Usually' },
       { id: 'l21_6', japanese: 'いつも', romaji: 'itsumo', meaning: 'Always' },
       { id: 'l21_7', japanese: 'ときどき', romaji: 'tokidoki', meaning: 'Sometimes' },
-      { id: 'l21_8', japanese: 'ぜんぜん', romaji: 'zenzen', meaning: 'Not at all (used with negative)' },
-      { id: 'l21_9', japanese: 'あまり', romaji: 'amari', meaning: 'Not much (used with negative)' },
+      {
+        id: 'l21_8',
+        japanese: 'ぜんぜん',
+        romaji: 'zenzen',
+        meaning: 'Not at all (used with negative)',
+      },
+      {
+        id: 'l21_9',
+        japanese: 'あまり',
+        romaji: 'amari',
+        meaning: 'Not much (used with negative)',
+      },
       { id: 'l21_10', japanese: 'もう', romaji: 'mou', meaning: 'Already / Anymore' },
-    ]
+    ],
   },
   level22: {
     title: 'Time Expressions (Days)',
@@ -375,7 +435,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l22_8', japanese: 'せんげつ', romaji: 'sengetsu', meaning: 'Last month' },
       { id: 'l22_9', japanese: 'ことし', romaji: 'kotoshi', meaning: 'This year' },
       { id: 'l22_10', japanese: 'らいねん', romaji: 'rainen', meaning: 'Next year' },
-    ]
+    ],
   },
   level23: {
     title: 'Days of the Week',
@@ -390,8 +450,13 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l23_7', japanese: 'にちようび', romaji: 'nichiyoubi', meaning: 'Sunday' },
       { id: 'l23_8', japanese: 'へいじつ', romaji: 'heijitsu', meaning: 'Weekday' },
       { id: 'l23_9', japanese: 'しゅうまつ', romaji: 'shuumatsu', meaning: 'Weekend' },
-      { id: 'l23_10', japanese: 'なんようび', romaji: 'nanyoubi', meaning: 'What day of the week?' },
-    ]
+      {
+        id: 'l23_10',
+        japanese: 'なんようび',
+        romaji: 'nanyoubi',
+        meaning: 'What day of the week?',
+      },
+    ],
   },
   level24: {
     title: 'House & Furniture',
@@ -407,7 +472,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l24_8', japanese: 'れいぞうこ', romaji: 'reizouko', meaning: 'Refrigerator' },
       { id: 'l24_9', japanese: 'トイレ', romaji: 'toire', meaning: 'Toilet / Restroom' },
       { id: 'l24_10', japanese: 'おふろ', romaji: 'ofuro', meaning: 'Bath' },
-    ]
+    ],
   },
   level25: {
     title: 'School & Office',
@@ -423,7 +488,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l25_8', japanese: 'パソコン', romaji: 'pasokon', meaning: 'Personal Computer' },
       { id: 'l25_9', japanese: 'でんわ', romaji: 'denwa', meaning: 'Telephone' },
       { id: 'l25_10', japanese: 'けいたい', romaji: 'keitai', meaning: 'Mobile phone' },
-    ]
+    ],
   },
   level26: {
     title: 'Question Words',
@@ -439,39 +504,124 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l26_8', japanese: 'どれ', romaji: 'dore', meaning: 'Which one (of three or more)' },
       { id: 'l26_9', japanese: 'どんな', romaji: 'donna', meaning: 'What kind of' },
       { id: 'l26_10', japanese: 'いくつ', romaji: 'ikutsu', meaning: 'How many / How old' },
-    ]
+    ],
   },
   level27: {
     title: 'Basic Phrases 1 (Questions)',
     description: 'Common daily questions.',
     items: [
-      { id: 'l27_1', japanese: 'おげんきですか', romaji: 'o genki desu ka', meaning: 'How are you?' },
-      { id: 'l27_2', japanese: 'おなまえはなんですか', romaji: 'o namae wa nan desu ka', meaning: 'What is your name?' },
-      { id: 'l27_3', japanese: 'どこからきましたか', romaji: 'doko kara kimashita ka', meaning: 'Where are you from?' },
-      { id: 'l27_4', japanese: 'いまなんじですか', romaji: 'ima nanji desu ka', meaning: 'What time is it now?' },
-      { id: 'l27_5', japanese: 'いくらですか', romaji: 'ikura desu ka', meaning: 'How much is it?' },
-      { id: 'l27_6', japanese: 'これはなんですか', romaji: 'kore wa nan desu ka', meaning: 'What is this?' },
-      { id: 'l27_7', japanese: 'トイレはどこですか', romaji: 'toire wa doko desu ka', meaning: 'Where is the restroom?' },
-      { id: 'l27_8', japanese: 'えいごがはなせますか', romaji: 'eigo ga hanasemasu ka', meaning: 'Can you speak English?' },
-      { id: 'l27_9', japanese: 'わかりましたか', romaji: 'wakarimashita ka', meaning: 'Did you understand?' },
-      { id: 'l27_10', japanese: 'どうしましたか', romaji: 'dou shimashita ka', meaning: 'What happened? / What is wrong?' },
-    ]
+      {
+        id: 'l27_1',
+        japanese: 'おげんきですか',
+        romaji: 'o genki desu ka',
+        meaning: 'How are you?',
+      },
+      {
+        id: 'l27_2',
+        japanese: 'おなまえはなんですか',
+        romaji: 'o namae wa nan desu ka',
+        meaning: 'What is your name?',
+      },
+      {
+        id: 'l27_3',
+        japanese: 'どこからきましたか',
+        romaji: 'doko kara kimashita ka',
+        meaning: 'Where are you from?',
+      },
+      {
+        id: 'l27_4',
+        japanese: 'いまなんじですか',
+        romaji: 'ima nanji desu ka',
+        meaning: 'What time is it now?',
+      },
+      {
+        id: 'l27_5',
+        japanese: 'いくらですか',
+        romaji: 'ikura desu ka',
+        meaning: 'How much is it?',
+      },
+      {
+        id: 'l27_6',
+        japanese: 'これはなんですか',
+        romaji: 'kore wa nan desu ka',
+        meaning: 'What is this?',
+      },
+      {
+        id: 'l27_7',
+        japanese: 'トイレはどこですか',
+        romaji: 'toire wa doko desu ka',
+        meaning: 'Where is the restroom?',
+      },
+      {
+        id: 'l27_8',
+        japanese: 'えいごがはなせますか',
+        romaji: 'eigo ga hanasemasu ka',
+        meaning: 'Can you speak English?',
+      },
+      {
+        id: 'l27_9',
+        japanese: 'わかりましたか',
+        romaji: 'wakarimashita ka',
+        meaning: 'Did you understand?',
+      },
+      {
+        id: 'l27_10',
+        japanese: 'どうしましたか',
+        romaji: 'dou shimashita ka',
+        meaning: 'What happened? / What is wrong?',
+      },
+    ],
   },
   level28: {
     title: 'Basic Phrases 2 (Responses)',
     description: 'Common responses and manners.',
     items: [
-      { id: 'l28_1', japanese: 'はじめまして', romaji: 'hajimemashite', meaning: 'Nice to meet you (first time)' },
-      { id: 'l28_2', japanese: 'よろしくおねがいします', romaji: 'yoroshiku onegaishimasu', meaning: 'Please treat me well' },
-      { id: 'l28_3', japanese: 'いただきます', romaji: 'itadakimasu', meaning: 'Let’s eat (before meal)' },
-      { id: 'l28_4', japanese: 'ごちそうさまでした', romaji: 'gochisousama deshita', meaning: 'Thank you for the meal (after meal)' },
+      {
+        id: 'l28_1',
+        japanese: 'はじめまして',
+        romaji: 'hajimemashite',
+        meaning: 'Nice to meet you (first time)',
+      },
+      {
+        id: 'l28_2',
+        japanese: 'よろしくおねがいします',
+        romaji: 'yoroshiku onegaishimasu',
+        meaning: 'Please treat me well',
+      },
+      {
+        id: 'l28_3',
+        japanese: 'いただきます',
+        romaji: 'itadakimasu',
+        meaning: 'Let’s eat (before meal)',
+      },
+      {
+        id: 'l28_4',
+        japanese: 'ごちそうさまでした',
+        romaji: 'gochisousama deshita',
+        meaning: 'Thank you for the meal (after meal)',
+      },
       { id: 'l28_5', japanese: 'いってきます', romaji: 'ittekimasu', meaning: 'I am leaving' },
-      { id: 'l28_6', japanese: 'いってらっしゃい', romaji: 'itterasshai', meaning: 'Take care / See you (to someone leaving)' },
+      {
+        id: 'l28_6',
+        japanese: 'いってらっしゃい',
+        romaji: 'itterasshai',
+        meaning: 'Take care / See you (to someone leaving)',
+      },
       { id: 'l28_7', japanese: 'ただいま', romaji: 'tadaima', meaning: 'I am home' },
       { id: 'l28_8', japanese: 'おかえりなさい', romaji: 'okaerinasai', meaning: 'Welcome home' },
-      { id: 'l28_9', japanese: 'わかりません', romaji: 'wakarimasen', meaning: 'I do not understand' },
-      { id: 'l28_10', japanese: 'だいじょうぶです', romaji: 'daijoubu desu', meaning: 'It is okay / I am fine' },
-    ]
+      {
+        id: 'l28_9',
+        japanese: 'わかりません',
+        romaji: 'wakarimasen',
+        meaning: 'I do not understand',
+      },
+      {
+        id: 'l28_10',
+        japanese: 'だいじょうぶです',
+        romaji: 'daijoubu desu',
+        meaning: 'It is okay / I am fine',
+      },
+    ],
   },
   level29: {
     title: 'Connecting Words',
@@ -487,7 +637,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l29_8', japanese: 'たとえば', romaji: 'tatoeba', meaning: 'For example' },
       { id: 'l29_9', japanese: 'ほんとうに', romaji: 'hontouni', meaning: 'Really / Truly' },
       { id: 'l29_10', japanese: 'もちろん', romaji: 'mochiron', meaning: 'Of course' },
-    ]
+    ],
   },
   level30: {
     title: 'Bonus: Essential Kanji Readings',
@@ -503,7 +653,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l30_8', japanese: '山', romaji: 'yama / san', meaning: 'Mountain' },
       { id: 'l30_9', japanese: '川', romaji: 'kawa / sen', meaning: 'River' },
       { id: 'l30_10', japanese: '人', romaji: 'hito / jin / nin', meaning: 'Person' },
-    ]
+    ],
   },
   level31: {
     title: 'Verbs (Giving & Receiving)',
@@ -519,7 +669,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l31_8', japanese: 'かける', romaji: 'kakeru', meaning: 'To make (a phone call)' },
       { id: 'l31_9', japanese: 'みせる', romaji: 'miseru', meaning: 'To show' },
       { id: 'l31_10', japanese: 'おくる', romaji: 'okuru', meaning: 'To send' },
-    ]
+    ],
   },
   level32: {
     title: 'Verbs (Daily Chores)',
@@ -535,7 +685,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l32_8', japanese: 'きる', romaji: 'kiru', meaning: 'To cut / slice' },
       { id: 'l32_9', japanese: 'いれる', romaji: 'ireru', meaning: 'To put in' },
       { id: 'l32_10', japanese: 'だす', romaji: 'dasu', meaning: 'To take out / hand in' },
-    ]
+    ],
   },
   level33: {
     title: 'Clothing & Wearing',
@@ -551,7 +701,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l33_8', japanese: 'かぶる', romaji: 'kaburu', meaning: 'To wear (on head)' },
       { id: 'l33_9', japanese: 'かける', romaji: 'kakeru', meaning: 'To wear (glasses)' },
       { id: 'l33_10', japanese: 'ぬぐ', romaji: 'nugu', meaning: 'To take off (clothes)' },
-    ]
+    ],
   },
   level34: {
     title: 'Places in Town',
@@ -563,11 +713,16 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l34_4', japanese: 'びじゅつかん', romaji: 'bijutsukan', meaning: 'Art museum' },
       { id: 'l34_5', japanese: 'えいがかん', romaji: 'eigakan', meaning: 'Movie theater' },
       { id: 'l34_6', japanese: 'こうえん', romaji: 'kouen', meaning: 'Park' },
-      { id: 'l34_7', japanese: 'しょくどう', romaji: 'shokudou', meaning: 'Cafeteria / Dining hall' },
+      {
+        id: 'l34_7',
+        japanese: 'しょくどう',
+        romaji: 'shokudou',
+        meaning: 'Cafeteria / Dining hall',
+      },
       { id: 'l34_8', japanese: 'デパート', romaji: 'depaato', meaning: 'Department store' },
       { id: 'l34_9', japanese: 'スーパー', romaji: 'suupaa', meaning: 'Supermarket' },
       { id: 'l34_10', japanese: 'コンビニ', romaji: 'konbini', meaning: 'Convenience store' },
-    ]
+    ],
   },
   level35: {
     title: 'Food & Meals 2',
@@ -583,7 +738,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l35_8', japanese: 'しょうゆ', romaji: 'shouyu', meaning: 'Soy sauce' },
       { id: 'l35_9', japanese: 'やさい', romaji: 'yasai', meaning: 'Vegetables' },
       { id: 'l35_10', japanese: 'おかし', romaji: 'okashi', meaning: 'Sweets / Snacks' },
-    ]
+    ],
   },
   level36: {
     title: 'Time (Frequencies)',
@@ -599,7 +754,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l36_8', japanese: 'いつも', romaji: 'itsumo', meaning: 'Always' },
       { id: 'l36_9', japanese: 'たいてい', romaji: 'taitei', meaning: 'Usually' },
       { id: 'l36_10', japanese: 'よく', romaji: 'yoku', meaning: 'Often' },
-    ]
+    ],
   },
   level37: {
     title: 'Adjectives (Taste & Weather)',
@@ -615,7 +770,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l37_8', japanese: 'むしあつい', romaji: 'mushiatsui', meaning: 'Hot and humid' },
       { id: 'l37_9', japanese: 'いいてんき', romaji: 'ii tenki', meaning: 'Good weather' },
       { id: 'l37_10', japanese: 'わるいてんき', romaji: 'warui tenki', meaning: 'Bad weather' },
-    ]
+    ],
   },
   level38: {
     title: 'Adjectives (Difficulty & Quality)',
@@ -631,7 +786,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l38_8', japanese: 'いそがしい', romaji: 'isogashii', meaning: 'Busy' },
       { id: 'l38_9', japanese: 'べんり', romaji: 'benri', meaning: 'Convenient' },
       { id: 'l38_10', japanese: 'ふべん', romaji: 'fuben', meaning: 'Inconvenient' },
-    ]
+    ],
   },
   level39: {
     title: 'N5 Grammar Keywords 1',
@@ -647,7 +802,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l39_8', japanese: 'もっと', romaji: 'motto', meaning: 'More' },
       { id: 'l39_9', japanese: 'いちばん', romaji: 'ichiban', meaning: 'Number one / Most' },
       { id: 'l39_10', japanese: 'たぶん', romaji: 'tabun', meaning: 'Probably / Perhaps' },
-    ]
+    ],
   },
   level40: {
     title: 'N5 Grammar Keywords 2',
@@ -661,9 +816,14 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l40_6', japanese: 'たい', romaji: 'tai', meaning: 'Want to (verb)...' },
       { id: 'l40_7', japanese: 'ほしい', romaji: 'hoshii', meaning: 'Want (noun)' },
       { id: 'l40_8', japanese: 'たり', romaji: 'tari', meaning: 'Do such things as...' },
-      { id: 'l40_9', japanese: 'ことが あります', romaji: 'koto ga arimasu', meaning: 'Have the experience of...' },
+      {
+        id: 'l40_9',
+        japanese: 'ことが あります',
+        romaji: 'koto ga arimasu',
+        meaning: 'Have the experience of...',
+      },
       { id: 'l40_10', japanese: 'ほうが いい', romaji: 'hou ga ii', meaning: 'It is better to...' },
-    ]
+    ],
   },
   level41: {
     title: 'Months of the Year',
@@ -679,7 +839,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l41_8', japanese: 'はちがつ', romaji: 'hachigatsu', meaning: 'August' },
       { id: 'l41_9', japanese: 'くがつ', romaji: 'kugatsu', meaning: 'September' },
       { id: 'l41_10', japanese: 'じゅうがつ', romaji: 'juugatsu', meaning: 'October' },
-    ]
+    ],
   },
   level42: {
     title: 'Dates of the Month (1-10)',
@@ -695,7 +855,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l42_8', japanese: 'ようか', romaji: 'youka', meaning: '8th day of the month' },
       { id: 'l42_9', japanese: 'ここのか', romaji: 'kokonoka', meaning: '9th day of the month' },
       { id: 'l42_10', japanese: 'とおか', romaji: 'tooka', meaning: '10th day of the month' },
-    ]
+    ],
   },
   level43: {
     title: 'Dates of the Month (Irregular)',
@@ -705,13 +865,18 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l43_2', japanese: 'はつか', romaji: 'hatsuka', meaning: '20th day' },
       { id: 'l43_3', japanese: 'にじゅうよっか', romaji: 'nijuuyokka', meaning: '24th day' },
       { id: 'l43_4', japanese: 'いちにち', romaji: 'ichinichi', meaning: 'One day (duration)' },
-      { id: 'l43_5', japanese: 'なんにち', romaji: 'nannichi', meaning: 'What day of the month? / How many days?' },
+      {
+        id: 'l43_5',
+        japanese: 'なんにち',
+        romaji: 'nannichi',
+        meaning: 'What day of the month? / How many days?',
+      },
       { id: 'l43_6', japanese: 'いっしゅうかん', romaji: 'isshuukan', meaning: 'One week' },
       { id: 'l43_7', japanese: 'いっかげつ', romaji: 'ikkagetsu', meaning: 'One month' },
       { id: 'l43_8', japanese: 'いちねん', romaji: 'ichinen', meaning: 'One year' },
       { id: 'l43_9', japanese: 'はん', romaji: 'han', meaning: 'Half (e.g. 1:30)' },
       { id: 'l43_10', japanese: 'たんじょうび', romaji: 'tanjoubi', meaning: 'Birthday' },
-    ]
+    ],
   },
   level44: {
     title: 'Travel & Vacation',
@@ -727,7 +892,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l44_8', japanese: 'おみやげ', romaji: 'omiyage', meaning: 'Souvenir' },
       { id: 'l44_9', japanese: 'パスポート', romaji: 'pasupooto', meaning: 'Passport' },
       { id: 'l44_10', japanese: 'やすみ', romaji: 'yasumi', meaning: 'Holiday / Vacation / Rest' },
-    ]
+    ],
   },
   level45: {
     title: 'Hobbies & Sports',
@@ -743,7 +908,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l45_8', japanese: 'プール', romaji: 'puuru', meaning: 'Pool' },
       { id: 'l45_9', japanese: 'ギター', romaji: 'gitaa', meaning: 'Guitar' },
       { id: 'l45_10', japanese: 'え', romaji: 'e', meaning: 'Picture / Painting' },
-    ]
+    ],
   },
   level46: {
     title: 'Classroom Vocabulary',
@@ -759,7 +924,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l46_8', japanese: 'ページ', romaji: 'peeji', meaning: 'Page' },
       { id: 'l46_9', japanese: 'もんだい', romaji: 'mondai', meaning: 'Problem / Question' },
       { id: 'l46_10', japanese: 'れい', romaji: 'rei', meaning: 'Example' },
-    ]
+    ],
   },
   level47: {
     title: 'Sickness & Health',
@@ -775,7 +940,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l47_8', japanese: 'だるい', romaji: 'darui', meaning: 'Sluggish / Heavy feeling' },
       { id: 'l47_9', japanese: 'なおる', romaji: 'naoru', meaning: 'To get well / be cured' },
       { id: 'l47_10', japanese: 'やすむ', romaji: 'yasumu', meaning: 'To rest / take a day off' },
-    ]
+    ],
   },
   level48: {
     title: 'Shopping & Money',
@@ -791,7 +956,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l48_8', japanese: 'えん', romaji: 'en', meaning: 'Yen' },
       { id: 'l48_9', japanese: 'たかい', romaji: 'takai', meaning: 'Expensive' },
       { id: 'l48_10', japanese: 'やすい', romaji: 'yasui', meaning: 'Cheap' },
-    ]
+    ],
   },
   level49: {
     title: 'Colors & Description',
@@ -807,7 +972,7 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
       { id: 'l49_8', japanese: 'しかくい', romaji: 'shikakui', meaning: 'Square' },
       { id: 'l49_9', japanese: 'あたらしい', romaji: 'atarashii', meaning: 'New' },
       { id: 'l49_10', japanese: 'ふるい', romaji: 'furui', meaning: 'Old (thing)' },
-    ]
+    ],
   },
   level50: {
     title: 'Greetings & Farewell (Review)',
@@ -815,14 +980,39 @@ export const readingData: Record<ReadingLevel, ReadingCategory> = {
     items: [
       { id: 'l50_1', japanese: 'おやすみなさい', romaji: 'oyasuminasai', meaning: 'Good night' },
       { id: 'l50_2', japanese: 'いってきます', romaji: 'ittekimasu', meaning: 'I’m leaving' },
-      { id: 'l50_3', japanese: 'いってらっしゃい', romaji: 'itterasshai', meaning: 'Have a good trip (to someone leaving)' },
+      {
+        id: 'l50_3',
+        japanese: 'いってらっしゃい',
+        romaji: 'itterasshai',
+        meaning: 'Have a good trip (to someone leaving)',
+      },
       { id: 'l50_4', japanese: 'ただいま', romaji: 'tadaima', meaning: 'I’m home' },
       { id: 'l50_5', japanese: 'おかえりなさい', romaji: 'okaerinasai', meaning: 'Welcome back' },
       { id: 'l50_6', japanese: 'いただきます', romaji: 'itadakimasu', meaning: 'Let’s eat' },
-      { id: 'l50_7', japanese: 'ごちそうさまでした', romaji: 'gochisousamadeshita', meaning: 'Thank you for the meal' },
-      { id: 'l50_8', japanese: 'おつかれさまでした', romaji: 'otsukaresamadeshita', meaning: 'Thank you for your hard work' },
-      { id: 'l50_9', japanese: 'おさきにしつれいします', romaji: 'osakini shitsureishimasu', meaning: 'Pardon me for leaving before you' },
-      { id: 'l50_10', japanese: 'きをつけて', romaji: 'ki o tsukete', meaning: 'Be careful / Take care' },
-    ]
-  }
+      {
+        id: 'l50_7',
+        japanese: 'ごちそうさまでした',
+        romaji: 'gochisousamadeshita',
+        meaning: 'Thank you for the meal',
+      },
+      {
+        id: 'l50_8',
+        japanese: 'おつかれさまでした',
+        romaji: 'otsukaresamadeshita',
+        meaning: 'Thank you for your hard work',
+      },
+      {
+        id: 'l50_9',
+        japanese: 'おさきにしつれいします',
+        romaji: 'osakini shitsureishimasu',
+        meaning: 'Pardon me for leaving before you',
+      },
+      {
+        id: 'l50_10',
+        japanese: 'きをつけて',
+        romaji: 'ki o tsukete',
+        meaning: 'Be careful / Take care',
+      },
+    ],
+  },
 }

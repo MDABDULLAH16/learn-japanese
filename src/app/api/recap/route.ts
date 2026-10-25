@@ -12,17 +12,19 @@ export async function GET() {
 
     const items = await prisma.recapItem.findMany({
       where: { user_id: session.user.id },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
 
-    const result: VocabularyItem[] = items.map(item => ({
+    const result: VocabularyItem[] = items.map((item) => ({
       nihongo: item.nihongo,
       romaji: item.romaji,
       uchharon: item.uchharon,
       kanji: item.kanji,
       english: item.english,
       bangla: item.bangla,
-      level: (['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal') as WhitelistLevel,
+      level: (['normal', 'medium', 'hard'].includes(item.level)
+        ? item.level
+        : 'normal') as WhitelistLevel,
     }))
 
     return NextResponse.json({ items: result })
@@ -46,16 +48,18 @@ export async function POST(request: Request) {
     if (action === 'setLevel' && vocab) {
       const nihongo = vocab.nihongo.trim()
       const bangla = vocab.bangla.trim()
-      const lvl = (['normal', 'medium', 'hard'].includes(targetLevel) ? targetLevel : 'normal') as WhitelistLevel
+      const lvl = (
+        ['normal', 'medium', 'hard'].includes(targetLevel) ? targetLevel : 'normal'
+      ) as WhitelistLevel
 
       const existing = await prisma.recapItem.findUnique({
         where: {
           user_id_nihongo_bangla: {
             user_id: userId,
             nihongo,
-            bangla
-          }
-        }
+            bangla,
+          },
+        },
       })
 
       if (existing) {
@@ -65,7 +69,7 @@ export async function POST(request: Request) {
         } else {
           await prisma.recapItem.update({
             where: { id: existing.id },
-            data: { level: lvl }
+            data: { level: lvl },
           })
           return NextResponse.json({ success: true, activeLevel: lvl })
         }
@@ -79,8 +83,8 @@ export async function POST(request: Request) {
             kanji: vocab.kanji || '',
             english: vocab.english || '',
             bangla,
-            level: lvl
-          }
+            level: lvl,
+          },
         })
         return NextResponse.json({ success: true, activeLevel: lvl })
       }
@@ -89,16 +93,18 @@ export async function POST(request: Request) {
     if (action === 'toggle' && vocab) {
       const nihongo = vocab.nihongo.trim()
       const bangla = vocab.bangla.trim()
-      const lvl = (['normal', 'medium', 'hard'].includes(vocab.level) ? vocab.level : 'normal') as WhitelistLevel
+      const lvl = (
+        ['normal', 'medium', 'hard'].includes(vocab.level) ? vocab.level : 'normal'
+      ) as WhitelistLevel
 
       const existing = await prisma.recapItem.findUnique({
         where: {
           user_id_nihongo_bangla: {
             user_id: userId,
             nihongo,
-            bangla
-          }
-        }
+            bangla,
+          },
+        },
       })
       if (existing) {
         await prisma.recapItem.delete({ where: { id: existing.id } })
@@ -113,29 +119,31 @@ export async function POST(request: Request) {
             kanji: vocab.kanji || '',
             english: vocab.english || '',
             bangla,
-            level: lvl
-          }
+            level: lvl,
+          },
         })
         return NextResponse.json({ added: true })
       }
     }
 
     if (action === 'add' && vocab) {
-      const lvl = (['normal', 'medium', 'hard'].includes(vocab.level) ? vocab.level : 'normal') as WhitelistLevel
+      const lvl = (
+        ['normal', 'medium', 'hard'].includes(vocab.level) ? vocab.level : 'normal'
+      ) as WhitelistLevel
       await prisma.recapItem.upsert({
         where: {
           user_id_nihongo_bangla: {
             user_id: userId,
             nihongo: vocab.nihongo.trim(),
-            bangla: vocab.bangla.trim()
-          }
+            bangla: vocab.bangla.trim(),
+          },
         },
         update: {
           romaji: vocab.romaji || '',
           uchharon: vocab.uchharon || '',
           kanji: vocab.kanji || '',
           english: vocab.english || '',
-          level: lvl
+          level: lvl,
         },
         create: {
           user_id: userId,
@@ -145,8 +153,8 @@ export async function POST(request: Request) {
           kanji: vocab.kanji || '',
           english: vocab.english || '',
           bangla: vocab.bangla.trim(),
-          level: lvl
-        }
+          level: lvl,
+        },
       })
       return NextResponse.json({ success: true })
     }
@@ -156,18 +164,18 @@ export async function POST(request: Request) {
         where: {
           user_id: userId,
           nihongo: vocab.nihongo.trim(),
-          bangla: vocab.bangla.trim()
-        }
+          bangla: vocab.bangla.trim(),
+        },
       })
       return NextResponse.json({ success: true })
     }
 
     if (action === 'clear') {
       await prisma.recapItem.deleteMany({
-        where: { 
+        where: {
           user_id: userId,
-          ...(level ? { level } : {})
-        }
+          ...(level ? { level } : {}),
+        },
       })
       return NextResponse.json({ success: true })
     }
@@ -175,21 +183,23 @@ export async function POST(request: Request) {
     if (action === 'sync' && Array.isArray(items)) {
       for (const item of items) {
         if (item?.nihongo?.trim() && item?.bangla?.trim()) {
-          const itemLvl = (['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal') as WhitelistLevel
+          const itemLvl = (
+            ['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal'
+          ) as WhitelistLevel
           await prisma.recapItem.upsert({
             where: {
               user_id_nihongo_bangla: {
                 user_id: userId,
                 nihongo: item.nihongo.trim(),
-                bangla: item.bangla.trim()
-              }
+                bangla: item.bangla.trim(),
+              },
             },
             update: {
               romaji: item.romaji || '',
               uchharon: item.uchharon || '',
               kanji: item.kanji || '',
               english: item.english || '',
-              level: itemLvl
+              level: itemLvl,
             },
             create: {
               user_id: userId,
@@ -199,25 +209,27 @@ export async function POST(request: Request) {
               kanji: item.kanji || '',
               english: item.english || '',
               bangla: item.bangla.trim(),
-              level: itemLvl
-            }
+              level: itemLvl,
+            },
           })
         }
       }
       const updated = await prisma.recapItem.findMany({
         where: { user_id: userId },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       })
       return NextResponse.json({
-        items: updated.map(item => ({
+        items: updated.map((item) => ({
           nihongo: item.nihongo,
           romaji: item.romaji,
           uchharon: item.uchharon,
           kanji: item.kanji,
           english: item.english,
           bangla: item.bangla,
-          level: (['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal') as WhitelistLevel,
-        }))
+          level: (['normal', 'medium', 'hard'].includes(item.level)
+            ? item.level
+            : 'normal') as WhitelistLevel,
+        })),
       })
     }
 

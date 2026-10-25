@@ -1,25 +1,25 @@
 'use server'
 
-import { signIn } from "@/auth"
-import prisma from "@/lib/prisma"
-import bcrypt from "bcryptjs"
-import { AuthError } from "next-auth"
+import { signIn } from '@/auth'
+import prisma from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
+import { AuthError } from 'next-auth'
 
 export async function register(formData: FormData) {
-  const email = formData.get("email") as string
-  const password = formData.get("password") as string
-  const name = formData.get("name") as string
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+  const name = formData.get('name') as string
 
   if (!email || !password || !name) {
-    return { error: "Missing fields" }
+    return { error: 'Missing fields' }
   }
 
   const existingUser = await prisma.user.findUnique({
-    where: { email }
+    where: { email },
   })
 
   if (existingUser) {
-    return { error: "Email already exists" }
+    return { error: 'Email already exists' }
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -29,7 +29,7 @@ export async function register(formData: FormData) {
       name,
       email,
       password: hashedPassword,
-    }
+    },
   })
 
   return { success: true }

@@ -1,23 +1,26 @@
-import { auth } from "@/auth"
+import { auth } from '@/auth'
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const isAuthPage = req.nextUrl.pathname.startsWith('/login') || req.nextUrl.pathname.startsWith('/register');
-  
+  const isLoggedIn = !!req.auth
+  const isAuthPage =
+    req.nextUrl.pathname.startsWith('/login') || req.nextUrl.pathname.startsWith('/register')
+
   if (isAuthPage) {
     if (isLoggedIn) {
-      return Response.redirect(new URL('/', req.nextUrl));
+      return Response.redirect(new URL('/', req.nextUrl))
     }
-    return null;
+    return null
   }
 
   if (!isLoggedIn) {
-    return Response.redirect(new URL('/login', req.nextUrl));
+    return Response.redirect(new URL('/login', req.nextUrl))
   }
 
-  return null;
+  return null
 })
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|site.webmanifest|icon-.*\\.png|sw\\.js|.*\\.svg).*)'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|site.webmanifest|icon-.*\\.png|sw\\.js|.*\\.svg).*)',
+  ],
 }

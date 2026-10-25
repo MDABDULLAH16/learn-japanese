@@ -1,101 +1,189 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { KANJI_DATA, KanjiItem } from '@/lib/kanjiData'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { 
-  ArrowLeft, 
-  BookOpen, 
-  X, 
-  ChevronRight, 
-  ChevronLeft, 
-  PenTool, 
-  Volume2, 
-  Maximize2, 
-  Minimize2, 
-  Lightbulb, 
-  Sparkles, 
-  Languages 
+import { useRouter } from 'next/navigation'
+import {
+  ArrowLeft,
+  PenTool,
+  Volume2,
+  Eye,
+  EyeOff,
+  Bookmark,
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle2,
+  Clock,
+  Flame,
+  ListFilter,
+  Sparkles,
 } from 'lucide-react'
-import { kanaToRomaji } from '@/lib/romaji'
+import { useRecapKanji } from '@/lib/kanjiRecapStorage'
+import { KanjiRecapItem } from '@/lib/actions'
+import { WhitelistLevel } from '@/lib/vocabularyData'
 
-export function KanjiClient({ userId }: { userId: string }) {
-  const [selectedLevel, setSelectedLevel] = useState<"N5" | "N4">("N5")
-  const [selectedLesson, setSelectedLesson] = useState<number>(1)
-  const [selectedKanji, setSelectedKanji] = useState<KanjiItem | null>(null)
-  const [isFullscreen, setIsFullscreen] = useState(false)
-  
-  const filteredKanji = KANJI_DATA.filter(k => k.level === selectedLevel && k.lesson === selectedLesson)
-  
-  // Get unique lessons for the selected level
-  const lessons = Array.from(new Set(KANJI_DATA.filter(k => k.level === selectedLevel).map(k => k.lesson))).sort((a, b) => a - b)
+export function KanjiClient({
+  userId,
+  initialLevel = 'N5',
+  initialLesson = 1,
+  initialRecapList,
+}: {
+  userId: string
+  initialLevel?: 'N5' | 'N4'
+  initialLesson?: number | 'recap'
+  initialRecapList?: KanjiRecapItem[]
+}) {
+  const router = useRouter()
+  const [selectedLevel, setSelectedLevel] = useState<'N5' | 'N4'>(initialLevel)
+  const [selectedLesson, setSelectedLesson] = useState<number | 'recap'>(initialLesson)
+  const [recapCategory, setRecapCategory] = useState<'all' | WhitelistLevel>('all')
+  const [shownReadings, setShownReadings] = useState<Set<string>>(new Set())
+  const [shownMeanings, setShownMeanings] = useState<Set<string>>(new Set())
+  const [showScrollLessonBar, setShowScrollLessonBar] = useState(false)
 
-  const currentIndex = selectedKanji ? filteredKanji.findIndex(k => k.id === selectedKanji.id) : -1
+  const stickyLessonsRef = useRef<HTMLDivElement>(null)
+  const mainLessonsRef = useRef<HTMLDivElement>(null)
+  const lastScrollY = useRef(0)
 
-  const handlePrevKanji = useCallback(() => {
-    if (filteredKanji.length === 0) return
-    if (currentIndex > 0) {
-      setSelectedKanji(filteredKanji[currentIndex - 1])
-    } else {
-      setSelectedKanji(filteredKanji[filteredKanji.length - 1])
-    }
-  }, [currentIndex, filteredKanji])
+  const { recapList, normalList, mediumList, hardList, getItemLevel, setLevel } =
+    useRecapKanji(initialRecapList, userId)
 
-  const handleNextKanji = useCallback(() => {
-    if (filteredKanji.length === 0) return
-    if (currentIndex >= 0 && currentIndex < filteredKanji.length - 1) {
-      setSelectedKanji(filteredKanji[currentIndex + 1])
-    } else {
-      setSelectedKanji(filteredKanji[0])
-    }
-  }, [currentIndex, filteredKanji])
-
-  // Keyboard navigation
+  // Scroll listener: shows sticky lesson bar when scrolling UP
   useEffect(() => {
-    if (!selectedKanji) return
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const diff = currentScrollY - lastScrollY.current
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (isFullscreen) {
-          setIsFullscreen(false)
-        } else {
-          setSelectedKanji(null)
-        }
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault()
-        handlePrevKanji()
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault()
-        handleNextKanji()
-      } else if (e.key === 'f' || e.key === 'F') {
-        // Toggle fullscreen only when not typing in an input
-        if (document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
-          e.preventDefault()
-          setIsFullscreen(prev => !prev)
-        }
+      if (currentScrollY <= 160) {
+        setShowScrollLessonBar(false)
+      } else if (diff < -8) {
+        setShowScrollLessonBar(true)
+      } else if (diff > 8) {
+        setShowScrollLessonBar(false)
+      }
+
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Auto-center selected lesson button in scroll containers
+  useEffect(() => {
+    const centerButton = (container: HTMLElement | null) => {
+      if (!container) return
+      const activeBtn = container.querySelector<HTMLElement>('[data-active="true"]')
+      if (activeBtn) {
+        const scrollLeft =
+          activeBtn.offsetLeft - container.offsetWidth / 2 + activeBtn.offsetWidth / 2
+        container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    const originalOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    centerButton(stickyLessonsRef.current)
+    centerButton(mainLessonsRef.current)
+  }, [selectedLesson])
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = originalOverflow
+  const scrollContainer = (
+    ref: React.RefObject<HTMLDivElement | null>,
+    direction: 'left' | 'right'
+  ) => {
+    if (ref.current) {
+      ref.current.scrollBy({ left: direction === 'left' ? -240 : 240, behavior: 'smooth' })
     }
-  }, [selectedKanji, isFullscreen, handlePrevKanji, handleNextKanji])
+  }
+
+  const handleHorizontalWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (e.deltaY !== 0) {
+      e.currentTarget.scrollLeft += e.deltaY * 1.2
+    }
+  }
+
+  const handleSelectLesson = (lesson: number | 'recap') => {
+    setSelectedLesson(lesson)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const toggleReading = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShownReadings((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
+
+  const toggleMeaning = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShownMeanings((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
+
+  // Get unique lessons for the selected level
+  const lessons = useMemo(
+    () =>
+      Array.from(
+        new Set(KANJI_DATA.filter((k) => k.level === selectedLevel).map((k) => k.lesson))
+      ).sort((a, b) => a - b),
+    [selectedLevel]
+  )
+
+  // Map whitelisted kanji IDs to full KanjiItem objects
+  const kanjiMap = useMemo(() => {
+    const map = new Map<string, KanjiItem>()
+    for (const item of KANJI_DATA) {
+      map.set(item.id, item)
+    }
+    return map
+  }, [])
+
+  // Filtered kanji list for current view
+  const displayedKanjiList = useMemo(() => {
+    if (selectedLesson === 'recap') {
+      const targetList =
+        recapCategory === 'all'
+          ? recapList
+          : recapCategory === 'normal'
+            ? normalList
+            : recapCategory === 'medium'
+              ? mediumList
+              : hardList
+
+      return targetList
+        .map((recapItem) => kanjiMap.get(recapItem.id))
+        .filter((k): k is KanjiItem => Boolean(k))
+    }
+
+    return KANJI_DATA.filter((k) => k.level === selectedLevel && k.lesson === selectedLesson)
+  }, [selectedLesson, recapCategory, recapList, normalList, mediumList, hardList, kanjiMap, selectedLevel])
+
+  const totalLevelKanji = useMemo(
+    () => KANJI_DATA.filter((k) => k.level === selectedLevel).length,
+    [selectedLevel]
+  )
 
   const speakJapanese = (text: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation()
     if (!text) return
-    // Extract only kana/kanji — strip romaji in parentheses and special chars
     const cleanText = text
-      .replace(/\([^)]*\)/g, '')  // remove (romaji) parts
-      .replace(/[-~、。,]/g, '')   // remove separators
+      .replace(/\([^)]*\)/g, '')
+      .replace(/[-~、。,]/g, '')
       .trim()
     if (!cleanText) return
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -104,540 +192,703 @@ export function KanjiClient({ userId }: { userId: string }) {
       utterance.lang = 'ja-JP'
       utterance.rate = 0.85
       utterance.pitch = 1.0
-      // Pick the best Japanese voice available
       const voices = window.speechSynthesis.getVoices()
-      const jpVoice = 
-        voices.find(v => v.lang === 'ja-JP' && v.name.includes('Google')) ||
-        voices.find(v => v.lang === 'ja-JP' && !v.name.toLowerCase().includes('espeak')) ||
-        voices.find(v => v.lang === 'ja-JP') ||
-        voices.find(v => v.lang.startsWith('ja'))
+      const jpVoice =
+        voices.find((v) => v.lang === 'ja-JP' && v.name.includes('Google')) ||
+        voices.find((v) => v.lang === 'ja-JP' && !v.name.toLowerCase().includes('espeak')) ||
+        voices.find((v) => v.lang === 'ja-JP') ||
+        voices.find((v) => v.lang.startsWith('ja'))
       if (jpVoice) utterance.voice = jpVoice
       window.speechSynthesis.speak(utterance)
     }
   }
 
-  // Helper: extract first kana from reading string like "ふた (futa)" or "イチ (ichi), イツ (itsu)"
   const extractKana = (reading: string): string => {
-    // Take only up to first comma (for multiple readings), then strip romaji in ()
     const firstReading = reading.split(',')[0].trim()
     return firstReading.replace(/\([^)]*\)/g, '').trim() || reading
   }
 
   return (
-    <div className="max-w-6xl mx-auto mt-6 md:mt-12 mb-28 md:mb-12 space-y-8 px-4 w-full">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-2">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
-          </Link>
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-extrabold tracking-tight">Dedicated Kanji</h1>
-            <Badge variant="secondary" className="px-2.5 py-0.5 rounded-full text-xs font-semibold">
-              Total {filteredKanji.length} Kanji
+    <div className="relative w-full">
+      {/* Sticky Floating Lesson Navbar on Scroll UP */}
+      <div
+        className={`fixed top-16 left-0 right-0 z-40 bg-background/90 dark:bg-background/95 backdrop-blur-md border-b border-border/80 shadow-md shadow-black/5 dark:shadow-black/20 transition-all duration-300 ease-out ${
+          showScrollLessonBar
+            ? 'translate-y-0 opacity-100 pointer-events-auto'
+            : '-translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-1.5 sm:gap-2.5">
+          {/* Active Lesson indicator */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground hidden sm:inline">
+              Lesson:
+            </span>
+            <Badge
+              variant="secondary"
+              className="font-bold text-xs px-2.5 py-0.5 bg-primary/10 text-primary border-primary/20 shrink-0"
+            >
+              {selectedLesson === 'recap' ? (
+                <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                  <Bookmark className="w-3 h-3 fill-current" /> Recap ({recapList.length})
+                </span>
+              ) : (
+                <span>Lesson {selectedLesson}</span>
+              )}
             </Badge>
           </div>
-          <p className="text-muted-foreground mt-1">Learn individual Kanji characters, meanings, readings, and stroke mnemonics.</p>
-        </div>
-        
-        <Link href="/kanji-practice">
-          <Button className="w-full sm:w-auto shadow-sm gap-2">
-            <PenTool className="w-4 h-4" /> Kanji Practice
-          </Button>
-        </Link>
-      </div>
 
-      {/* JLPT Level selector */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 scrollbar-hide w-full max-w-full">
-        <span className="text-sm font-medium text-muted-foreground whitespace-nowrap pr-2">JLPT Level:</span>
-        <Button
-          variant={selectedLevel === "N5" ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => {
-            setSelectedLevel("N5")
-            setSelectedKanji(null)
-          }}
-          className="rounded-full flex-shrink-0"
-        >
-          N5 (Basic)
-        </Button>
-        <Button
-          variant={selectedLevel === "N4" ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setSelectedLevel("N4")}
-          className="rounded-full flex-shrink-0 opacity-50 cursor-not-allowed"
-          title="Coming in the next update!"
-        >
-          N4 (Coming Soon)
-        </Button>
-      </div>
-
-      {/* Lessons Selector */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 pt-1 scrollbar-hide w-full max-w-full">
-        <span className="text-sm font-medium text-muted-foreground whitespace-nowrap pr-2">Lesson:</span>
-        {lessons.length > 0 ? lessons.map(lessonNum => (
+          {/* Left Arrow Button for Sticky Lessons */}
           <Button
-            key={lessonNum}
-            variant={selectedLesson === lessonNum ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => {
-              setSelectedLesson(lessonNum)
-              setSelectedKanji(null)
-            }}
-            className="rounded-full flex-shrink-0"
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 rounded-full shrink-0 text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+            onClick={() => scrollContainer(stickyLessonsRef, 'left')}
+            title="Scroll Lessons Left"
+            aria-label="Scroll left"
           >
-            Lesson {lessonNum}
+            <ChevronLeft className="w-4 h-4" />
           </Button>
-        )) : (
-          <span className="text-sm text-muted-foreground italic">No lessons available</span>
-        )}
-      </div>
 
-      {/* Kanji Cards Grid */}
-      <div className="mt-4">
-        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {filteredKanji.map((kanji) => (
-            <Card 
-              key={kanji.id}
-              className="overflow-hidden border border-border/70 transition-all duration-200 hover:shadow-lg hover:border-primary/50 hover:-translate-y-1 group cursor-pointer flex flex-col justify-center items-center p-5 aspect-square bg-card hover:bg-secondary/15 relative"
-              onClick={() => setSelectedKanji(kanji)}
-            >
-              <div className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Badge variant="secondary" className="text-[10px] px-1.5 py-0.5">Details</Badge>
-              </div>
-              <h3 className="text-5xl sm:text-6xl font-black text-primary mb-2 drop-shadow-sm group-hover:scale-110 transition-transform duration-200">
-                {kanji.kanji}
-              </h3>
-              <p className="text-sm font-semibold text-foreground text-center truncate w-full px-1">
-                {kanji.meaning_en}
-              </p>
-              <p className="text-xs font-bold text-blue-600 dark:text-blue-400 text-center truncate w-full px-1 mt-0.5">
-                {kanji.meaning_bn}
-              </p>
-              {/* Kunyomi & Onyomi quick-listen buttons */}
-              <div className="flex items-center gap-2 mt-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                {kanji.kunyomi.length > 0 && (
-                  <button
-                    className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 hover:bg-blue-500/30 active:scale-95 transition-all min-h-[32px]"
-                    onClick={(e) => { e.stopPropagation(); speakJapanese(kanji.kunyomi[0], e) }}
-                    title={`Kunyomi: ${kanji.kunyomi[0]}`}
-                  >
-                    <Volume2 className="w-3.5 h-3.5" /> 訓
-                  </button>
-                )}
-                {kanji.onyomi.length > 0 && (
-                  <button
-                    className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 hover:bg-rose-500/30 active:scale-95 transition-all min-h-[32px]"
-                    onClick={(e) => { e.stopPropagation(); speakJapanese(kanji.onyomi[0], e) }}
-                    title={`Onyomi: ${kanji.onyomi[0]}`}
-                  >
-                    <Volume2 className="w-3.5 h-3.5" /> 音
-                  </button>
-                )}
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* Fullscreen / Large Screen Kanji Details Modal */}
-      {selectedKanji && (
-        <div 
-          className={`fixed inset-0 z-[100] flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4 md:p-6'} bg-background/85 backdrop-blur-md animate-in fade-in-50 duration-200`}
-          onClick={() => { setSelectedKanji(null); setIsFullscreen(false); }}
-        >
-          <div 
-            className={`bg-card text-card-foreground border border-border/80 shadow-2xl flex flex-col transition-all duration-300 overflow-hidden ${
-              isFullscreen 
-                ? 'w-screen h-screen rounded-none border-none' 
-                : 'w-full max-w-6xl xl:max-w-7xl h-[92vh] max-h-[94vh] rounded-2xl md:rounded-3xl'
-            }`}
-            onClick={e => e.stopPropagation()}
+          {/* Horizontal scrollable lesson buttons */}
+          <div
+            ref={stickyLessonsRef}
+            onWheel={handleHorizontalWheel}
+            className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-0.5 px-1 flex-1 scroll-smooth"
           >
-            {/* Modal Header Bar */}
-            <div className="px-5 py-3.5 border-b border-border/60 bg-muted/40 flex items-center justify-between gap-4 shrink-0">
-              <div className="flex items-center gap-3">
-                <Badge variant="outline" className="font-bold border-primary/30 text-primary px-2.5 py-1 text-xs">
-                  {selectedKanji.level} • Lesson {selectedKanji.lesson}
-                </Badge>
-                <span className="text-xs sm:text-sm font-semibold text-muted-foreground">
-                  Kanji {currentIndex + 1} of {filteredKanji.length}
-                </span>
-              </div>
+            <Button
+              variant={selectedLesson === 'recap' ? 'default' : 'outline'}
+              size="sm"
+              data-active={selectedLesson === 'recap'}
+              onClick={() => handleSelectLesson('recap')}
+              className={`h-7 px-2.5 text-xs rounded-full whitespace-nowrap shrink-0 gap-1 font-semibold transition-all ${
+                selectedLesson === 'recap'
+                  ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm ring-1 ring-amber-500/40'
+                  : 'border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10'
+              }`}
+            >
+              <Bookmark className={`w-3 h-3 ${selectedLesson === 'recap' ? 'fill-current' : ''}`} />
+              Recap ({recapList.length})
+            </Button>
 
-              {/* Prev / Next Kanji Buttons */}
-              <div className="flex items-center gap-1 sm:gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handlePrevKanji}
-                  className="h-8 sm:h-9 px-2 sm:px-3 text-xs sm:text-sm rounded-full gap-1 hover:bg-secondary"
-                  title="Previous Kanji (← Left Arrow)"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span className="hidden sm:inline">Prev</span>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleNextKanji}
-                  className="h-8 sm:h-9 px-2 sm:px-3 text-xs sm:text-sm rounded-full gap-1 hover:bg-secondary"
-                  title="Next Kanji (→ Right Arrow)"
-                >
-                  <span className="hidden sm:inline">Next</span>
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              </div>
+            <div className="h-4 w-px bg-border/60 mx-0.5 shrink-0" />
 
-              {/* Window Controls */}
-              <div className="flex items-center gap-1.5">
+            {lessons.map((lessonNum) => {
+              const isActive = selectedLesson === lessonNum
+              return (
                 <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 sm:h-9 sm:w-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/60"
-                  onClick={() => setIsFullscreen(prev => !prev)}
-                  title={isFullscreen ? "Exit Fullscreen (F)" : "Full Screen (F)"}
+                  key={`sticky_lesson_${lessonNum}`}
+                  variant={isActive ? 'default' : 'outline'}
+                  size="sm"
+                  data-active={isActive}
+                  onClick={() => handleSelectLesson(lessonNum)}
+                  className={`h-7 px-2.5 text-xs rounded-full whitespace-nowrap shrink-0 transition-all ${
+                    isActive
+                      ? 'font-bold shadow-sm ring-1 ring-primary/40'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
                 >
-                  {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                  L-{lessonNum}
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 sm:h-9 sm:w-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/60"
-                  onClick={() => { setSelectedKanji(null); setIsFullscreen(false); }}
-                  title="Close (Esc)"
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
+              )
+            })}
+          </div>
 
-            {/* Modal Body: Responsive Split-Layout on Desktop */}
-            <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 overflow-y-auto lg:overflow-hidden">
-              {/* Left Column: Kanji Hero & Mnemonic (Sticky/Distinct on Desktop) */}
-              <div className="lg:col-span-5 xl:col-span-4 border-b lg:border-b-0 lg:border-r border-border/60 bg-gradient-to-b from-secondary/35 via-secondary/10 to-background flex flex-col justify-between overflow-y-auto p-6 lg:p-8 space-y-6">
-                <div className="space-y-6">
-                  {/* Hero Kanji Card */}
-                  <div className="flex flex-col items-center text-center p-6 bg-card/60 backdrop-blur-xs rounded-2xl border border-border/60 shadow-xs relative">
-                    <div className="relative mb-3 flex items-center justify-center">
-                      <h2 className="text-8xl sm:text-9xl font-black text-primary tracking-tight select-none drop-shadow-sm">
-                        {selectedKanji.kanji}
-                      </h2>
-                    </div>
+          {/* Right Arrow Button for Sticky Lessons */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 rounded-full shrink-0 text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+            onClick={() => scrollContainer(stickyLessonsRef, 'right')}
+            title="Scroll Lessons Right"
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
 
-                    {/* Pronounce Main Kanji Button */}
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="rounded-full gap-2 text-primary font-bold border-primary/20 bg-primary/5 hover:bg-primary/10 shadow-xs mb-4" 
-                      onClick={(e) => speakJapanese(selectedKanji.kanji, e)}
-                      title="Pronounce Kanji"
-                    >
-                      <Volume2 className="w-4 h-4" />
-                      Listen Pronunciation
-                    </Button>
-
-                    {/* Meanings */}
-                    <div className="space-y-1 w-full">
-                      <p className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                        {selectedKanji.meaning_en}
-                      </p>
-                      <p className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">
-                        {selectedKanji.meaning_bn}
-                      </p>
-                    </div>
-
-                    {/* Quick Readings Summary */}
-                    <div className="flex flex-wrap gap-1.5 justify-center mt-4 pt-4 border-t border-border/50 w-full text-xs">
-                      {selectedKanji.kunyomi.length > 0 && (
-                        <div className="bg-blue-500/10 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full font-medium">
-                          <span className="font-bold mr-1">Kun:</span>
-                          {selectedKanji.kunyomi.join(', ')}
-                        </div>
-                      )}
-                      {selectedKanji.onyomi.length > 0 && (
-                        <div className="bg-rose-500/10 text-rose-700 dark:text-rose-300 px-2.5 py-1 rounded-full font-medium">
-                          <span className="font-bold mr-1">On:</span>
-                          {selectedKanji.onyomi.join(', ')}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Mnemonic / Hint Box */}
-                  {selectedKanji.mnemonic && (
-                    <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-5 shadow-xs relative overflow-hidden">
-                      <div className="flex items-center gap-2 mb-2 text-amber-700 dark:text-amber-400">
-                        <Lightbulb className="w-4 h-4 shrink-0" />
-                        <span className="text-xs font-extrabold uppercase tracking-wider">
-                          Mnemonic / মনে রাখার উপায়
-                        </span>
-                      </div>
-                      <p className="text-base sm:text-lg font-bold text-foreground leading-relaxed">
-                        {selectedKanji.mnemonic}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Left Column Footer Helper */}
-                <div className="hidden lg:flex items-center justify-between pt-4 border-t border-border/50 text-xs text-muted-foreground font-medium">
-                  <span>← / → arrows to browse</span>
-                  <span>Esc to close</span>
-                </div>
-              </div>
-
-              {/* Right Column: Detailed Readings, Vocabulary & Sentences (Scrollable on Desktop) */}
-              <div className="lg:col-span-7 xl:col-span-8 flex-1 overflow-y-auto p-5 sm:p-6 lg:p-8 space-y-8 bg-card/40">
-                {/* 1. Readings Breakdown (Kunyomi & Onyomi side-by-side) */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 pb-1 border-b border-border/50">
-                    <Languages className="w-5 h-5 text-primary" />
-                    <h3 className="text-base sm:text-lg font-bold">Readings & Pronunciation (読み方)</h3>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
-                    {/* Kunyomi (Japanese) */}
-                    <div className="bg-blue-500/5 p-4 sm:p-5 rounded-2xl border border-blue-500/25 flex flex-col justify-between shadow-xs">
-                      <div>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs uppercase tracking-wider font-extrabold text-blue-600 dark:text-blue-400">
-                            訓読み • Kunyomi (Japanese)
-                          </span>
-                        </div>
-
-                        {selectedKanji.kun_yomi_new ? (
-                          <div className="space-y-3">
-                            {selectedKanji.kun_yomi_new.reading && (
-                              <div className="flex items-center gap-2">
-                                <p className="font-black text-xl text-foreground">
-                                  {selectedKanji.kun_yomi_new.reading}
-                                </p>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-7 w-7 text-blue-500 hover:text-blue-600 rounded-full hover:bg-blue-500/10 shrink-0"
-                                  onClick={(e) => speakJapanese(extractKana(selectedKanji.kun_yomi_new!.reading), e)}
-                                  title="Kunyomi উচ্চারণ শুনুন"
-                                >
-                                  <Volume2 className="w-3.5 h-3.5" />
-                                </Button>
-                              </div>
-                            )}
-                            {selectedKanji.kun_yomi_new.examples && selectedKanji.kun_yomi_new.examples.length > 0 && (
-                              <div className="space-y-2 mt-3">
-                                {selectedKanji.kun_yomi_new.examples.map((ex, i) => (
-                                  <div key={i} className="flex items-center justify-between p-2.5 bg-background/80 rounded-xl border border-border/60 hover:border-blue-500/40 transition-colors">
-                                    <div className="flex flex-col">
-                                      <div className="flex items-center gap-2">
-                                        <span className="font-black text-lg text-primary">{ex.word}</span>
-                                        <span className="text-xs text-muted-foreground font-semibold">({ex.reading})</span>
-                                      </div>
-                                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{ex.meaning_bn}</span>
-                                    </div>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="icon" 
-                                      className="h-8 w-8 text-muted-foreground hover:text-primary rounded-full hover:bg-blue-500/10 shrink-0"
-                                      onClick={(e) => speakJapanese(extractKana(ex.reading), e)}
-                                      title="উচ্চারণ শুনুন"
-                                    >
-                                      <Volume2 className="w-4 h-4" />
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {selectedKanji.kunyomi.length > 0 ? selectedKanji.kunyomi.map((k, i) => (
-                              <div key={i} className="flex items-center gap-1.5 bg-background font-bold text-sm px-3 py-1.5 rounded-lg border border-border/60 text-foreground">
-                                <span>{k}</span>
-                                <span className="text-muted-foreground font-medium text-xs">({kanaToRomaji(k)})</span>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6 text-muted-foreground hover:text-primary rounded-full -mr-1"
-                                  onClick={(e) => speakJapanese(k, e)}
-                                >
-                                  <Volume2 className="w-3 h-3" />
-                                </Button>
-                              </div>
-                            )) : <span className="text-muted-foreground text-sm italic">None</span>}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Onyomi (Chinese) */}
-                    <div className="bg-rose-500/5 p-4 sm:p-5 rounded-2xl border border-rose-500/25 flex flex-col justify-between shadow-xs">
-                      <div>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs uppercase tracking-wider font-extrabold text-rose-600 dark:text-rose-400">
-                            音読み • Onyomi (Chinese)
-                          </span>
-                        </div>
-
-                        {selectedKanji.on_yomi_new ? (
-                          <div className="space-y-3">
-                            {selectedKanji.on_yomi_new.reading && (
-                              <div className="flex items-center gap-2">
-                                <p className="font-black text-xl text-foreground">
-                                  {selectedKanji.on_yomi_new.reading}
-                                </p>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-7 w-7 text-rose-500 hover:text-rose-600 rounded-full hover:bg-rose-500/10 shrink-0"
-                                  onClick={(e) => speakJapanese(extractKana(selectedKanji.on_yomi_new!.reading), e)}
-                                  title="Onyomi উচ্চারণ শুনুন"
-                                >
-                                  <Volume2 className="w-3.5 h-3.5" />
-                                </Button>
-                              </div>
-                            )}
-                            {selectedKanji.on_yomi_new.examples && selectedKanji.on_yomi_new.examples.length > 0 && (
-                              <div className="space-y-2 mt-3">
-                                {selectedKanji.on_yomi_new.examples.map((ex, i) => (
-                                  <div key={i} className="flex items-center justify-between p-2.5 bg-background/80 rounded-xl border border-border/60 hover:border-rose-500/40 transition-colors">
-                                    <div className="flex flex-col">
-                                      <div className="flex items-center gap-2">
-                                        <span className="font-black text-lg text-primary">{ex.word}</span>
-                                        <span className="text-xs text-muted-foreground font-semibold">({ex.reading})</span>
-                                      </div>
-                                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{ex.meaning_bn}</span>
-                                    </div>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="icon" 
-                                      className="h-8 w-8 text-muted-foreground hover:text-primary rounded-full hover:bg-rose-500/10 shrink-0"
-                                      onClick={(e) => speakJapanese(extractKana(ex.reading), e)}
-                                      title="উচ্চারণ শুনুন"
-                                    >
-                                      <Volume2 className="w-4 h-4" />
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {selectedKanji.onyomi.length > 0 ? selectedKanji.onyomi.map((o, i) => (
-                              <div key={i} className="flex items-center gap-1.5 bg-background font-bold text-sm px-3 py-1.5 rounded-lg border border-border/60 text-foreground">
-                                <span>{o}</span>
-                                <span className="text-muted-foreground font-medium text-xs">({kanaToRomaji(o)})</span>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6 text-muted-foreground hover:text-primary rounded-full -mr-1"
-                                  onClick={(e) => speakJapanese(o, e)}
-                                >
-                                  <Volume2 className="w-3 h-3" />
-                                </Button>
-                              </div>
-                            )) : <span className="text-muted-foreground text-sm italic">None</span>}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 2. Vocabulary Examples (Words using this Kanji) */}
-                {selectedKanji.examples.length > 0 && (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between pb-1 border-b border-border/50">
-                      <div className="flex items-center gap-2">
-                        <BookOpen className="w-5 h-5 text-primary" />
-                        <h3 className="text-base sm:text-lg font-bold">Vocabulary Words (関連語彙)</h3>
-                      </div>
-                      <Badge variant="secondary" className="font-semibold text-xs">
-                        {selectedKanji.examples.length} words
-                      </Badge>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                      {selectedKanji.examples.map((ex, i) => (
-                        <div key={i} className="flex flex-col justify-between p-3.5 bg-secondary/20 hover:bg-secondary/35 rounded-xl border border-border/60 transition-all hover:shadow-xs">
-                          <div className="flex items-center justify-between gap-2 mb-1.5">
-                            <div className="flex items-center gap-2.5">
-                              <span className="font-black text-2xl text-primary">{ex.word}</span>
-                              <Badge variant="outline" className="text-xs font-semibold px-2 py-0.5 bg-background/60">
-                                {ex.reading}
-                              </Badge>
-                            </div>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 text-muted-foreground hover:text-primary rounded-full bg-background/70 hover:bg-background shadow-xs shrink-0" 
-                              onClick={(e) => speakJapanese(ex.reading, e)}
-                              title="Listen"
-                            >
-                              <Volume2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                          <div className="flex flex-col">
-                            <p className="text-sm font-medium text-foreground">{ex.meaning_en}</p>
-                            <p className="text-sm font-bold text-blue-600 dark:text-blue-400">{ex.meaning_bn}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 3. Example Sentences */}
-                {selectedKanji.sentences.length > 0 && (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between pb-1 border-b border-border/50">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-amber-500" />
-                        <h3 className="text-base sm:text-lg font-bold">Example Sentences (例文)</h3>
-                      </div>
-                      <Badge variant="secondary" className="font-semibold text-xs">
-                        {selectedKanji.sentences.length} sentences
-                      </Badge>
-                    </div>
-
-                    <div className="space-y-3.5">
-                      {selectedKanji.sentences.map((sent, i) => (
-                        <div key={i} className="p-4 sm:p-5 bg-card/90 rounded-2xl border border-border/80 shadow-xs relative hover:border-primary/40 transition-all">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="space-y-1 pr-2">
-                              <p className="font-bold text-lg sm:text-xl text-foreground tracking-wide leading-relaxed">
-                                {sent.japanese}
-                              </p>
-                              <p className="text-xs sm:text-sm text-muted-foreground font-mono">
-                                {sent.romaji}
-                              </p>
-                            </div>
-                            <Button 
-                              variant="outline" 
-                              size="icon" 
-                              className="h-9 w-9 text-muted-foreground hover:text-primary rounded-full bg-background shrink-0 shadow-xs hover:scale-105 transition-transform" 
-                              onClick={(e) => speakJapanese(sent.japanese, e)}
-                              title="Pronounce sentence"
-                            >
-                              <Volume2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                          <div className="h-px w-full bg-border/60 my-3"></div>
-                          <div className="space-y-0.5">
-                            <p className="text-sm font-medium text-muted-foreground">{sent.english}</p>
-                            <p className="text-base font-bold text-blue-600 dark:text-blue-400">{sent.bangla}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+          {/* Quick Practice Shortcut */}
+          <div className="flex items-center gap-1 shrink-0">
+            <Link href="/kanji-practice">
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-7 px-2.5 text-xs font-semibold gap-1 text-primary border-primary/20 hover:bg-primary/10"
+                title="Practice Kanji"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Practice</span>
+              </Button>
+            </Link>
           </div>
         </div>
-      )}
+      </div>
+
+      <div className="max-w-6xl mx-auto mt-6 md:mt-12 mb-28 md:mb-12 space-y-8 px-4 w-full">
+        {/* Top Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <Link
+              href="/"
+              className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-2"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+            </Link>
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-3xl font-extrabold tracking-tight">Dedicated Kanji</h1>
+              <Badge variant="secondary" className="px-2.5 py-0.5 rounded-full text-xs font-semibold">
+                Total: {totalLevelKanji} Kanji
+              </Badge>
+              <button
+                onClick={() => handleSelectLesson('recap')}
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 border border-amber-500/20 transition-all cursor-pointer"
+                title="Click to view Whitelist / Recap"
+              >
+                <Bookmark className="w-3 h-3 fill-current" />
+                Whitelist: {recapList.length}
+              </button>
+            </div>
+            <p className="text-muted-foreground mt-1">
+              Learn individual Kanji characters, stroke mnemonics, and classify them into difficulty levels for revision.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            {recapList.length > 0 && (
+              <Button
+                variant={selectedLesson === 'recap' ? 'default' : 'outline'}
+                onClick={() => handleSelectLesson('recap')}
+                className="gap-2 shadow-sm font-semibold border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
+              >
+                <Bookmark className="w-4 h-4 fill-current" /> Whitelist Recap ({recapList.length})
+              </Button>
+            )}
+            <Link href="/kanji-practice">
+              <Button className="w-full sm:w-auto shadow-sm gap-2 font-semibold">
+                <PenTool className="w-4 h-4" /> Kanji Practice
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* JLPT Level selector */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 scrollbar-hide w-full max-w-full">
+          <span className="text-sm font-medium text-muted-foreground whitespace-nowrap pr-2">
+            JLPT Level:
+          </span>
+          <Button
+            variant={selectedLevel === 'N5' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => {
+              setSelectedLevel('N5')
+              if (selectedLesson !== 'recap') setSelectedLesson(1)
+            }}
+            className="rounded-full"
+          >
+            N5 (Beginner)
+          </Button>
+          <Button
+            variant={selectedLevel === 'N4' ? 'default' : 'outline'}
+            size="sm"
+            disabled
+            className="rounded-full opacity-60 cursor-not-allowed"
+            title="Coming in the next update!"
+          >
+            N4 (Coming Soon)
+          </Button>
+        </div>
+
+        {/* Lesson Selector Bar with Left/Right Scroll Controls & Recap Button */}
+        <div className="flex items-center gap-1.5 w-full max-w-full">
+          <span className="text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:inline pr-1">
+            Select Lesson:
+          </span>
+
+          {/* Left Arrow Button */}
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full shrink-0 text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer shadow-xs"
+            onClick={() => scrollContainer(mainLessonsRef, 'left')}
+            title="Scroll Lessons Left"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+
+          {/* Horizontal scrollable lesson buttons */}
+          <div
+            ref={mainLessonsRef}
+            onWheel={handleHorizontalWheel}
+            className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1 px-1 flex-1 scroll-smooth"
+          >
+            {/* Whitelist / Recap Tab Button */}
+            <Button
+              variant={selectedLesson === 'recap' ? 'default' : 'outline'}
+              size="sm"
+              data-active={selectedLesson === 'recap'}
+              onClick={() => handleSelectLesson('recap')}
+              className={`rounded-full shrink-0 gap-1.5 font-bold transition-all ${
+                selectedLesson === 'recap'
+                  ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm ring-2 ring-amber-500/30'
+                  : 'border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10'
+              }`}
+            >
+              <Bookmark className={`w-3.5 h-3.5 ${selectedLesson === 'recap' ? 'fill-current' : ''}`} />
+              Recap ({recapList.length})
+            </Button>
+
+            <div className="h-5 w-px bg-border/60 mx-1 shrink-0" />
+
+            {/* Individual Lesson Buttons */}
+            {lessons.map((lessonNum) => {
+              const isActive = selectedLesson === lessonNum
+              return (
+                <Button
+                  key={`lesson_${lessonNum}`}
+                  variant={isActive ? 'default' : 'outline'}
+                  size="sm"
+                  data-active={isActive}
+                  onClick={() => handleSelectLesson(lessonNum)}
+                  className={`rounded-full shrink-0 transition-all font-semibold ${
+                    isActive ? 'font-bold shadow-xs ring-2 ring-primary/30' : ''
+                  }`}
+                >
+                  Lesson {lessonNum}
+                </Button>
+              )
+            })}
+          </div>
+
+          {/* Right Arrow Button */}
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full shrink-0 text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer shadow-xs"
+            onClick={() => scrollContainer(mainLessonsRef, 'right')}
+            title="Scroll Lessons Right"
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* RECAP VIEW: When selectedLesson === 'recap' */}
+        {selectedLesson === 'recap' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            {/* Whitelist Overview Banner */}
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/25 space-y-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                      <Bookmark className="w-5 h-5 fill-current" />
+                    </span>
+                    <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+                      Kanji Whitelist & Recap
+                    </h2>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Your personal practice list for difficult or important Kanji. Filter by difficulty level below.
+                  </p>
+                </div>
+              </div>
+
+              {/* 3 Difficulty Level Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                {/* Normal Card */}
+                <button
+                  type="button"
+                  onClick={() => setRecapCategory('normal')}
+                  className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                    recapCategory === 'normal'
+                      ? 'bg-emerald-500/15 border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-xs'
+                      : 'bg-background/60 hover:bg-emerald-500/5 border-emerald-500/20'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-8 w-8 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                        Normal
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">একবার রিভিশন করলেই হবে</div>
+                    </div>
+                  </div>
+                  <Badge
+                    variant="secondary"
+                    className="font-extrabold text-xs px-2 py-0.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20"
+                  >
+                    {normalList.length}
+                  </Badge>
+                </button>
+
+                {/* Medium Card */}
+                <button
+                  type="button"
+                  onClick={() => setRecapCategory('medium')}
+                  className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                    recapCategory === 'medium'
+                      ? 'bg-amber-500/15 border-amber-500/50 ring-2 ring-amber-500/20 shadow-xs'
+                      : 'bg-background/60 hover:bg-amber-500/5 border-amber-500/20'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-8 w-8 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-amber-700 dark:text-amber-300">
+                        Medium
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">মাঝারি প্র্যাকটিস প্রয়োজন</div>
+                    </div>
+                  </div>
+                  <Badge
+                    variant="secondary"
+                    className="font-extrabold text-xs px-2 py-0.5 bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20"
+                  >
+                    {mediumList.length}
+                  </Badge>
+                </button>
+
+                {/* Hard Card */}
+                <button
+                  type="button"
+                  onClick={() => setRecapCategory('hard')}
+                  className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                    recapCategory === 'hard'
+                      ? 'bg-rose-500/15 border-rose-500/50 ring-2 ring-rose-500/20 shadow-xs'
+                      : 'bg-background/60 hover:bg-rose-500/5 border-rose-500/20'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-8 w-8 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                      <Flame className="w-4 h-4 fill-current" />
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-rose-700 dark:text-rose-300">
+                        Hard
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">কঠিন / বিশেষ মনোযোগ</div>
+                    </div>
+                  </div>
+                  <Badge
+                    variant="secondary"
+                    className="font-extrabold text-xs px-2 py-0.5 bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20"
+                  >
+                    {hardList.length}
+                  </Badge>
+                </button>
+              </div>
+            </div>
+
+            {/* Filter Tabs */}
+            <div className="flex items-center justify-between flex-wrap gap-3 pb-1 border-b border-border/60">
+              <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-1">
+                <Button
+                  size="sm"
+                  variant={recapCategory === 'all' ? 'default' : 'outline'}
+                  onClick={() => setRecapCategory('all')}
+                  className={`rounded-full h-8 text-xs font-semibold gap-1.5 transition-all ${
+                    recapCategory === 'all' ? 'bg-foreground text-background' : ''
+                  }`}
+                >
+                  <ListFilter className="w-3.5 h-3.5" />
+                  All Whitelist ({recapList.length})
+                </Button>
+
+                <Button
+                  size="sm"
+                  variant={recapCategory === 'normal' ? 'default' : 'outline'}
+                  onClick={() => setRecapCategory('normal')}
+                  className={`rounded-full h-8 text-xs font-semibold gap-1.5 transition-all ${
+                    recapCategory === 'normal'
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white ring-1 ring-emerald-500/40 shadow-xs'
+                      : 'border-emerald-500/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10'
+                  }`}
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Normal ({normalList.length})
+                </Button>
+
+                <Button
+                  size="sm"
+                  variant={recapCategory === 'medium' ? 'default' : 'outline'}
+                  onClick={() => setRecapCategory('medium')}
+                  className={`rounded-full h-8 text-xs font-semibold gap-1.5 transition-all ${
+                    recapCategory === 'medium'
+                      ? 'bg-amber-600 hover:bg-amber-700 text-white ring-1 ring-amber-500/40 shadow-xs'
+                      : 'border-amber-500/30 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10'
+                  }`}
+                >
+                  <Clock className="w-3.5 h-3.5" />
+                  Medium ({mediumList.length})
+                </Button>
+
+                <Button
+                  size="sm"
+                  variant={recapCategory === 'hard' ? 'default' : 'outline'}
+                  onClick={() => setRecapCategory('hard')}
+                  className={`rounded-full h-8 text-xs font-semibold gap-1.5 transition-all ${
+                    recapCategory === 'hard'
+                      ? 'bg-rose-600 hover:bg-rose-700 text-white ring-1 ring-rose-500/40 shadow-xs'
+                      : 'border-rose-500/30 text-rose-700 dark:text-rose-300 hover:bg-rose-500/10'
+                  }`}
+                >
+                  <Flame className="w-3.5 h-3.5 fill-current" />
+                  Hard ({hardList.length})
+                </Button>
+              </div>
+
+              <div className="text-xs text-muted-foreground font-medium">
+                Showing <span className="font-bold text-foreground">{displayedKanjiList.length}</span>{' '}
+                {recapCategory === 'all' ? 'saved' : recapCategory} Kanji
+              </div>
+            </div>
+
+            {/* Empty State */}
+            {displayedKanjiList.length === 0 && (
+              <div className="text-center py-16 px-6 border border-dashed rounded-2xl bg-secondary/10 flex flex-col items-center justify-center space-y-4">
+                <div className="h-16 w-16 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center border border-amber-500/20">
+                  <Bookmark className="w-8 h-8 fill-current" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-bold text-lg">No Kanji in this category yet</h3>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                    Browse any lesson and click on the Normal, Medium, or Hard pill buttons on a Kanji card to add it to your Whitelist!
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectLesson(1)}
+                  className="rounded-full gap-2 font-semibold"
+                >
+                  <ChevronLeft className="w-4 h-4" /> Go to Lesson 1
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Kanji Cards Grid */}
+        {displayedKanjiList.length > 0 && (
+          <div className="mt-4">
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {displayedKanjiList.map((kanji) => {
+                const isReadingShown = shownReadings.has(kanji.id)
+                const isMeaningShown = shownMeanings.has(kanji.id)
+                const currentLevel = getItemLevel(kanji.id)
+                const kunReading = kanji.kunyomi[0] ? extractKana(kanji.kunyomi[0]) : ''
+                const onReading = kanji.onyomi[0] ? extractKana(kanji.onyomi[0]) : ''
+                const readingDisplay = [kunReading, onReading].filter(Boolean).join(' / ')
+
+                return (
+                  <Card
+                    key={kanji.id}
+                    className="overflow-hidden border border-border/70 transition-all duration-200 hover:shadow-lg hover:border-primary/50 hover:-translate-y-1 group cursor-pointer bg-card hover:bg-secondary/15 relative flex flex-col items-center justify-between p-3.5 min-h-[195px]"
+                    onClick={() =>
+                      router.push(
+                        `/kanji/${kanji.id}?level=${selectedLevel}&lesson=${
+                          selectedLesson === 'recap' ? kanji.lesson : selectedLesson
+                        }`
+                      )
+                    }
+                  >
+                    {/* Card Header: Lesson badge (if recap) + 3 Whitelist Level Pill Buttons */}
+                    <div className="w-full flex items-center justify-between gap-1 mb-1">
+                      {selectedLesson === 'recap' ? (
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px] font-bold px-1.5 py-0.5 bg-muted/80 text-muted-foreground"
+                        >
+                          L-{kanji.lesson}
+                        </Badge>
+                      ) : (
+                        <div />
+                      )}
+
+                      {/* 3 Whitelist Action Pills */}
+                      <div className="flex items-center gap-0.5 p-0.5 rounded-full bg-background/90 dark:bg-zinc-900/90 backdrop-blur-md border border-border/70 shadow-2xs ml-auto">
+                        {/* Normal Button */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setLevel(kanji, 'normal')
+                          }}
+                          title={
+                            currentLevel === 'normal'
+                              ? 'Normal (Click to remove)'
+                              : 'Add to Normal: একবার রিভিশন'
+                          }
+                          aria-label="Normal level"
+                          className={`h-6 w-6 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                            currentLevel === 'normal'
+                              ? 'bg-emerald-500 text-white shadow-xs ring-1 ring-emerald-400/60 scale-105'
+                              : 'text-muted-foreground/50 hover:text-emerald-600 hover:bg-emerald-500/15'
+                          }`}
+                        >
+                          <CheckCircle2
+                            className={`w-3 h-3 ${currentLevel === 'normal' ? 'stroke-[2.5]' : ''}`}
+                          />
+                        </button>
+
+                        {/* Medium Button */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setLevel(kanji, 'medium')
+                          }}
+                          title={
+                            currentLevel === 'medium'
+                              ? 'Medium (Click to remove)'
+                              : 'Add to Medium: মাঝারি প্র্যাকটিস'
+                          }
+                          aria-label="Medium level"
+                          className={`h-6 w-6 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                            currentLevel === 'medium'
+                              ? 'bg-amber-500 text-white shadow-xs ring-1 ring-amber-400/60 scale-105'
+                              : 'text-muted-foreground/50 hover:text-amber-600 hover:bg-amber-500/15'
+                          }`}
+                        >
+                          <Clock
+                            className={`w-3 h-3 ${currentLevel === 'medium' ? 'stroke-[2.5]' : ''}`}
+                          />
+                        </button>
+
+                        {/* Hard Button */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setLevel(kanji, 'hard')
+                          }}
+                          title={
+                            currentLevel === 'hard'
+                              ? 'Hard (Click to remove)'
+                              : 'Add to Hard: কঠিন, বারবার প্র্যাকটিস'
+                          }
+                          aria-label="Hard level"
+                          className={`h-6 w-6 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                            currentLevel === 'hard'
+                              ? 'bg-rose-500 text-white shadow-xs ring-1 ring-rose-400/60 scale-105'
+                              : 'text-muted-foreground/50 hover:text-rose-600 hover:bg-rose-500/15'
+                          }`}
+                        >
+                          <Flame
+                            className={`w-3 h-3 ${currentLevel === 'hard' ? 'fill-white stroke-[2.5]' : ''}`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Main Content: Kanji character, Kun/On Reading, and Bangla Meaning */}
+                    <div className="flex-1 flex flex-col items-center justify-center w-full py-1 text-center">
+                      {/* Kanji character */}
+                      <h3 className="text-5xl sm:text-6xl font-black text-primary drop-shadow-sm group-hover:scale-105 transition-transform duration-200">
+                        {kanji.kanji}
+                      </h3>
+
+                      {/* Kunyomi / Onyomi reading (toggleable) */}
+                      {isReadingShown && (
+                        <p className="text-sm font-bold text-foreground truncate tracking-wide animate-in fade-in duration-150 w-full px-1 mt-1">
+                          {readingDisplay || '—'}
+                        </p>
+                      )}
+
+                      {/* Bangla Meaning (toggleable) */}
+                      {isMeaningShown && (
+                        <p className="text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400 text-center truncate w-full px-1 mt-0.5 animate-in fade-in duration-150">
+                          {kanji.meaning_bn}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Bottom Controls: Pronounce Buttons (訓, 音) + Show/Hide Toggles (রিডিং, অর্থ) */}
+                    <div className="flex flex-col items-center gap-1.5 mt-2 w-full shrink-0">
+                      {/* Pronounce buttons */}
+                      <div className="flex items-center justify-center gap-1.5 w-full">
+                        {kanji.kunyomi.length > 0 && (
+                          <button
+                            type="button"
+                            className="flex items-center justify-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 hover:bg-blue-500/25 active:scale-95 transition-all shadow-2xs"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              speakJapanese(kanji.kunyomi[0], e)
+                            }}
+                            title={`Kunyomi: ${kanji.kunyomi[0]}`}
+                          >
+                            <Volume2 className="w-3 h-3" /> 訓
+                          </button>
+                        )}
+                        {kanji.onyomi.length > 0 && (
+                          <button
+                            type="button"
+                            className="flex items-center justify-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 hover:bg-rose-500/25 active:scale-95 transition-all shadow-2xs"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              speakJapanese(kanji.onyomi[0], e)
+                            }}
+                            title={`Onyomi: ${kanji.onyomi[0]}`}
+                          >
+                            <Volume2 className="w-3 h-3" /> 音
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Reading and Meaning Show/Hide Toggles */}
+                      <div className="flex items-center justify-center gap-1.5 w-full">
+                        <button
+                          type="button"
+                          className={`flex items-center justify-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full active:scale-95 transition-all ${
+                            isReadingShown
+                              ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+                              : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
+                          }`}
+                          onClick={(e) => toggleReading(kanji.id, e)}
+                          title={
+                            isReadingShown ? 'Hide reading (রিডিং লুকান)' : 'Show reading (রিডিং দেখান)'
+                          }
+                        >
+                          {isReadingShown ? (
+                            <EyeOff className="w-3 h-3" />
+                          ) : (
+                            <Eye className="w-3 h-3" />
+                          )}
+                          <span>রিডিং</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          className={`flex items-center justify-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full active:scale-95 transition-all ${
+                            isMeaningShown
+                              ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                              : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
+                          }`}
+                          onClick={(e) => toggleMeaning(kanji.id, e)}
+                          title={
+                            isMeaningShown ? 'Hide meaning (অর্থ লুকান)' : 'Show meaning (অর্থ দেখান)'
+                          }
+                        >
+                          {isMeaningShown ? (
+                            <EyeOff className="w-3 h-3" />
+                          ) : (
+                            <Eye className="w-3 h-3" />
+                          )}
+                          <span>অর্থ</span>
+                        </button>
+                      </div>
+                    </div>
+                  </Card>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

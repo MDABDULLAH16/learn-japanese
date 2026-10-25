@@ -4,35 +4,35 @@ import path from 'path'
 import prisma from './prisma'
 import { revalidatePath } from 'next/cache'
 
-import { auth } from "@/auth"
+import { auth } from '@/auth'
 
 export const getCurrentUser = async () => {
   const session = await auth()
   if (!session?.user?.email) {
-    throw new Error("Not authenticated")
+    throw new Error('Not authenticated')
   }
 
   let user = await prisma.user.findUnique({
-    where: { email: session.user.email }
+    where: { email: session.user.email },
   })
-  
+
   if (!user) {
-    throw new Error("User not found")
+    throw new Error('User not found')
   }
 
   const now = new Date()
   const lastLogin = new Date(user.lastLoginAt)
   const diffDays = Math.floor((now.getTime() - lastLogin.getTime()) / (1000 * 3600 * 24))
-  
+
   if (diffDays === 1) {
     user = await prisma.user.update({
       where: { id: user.id },
-      data: { streak: user.streak + 1, lastLoginAt: now }
+      data: { streak: user.streak + 1, lastLoginAt: now },
     })
   } else if (diffDays > 1) {
     user = await prisma.user.update({
       where: { id: user.id },
-      data: { streak: 1, lastLoginAt: now }
+      data: { streak: 1, lastLoginAt: now },
     })
   }
   return user
@@ -40,7 +40,7 @@ export const getCurrentUser = async () => {
 
 export const getUserProgress = async (userId: string) => {
   return await prisma.userProgress.findMany({
-    where: { user_id: userId }
+    where: { user_id: userId },
   })
 }
 
@@ -50,15 +50,15 @@ export const markItemLearned = async (userId: string, itemId: string, itemType: 
       where: {
         user_id_item_id: {
           user_id: userId,
-          item_id: itemId
-        }
+          item_id: itemId,
+        },
       },
       update: {},
       create: {
         user_id: userId,
         item_id: itemId,
-        item_type: itemType
-      }
+        item_type: itemType,
+      },
     })
     revalidatePath('/alphabet')
     revalidatePath('/')
@@ -69,18 +69,18 @@ export const markItemLearned = async (userId: string, itemId: string, itemType: 
 
 export const markAllLearned = async (userId: string, itemIds: string[], itemType: string) => {
   try {
-    const records = itemIds.map(id => ({
+    const records = itemIds.map((id) => ({
       user_id: userId,
       item_id: id,
-      item_type: itemType
+      item_type: itemType,
     }))
-    
+
     // Efficiently add multiple by doing createMany with skipDuplicates
     await prisma.userProgress.createMany({
       data: records,
-      skipDuplicates: true
+      skipDuplicates: true,
     })
-    
+
     revalidatePath('/alphabet')
     revalidatePath('/')
   } catch (error) {
@@ -93,9 +93,9 @@ export const saveQuizScore = async (userId: string, newScore: number) => {
     where: { id: userId },
     data: {
       totalScore: {
-        increment: newScore
-      }
-    }
+        increment: newScore,
+      },
+    },
   })
   revalidatePath('/')
   revalidatePath('/quiz')
@@ -111,27 +111,32 @@ export const getUserRecapItems = async (userId?: string): Promise<VocabularyItem
       targetUserId = user.id
     }
     const items = await prisma.recapItem.findMany({
-      where: { user_id: targetUserId },
-      orderBy: { createdAt: 'desc' }
+      where: {
+        user_id: targetUserId,
+        NOT: { nihongo: { startsWith: '[KANJI]' } },
+      },
+      orderBy: { createdAt: 'desc' },
     })
-    return items.map(item => ({
+    return items.map((item) => ({
       nihongo: item.nihongo,
       romaji: item.romaji,
       uchharon: item.uchharon,
       kanji: item.kanji,
       english: item.english,
       bangla: item.bangla,
-      level: (['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal') as WhitelistLevel,
+      level: (['normal', 'medium', 'hard'].includes(item.level)
+        ? item.level
+        : 'normal') as WhitelistLevel,
     }))
   } catch (error) {
-    console.error("Failed to get recap items:", error)
+    console.error('Failed to get recap items:', error)
     return []
   }
 }
 
 export const setRecapItemLevelAction = async (
-  vocab: VocabularyItem, 
-  targetLevel: WhitelistLevel, 
+  vocab: VocabularyItem,
+  targetLevel: WhitelistLevel,
   userId?: string
 ): Promise<{ success: boolean; activeLevel: WhitelistLevel | null }> => {
   try {
@@ -148,16 +153,16 @@ export const setRecapItemLevelAction = async (
         user_id_nihongo_bangla: {
           user_id: targetUserId,
           nihongo,
-          bangla
-        }
-      }
+          bangla,
+        },
+      },
     })
 
     if (existing) {
       if (existing.level === targetLevel) {
         // Toggle off / remove if clicking currently active level
         await prisma.recapItem.delete({
-          where: { id: existing.id }
+          where: { id: existing.id },
         })
         revalidatePath('/vocabulary')
         revalidatePath('/vocabulary-quiz')
@@ -166,7 +171,7 @@ export const setRecapItemLevelAction = async (
         // Switch difficulty level
         await prisma.recapItem.update({
           where: { id: existing.id },
-          data: { level: targetLevel }
+          data: { level: targetLevel },
         })
         revalidatePath('/vocabulary')
         revalidatePath('/vocabulary-quiz')
@@ -183,15 +188,15 @@ export const setRecapItemLevelAction = async (
           kanji: vocab.kanji || '',
           english: vocab.english || '',
           bangla,
-          level: targetLevel
-        }
+          level: targetLevel,
+        },
       })
       revalidatePath('/vocabulary')
       revalidatePath('/vocabulary-quiz')
       return { success: true, activeLevel: targetLevel }
     }
   } catch (error) {
-    console.error("Failed to set recap item level:", error)
+    console.error('Failed to set recap item level:', error)
     return { success: false, activeLevel: null }
   }
 }
@@ -218,15 +223,15 @@ export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string)
         user_id_nihongo_bangla: {
           user_id: targetUserId,
           nihongo,
-          bangla
-        }
+          bangla,
+        },
       },
       update: {
         romaji: vocab.romaji || '',
         uchharon: vocab.uchharon || '',
         kanji: vocab.kanji || '',
         english: vocab.english || '',
-        level
+        level,
       },
       create: {
         user_id: targetUserId,
@@ -236,14 +241,14 @@ export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string)
         kanji: vocab.kanji || '',
         english: vocab.english || '',
         bangla,
-        level
-      }
+        level,
+      },
     })
     revalidatePath('/vocabulary')
     revalidatePath('/vocabulary-quiz')
     return { success: true }
   } catch (error) {
-    console.error("Failed to add recap item:", error)
+    console.error('Failed to add recap item:', error)
     return { success: false }
   }
 }
@@ -259,14 +264,14 @@ export const removeRecapItemAction = async (vocab: VocabularyItem, userId?: stri
       where: {
         user_id: targetUserId,
         nihongo: vocab.nihongo.trim(),
-        bangla: vocab.bangla.trim()
-      }
+        bangla: vocab.bangla.trim(),
+      },
     })
     revalidatePath('/vocabulary')
     revalidatePath('/vocabulary-quiz')
     return { success: true }
   } catch (error) {
-    console.error("Failed to remove recap item:", error)
+    console.error('Failed to remove recap item:', error)
     return { success: false }
   }
 }
@@ -279,21 +284,24 @@ export const clearRecapItemsAction = async (userId?: string, level?: WhitelistLe
       targetUserId = user.id
     }
     await prisma.recapItem.deleteMany({
-      where: { 
+      where: {
         user_id: targetUserId,
-        ...(level ? { level } : {})
-      }
+        ...(level ? { level } : {}),
+      },
     })
     revalidatePath('/vocabulary')
     revalidatePath('/vocabulary-quiz')
     return { success: true }
   } catch (error) {
-    console.error("Failed to clear recap items:", error)
+    console.error('Failed to clear recap items:', error)
     return { success: false }
   }
 }
 
-export const syncRecapItemsAction = async (localItems: VocabularyItem[], userId?: string): Promise<VocabularyItem[]> => {
+export const syncRecapItemsAction = async (
+  localItems: VocabularyItem[],
+  userId?: string
+): Promise<VocabularyItem[]> => {
   try {
     let targetUserId = userId
     if (!targetUserId) {
@@ -302,24 +310,28 @@ export const syncRecapItemsAction = async (localItems: VocabularyItem[], userId?
     }
 
     if (localItems && localItems.length > 0) {
-      const validItems = localItems.filter(item => Boolean(item && item.nihongo?.trim() && item.bangla?.trim()))
-      
+      const validItems = localItems.filter((item) =>
+        Boolean(item && item.nihongo?.trim() && item.bangla?.trim())
+      )
+
       for (const item of validItems) {
-        const itemLevel = (['normal', 'medium', 'hard'].includes(item.level || '') ? item.level : 'normal') as WhitelistLevel
+        const itemLevel = (
+          ['normal', 'medium', 'hard'].includes(item.level || '') ? item.level : 'normal'
+        ) as WhitelistLevel
         await prisma.recapItem.upsert({
           where: {
             user_id_nihongo_bangla: {
               user_id: targetUserId,
               nihongo: item.nihongo.trim(),
-              bangla: item.bangla.trim()
-            }
+              bangla: item.bangla.trim(),
+            },
           },
           update: {
             romaji: item.romaji || '',
             uchharon: item.uchharon || '',
             kanji: item.kanji || '',
             english: item.english || '',
-            level: itemLevel
+            level: itemLevel,
           },
           create: {
             user_id: targetUserId,
@@ -329,50 +341,193 @@ export const syncRecapItemsAction = async (localItems: VocabularyItem[], userId?
             kanji: item.kanji || '',
             english: item.english || '',
             bangla: item.bangla.trim(),
-            level: itemLevel
-          }
+            level: itemLevel,
+          },
         })
       }
     }
 
     const dbItems = await prisma.recapItem.findMany({
       where: { user_id: targetUserId },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
 
-    return dbItems.map(item => ({
+    return dbItems.map((item) => ({
       nihongo: item.nihongo,
       romaji: item.romaji,
       uchharon: item.uchharon,
       kanji: item.kanji,
       english: item.english,
       bangla: item.bangla,
-      level: (['normal', 'medium', 'hard'].includes(item.level) ? item.level : 'normal') as WhitelistLevel,
+      level: (['normal', 'medium', 'hard'].includes(item.level)
+        ? item.level
+        : 'normal') as WhitelistLevel,
     }))
   } catch (error) {
-    console.error("Failed to sync recap items:", error)
+    console.error('Failed to sync recap items:', error)
     return []
   }
 }
 
-let kuroshiroInstance: any = null
+type KuroshiroType = {
+  init: (analyzer: unknown) => Promise<void>
+  convert: (text: string, options?: Record<string, unknown>) => Promise<string>
+}
+
+let kuroshiroInstance: KuroshiroType | null = null
 
 export const convertToRomaji = async (japaneseText: string) => {
   try {
     if (!kuroshiroInstance) {
       // Lazy load to avoid affecting startup performance
-      // @ts-ignore
-      const Kuroshiro = (await import("kuroshiro")).default
-      // @ts-ignore
-      const KuromojiAnalyzer = (await import("kuroshiro-analyzer-kuromoji")).default
-      kuroshiroInstance = new Kuroshiro()
+      // @ts-expect-error Kuroshiro module lacks TypeScript definitions
+      const Kuroshiro = (await import('kuroshiro')).default
+      // @ts-expect-error KuromojiAnalyzer module lacks TypeScript definitions
+      const KuromojiAnalyzer = (await import('kuroshiro-analyzer-kuromoji')).default
+      const instance: KuroshiroType = new Kuroshiro()
       const dictPath = path.join(process.cwd(), 'node_modules', 'kuromoji', 'dict')
-      await kuroshiroInstance.init(new KuromojiAnalyzer({ dictPath }))
+      await instance.init(new KuromojiAnalyzer({ dictPath }))
+      kuroshiroInstance = instance
     }
-    const romaji = await kuroshiroInstance.convert(japaneseText, { to: "romaji", mode: "spaced" })
+    if (!kuroshiroInstance) throw new Error('Kuroshiro failed to initialize')
+    const romaji = await kuroshiroInstance.convert(japaneseText, { to: 'romaji', mode: 'spaced' })
     return romaji
-  } catch (error: any) {
-    console.error("Romaji conversion error:", error)
-    return "[ERROR: " + (error.message || String(error)) + "]"
+  } catch (error: unknown) {
+    console.error('Romaji conversion error:', error)
+    return '[ERROR: ' + (error instanceof Error ? error.message : String(error)) + ']'
   }
 }
+
+import type { KanjiItem } from './kanjiData'
+
+export type KanjiRecapItem = {
+  id: string
+  kanji: string
+  meaning_en: string
+  meaning_bn: string
+  level: WhitelistLevel
+  lesson: number
+  kanjiLevel: 'N5' | 'N4'
+}
+
+export const getUserKanjiRecapItems = async (userId?: string): Promise<KanjiRecapItem[]> => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+    const items = await prisma.recapItem.findMany({
+      where: {
+        user_id: targetUserId,
+        nihongo: { startsWith: '[KANJI]' },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return items.map((item) => {
+      const kanjiId = item.nihongo.replace('[KANJI]', '')
+      const [kLevel, lessonPart] = (item.uchharon || '').split('::Lesson ')
+      return {
+        id: kanjiId,
+        kanji: item.kanji,
+        meaning_en: item.english,
+        meaning_bn: item.bangla,
+        level: (['normal', 'medium', 'hard'].includes(item.level)
+          ? item.level
+          : 'normal') as WhitelistLevel,
+        lesson: lessonPart ? parseInt(lessonPart, 10) : 1,
+        kanjiLevel: (kLevel as 'N5' | 'N4') || 'N5',
+      }
+    })
+  } catch (error) {
+    console.error('Failed to get kanji recap items:', error)
+    return []
+  }
+}
+
+export const setKanjiRecapLevelAction = async (
+  kanji: KanjiItem,
+  targetLevel: WhitelistLevel,
+  userId?: string
+): Promise<{ success: boolean; activeLevel: WhitelistLevel | null }> => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+    const nihongoKey = `[KANJI]${kanji.id}`
+    const banglaKey = kanji.meaning_bn.trim()
+
+    const existing = await prisma.recapItem.findUnique({
+      where: {
+        user_id_nihongo_bangla: {
+          user_id: targetUserId,
+          nihongo: nihongoKey,
+          bangla: banglaKey,
+        },
+      },
+    })
+
+    if (existing) {
+      if (existing.level === targetLevel) {
+        // Toggle off / remove from whitelist
+        await prisma.recapItem.delete({
+          where: { id: existing.id },
+        })
+        revalidatePath('/kanji')
+        return { success: true, activeLevel: null }
+      } else {
+        // Switch difficulty level
+        await prisma.recapItem.update({
+          where: { id: existing.id },
+          data: { level: targetLevel },
+        })
+        revalidatePath('/kanji')
+        return { success: true, activeLevel: targetLevel }
+      }
+    } else {
+      // Add to whitelist
+      await prisma.recapItem.create({
+        data: {
+          user_id: targetUserId,
+          nihongo: nihongoKey,
+          kanji: kanji.kanji,
+          english: kanji.meaning_en,
+          bangla: banglaKey,
+          romaji: [...kanji.kunyomi, ...kanji.onyomi].join(', '),
+          uchharon: `${kanji.level}::Lesson ${kanji.lesson}`,
+          level: targetLevel,
+        },
+      })
+      revalidatePath('/kanji')
+      return { success: true, activeLevel: targetLevel }
+    }
+  } catch (error) {
+    console.error('Failed to set kanji recap level:', error)
+    return { success: false, activeLevel: null }
+  }
+}
+
+export const clearKanjiRecapsAction = async (userId?: string): Promise<{ success: boolean }> => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user.id
+    }
+    await prisma.recapItem.deleteMany({
+      where: {
+        user_id: targetUserId,
+        nihongo: { startsWith: '[KANJI]' },
+      },
+    })
+    revalidatePath('/kanji')
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to clear kanji recaps:', error)
+    return { success: false }
+  }
+}
+

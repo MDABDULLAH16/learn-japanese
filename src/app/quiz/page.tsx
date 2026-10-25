@@ -1,7 +1,7 @@
 export const instant = false
 
-import { getCurrentUser } from "@/lib/actions"
-import { QuizClient } from "./QuizClient"
+import { getCurrentUser } from '@/lib/actions'
+import { QuizClient } from './QuizClient'
 
 export default async function QuizPage() {
   const user = await getCurrentUser()
