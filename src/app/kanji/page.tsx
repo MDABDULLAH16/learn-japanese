@@ -1,5 +1,4 @@
 import { getCurrentUser, getUserKanjiRecapItems } from '@/lib/actions'
-import { redirect } from 'next/navigation'
 import { connection } from 'next/server'
 import { KanjiClient } from './KanjiClient'
 
@@ -12,7 +11,6 @@ export default async function KanjiPage({
 }) {
   await connection()
   const user = await getCurrentUser()
-  if (!user) redirect('/login')
 
   const resolvedParams = searchParams ? await searchParams : {}
   const initialLevel = (resolvedParams.level as 'N5' | 'N4') || 'N5'
@@ -23,11 +21,11 @@ export default async function KanjiPage({
         ? parseInt(resolvedParams.lesson, 10)
         : 1
 
-  const initialKanjiRecaps = await getUserKanjiRecapItems(user.id)
+  const initialKanjiRecaps = user ? await getUserKanjiRecapItems(user.id) : []
 
   return (
     <KanjiClient
-      userId={user.id}
+      userId={user ? user.id : ''}
       initialLevel={initialLevel}
       initialLesson={initialLesson}
       initialRecapList={initialKanjiRecaps}

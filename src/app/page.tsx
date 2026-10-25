@@ -328,7 +328,108 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. JLPT ROADMAP */}
+      {/* 5. 100% FREE COMMUNITY TOOLS */}
+      <section className="py-16 md:py-20 border-t border-border/50 bg-gradient-to-b from-background via-muted/20 to-background">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 space-y-12">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-xs font-bold tracking-wide border border-cyan-500/20">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Free Community Toolkit</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Powerful Free Tools for Every Learner
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base">
+              No account required. Practice your handwriting, learn anime phrases, type in kana, or
+              print reference charts.
+            </p>
+          </div>
+
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {/* 1. Handwriting Practice */}
+            <Link href="/practice-writing" className="block group">
+              <div className="h-full p-6 rounded-3xl bg-card border border-border/80 hover:border-primary/50 hover:shadow-lg transition-all duration-300 space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <PenTool className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                  Handwriting Canvas
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Draw Hiragana & Katakana with calligraphy quadrant guides and ghost watermarks on
+                  touch or mouse.
+                </p>
+                <div className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 pt-2">
+                  <span>Start Drawing</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </div>
+            </Link>
+
+            {/* 2. Essential Phrases */}
+            <Link href="/phrases" className="block group">
+              <div className="h-full p-6 rounded-3xl bg-card border border-border/80 hover:border-primary/50 hover:shadow-lg transition-all duration-300 space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Heart className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                  Essential Phrases
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Anime quotes, dining out, greetings, and travel emergency expressions with native
+                  audio & Bengali notes.
+                </p>
+                <div className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 dark:text-rose-400 pt-2">
+                  <span>Explore Phrases</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </div>
+            </Link>
+
+            {/* 3. Romaji Converter */}
+            <Link href="/converter" className="block group">
+              <div className="h-full p-6 rounded-3xl bg-card border border-border/80 hover:border-primary/50 hover:shadow-lg transition-all duration-300 space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <BookA className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                  Romaji to Kana
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Real-time converter. Type English letters like &quot;arigatou&quot; and watch it
+                  turn into Hiragana and Katakana.
+                </p>
+                <div className="inline-flex items-center gap-1 text-xs font-bold text-cyan-600 dark:text-cyan-400 pt-2">
+                  <span>Launch Converter</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </div>
+            </Link>
+
+            {/* 4. Printable Cheat Sheets */}
+            <Link href="/cheat-sheets" className="block group">
+              <div className="h-full p-6 rounded-3xl bg-card border border-border/80 hover:border-primary/50 hover:shadow-lg transition-all duration-300 space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <GraduationCap className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                  Printable Charts
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  High-res Hiragana, Katakana, and JLPT N5 Kanji charts formatted for 1-click
+                  printing or saving to PDF.
+                </p>
+                <div className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 pt-2">
+                  <span>Download / Print</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. JLPT ROADMAP */}
       <section className="py-16 md:py-20 border-t border-border/50 max-w-6xl mx-auto px-4 sm:px-6 md:px-8 space-y-12">
         <div className="text-center space-y-3 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold tracking-wide border border-indigo-500/20">

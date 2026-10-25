@@ -24,6 +24,9 @@ import {
   GraduationCap,
   PlayCircle,
   Lock,
+  Heart,
+  Keyboard,
+  FileText,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { handleSignOut, recordVisit } from '@/lib/auth-actions'
@@ -58,10 +61,44 @@ const LEARN_SECTIONS: LearnSection[] = [
     isPublic: true,
   },
   {
+    title: 'Handwriting Canvas',
+    description: 'Draw Kana with stroke guide',
+    href: '/practice-writing',
+    icon: PenTool,
+    badge: 'Free',
+    isPublic: true,
+  },
+  {
+    title: 'Essential Phrases',
+    description: 'Anime, travel & daily Japanese',
+    href: '/phrases',
+    icon: Heart,
+    badge: 'Free',
+    isPublic: true,
+  },
+  {
+    title: 'Romaji Converter',
+    description: 'Instant Romaji to Kana typist',
+    href: '/converter',
+    icon: Keyboard,
+    badge: 'Free',
+    isPublic: true,
+  },
+  {
+    title: 'Printable Cheat Sheets',
+    description: 'Printable PDF charts for wall/study',
+    href: '/cheat-sheets',
+    icon: FileText,
+    badge: 'Free',
+    isPublic: true,
+  },
+  {
     title: 'Kanji Library',
     description: 'JLPT N5–N1 stroke orders & radicals',
     href: '/kanji',
     icon: Languages,
+    badge: 'Preview',
+    isPublic: true,
   },
   {
     title: 'Kanji Flashcards',
@@ -74,6 +111,8 @@ const LEARN_SECTIONS: LearnSection[] = [
     description: '10,000+ words with audio & recap',
     href: '/vocabulary',
     icon: BookOpen,
+    badge: 'Preview',
+    isPublic: true,
   },
   {
     title: 'Vocabulary Quiz',
@@ -92,6 +131,8 @@ const LEARN_SECTIONS: LearnSection[] = [
     description: 'Test your kana and words for XP',
     href: '/quiz',
     icon: PlayCircle,
+    badge: 'Free',
+    isPublic: true,
   },
 ]
 
@@ -213,13 +254,13 @@ export function HeaderClient({ session }: { session: Session | null }) {
 
               {/* Flyout Dropdown Menu */}
               {learnDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-[460px] p-3 rounded-2xl bg-card/95 border border-border/80 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150 z-50">
+                <div className="absolute top-full left-0 mt-2 w-[540px] p-3 rounded-3xl bg-card/95 border border-border/80 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150 z-50 max-h-[80vh] overflow-y-auto">
                   <div className="px-3 py-2 border-b border-border/60 mb-2 flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      All Learning Modules
+                      All Learning Modules & Tools
                     </span>
                     <span className="text-[11px] text-muted-foreground">
-                      Structured JLPT Curriculum
+                      Structured JLPT Platform
                     </span>
                   </div>
 
@@ -372,7 +413,7 @@ export function HeaderClient({ session }: { session: Session | null }) {
           {/* Learn Subsections */}
           <div className="pt-2 border-t border-border/60">
             <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground px-3 block mb-1">
-              Learn Modules
+              Learn Modules & Tools
             </span>
             <div className="grid grid-cols-1 gap-1">
               {LEARN_SECTIONS.map((sec) => {

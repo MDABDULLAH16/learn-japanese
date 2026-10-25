@@ -15,10 +15,28 @@ export default auth((req) => {
     return Response.redirect(new URL('/', req.nextUrl))
   }
 
-  // Public Routes: Home, Alphabet section, Alphabet speech, and Auth pages
-  const isPublicRoute = pathname === '/' || pathname.startsWith('/alphabet') || isAuthPage
+  // Public Routes:
+  // - Home (/)
+  // - Alphabet (/alphabet, /alphabet-speech)
+  // - Essential Phrases (/phrases)
+  // - Romaji to Kana Converter (/converter)
+  // - Handwriting Practice Canvas (/practice-writing)
+  // - Printable Cheat Sheets (/cheat-sheets)
+  // - Freemium Previews (/kanji, /vocabulary, /quiz)
+  // - Auth Pages (/login, /register, etc.)
+  const isPublicRoute =
+    pathname === '/' ||
+    pathname.startsWith('/alphabet') ||
+    pathname.startsWith('/phrases') ||
+    pathname.startsWith('/converter') ||
+    pathname.startsWith('/practice-writing') ||
+    pathname.startsWith('/cheat-sheets') ||
+    pathname.startsWith('/kanji') ||
+    pathname.startsWith('/vocabulary') ||
+    pathname.startsWith('/quiz') ||
+    isAuthPage
 
-  // Protected Routes: All other features (Kanji, Vocabulary, Quizzes, Reading, Admin, etc.)
+  // Protected Routes: Admin, Study Dashboard, Reading practice, Vocab Quiz, Kanji Practice, etc.
   if (!isPublicRoute && !isLoggedIn) {
     const loginUrl = new URL('/login', req.nextUrl)
     // Save attempted URL to redirect back after successful login

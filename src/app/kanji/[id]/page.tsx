@@ -15,7 +15,6 @@ export default async function KanjiDetailPage({
 }) {
   await connection()
   const user = await getCurrentUser()
-  if (!user) redirect('/login')
 
   const { id } = await params
   const { level, lesson } = await searchParams
@@ -23,6 +22,12 @@ export default async function KanjiDetailPage({
   const kanji = KANJI_DATA.find((k) => k.id === id)
   if (!kanji) {
     notFound()
+  }
+
+  // Free preview allows N5 Lesson 1 and 2
+  const isFreePreview = kanji.level === 'N5' && kanji.lesson <= 2
+  if (!user && !isFreePreview) {
+    redirect('/login')
   }
 
   const initialLevel = (level as 'N5' | 'N4') || kanji.level
@@ -34,7 +39,7 @@ export default async function KanjiDetailPage({
         initialKanji={kanji}
         initialLevel={initialLevel}
         initialLesson={initialLesson}
-        userId={user.id}
+        userId={user ? user.id : ''}
       />
     </main>
   )
