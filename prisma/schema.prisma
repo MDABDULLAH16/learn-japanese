@@ -14,6 +14,8 @@ model User {
   password         String?
   image            String?
   role             String         @default("USER") // 'SUPER_ADMIN', 'ADMIN', 'USER'
+  emailVerified    DateTime?
+  verificationToken String?
   resetToken       String?
   resetTokenExpiry DateTime?
   streak           Int            @default(0)

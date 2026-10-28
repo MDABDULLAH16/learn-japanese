@@ -15,31 +15,34 @@ export default auth((req) => {
     return Response.redirect(new URL('/', req.nextUrl))
   }
 
-  // Public Routes:
-  // - Home (/)
-  // - Global Search (/search)
-  // - Alphabet (/alphabet, /alphabet-speech)
-  // - Essential Phrases (/phrases)
-  // - Handwriting Practice Canvas (/practice-writing)
-  // - Freemium Previews (/kanji, /vocabulary, /quiz)
-  // - Auth Pages (/login, /register, etc.)
+  // Strict Public Routes based on requirement:
+  // Without login, users can ONLY read alphabet (/alphabet, /alphabet-speech) and practice handwriting (/practice-writing), plus auth pages and home page.
+  // All other routes (/search, /phrases, /kanji, /vocabulary, /quiz, /dashboard, /reading, /admin, etc.) require login!
   const isPublicRoute =
     pathname === '/' ||
-    pathname.startsWith('/search') ||
     pathname.startsWith('/alphabet') ||
-    pathname.startsWith('/phrases') ||
     pathname.startsWith('/practice-writing') ||
-    pathname.startsWith('/kanji') ||
-    pathname.startsWith('/vocabulary') ||
-    pathname.startsWith('/quiz') ||
+    pathname.startsWith('/verify-email') ||
     isAuthPage
 
-  // Protected Routes: Admin, Study Dashboard, Reading practice, Vocab Quiz, Kanji Practice, etc.
+  // Protected Routes: Require login
   if (!isPublicRoute && !isLoggedIn) {
     const loginUrl = new URL('/login', req.nextUrl)
     // Save attempted URL to redirect back after successful login
     loginUrl.searchParams.set('callbackUrl', pathname)
     return Response.redirect(loginUrl)
+  }
+
+  // Admin Route Protection: Only ADMIN or SUPER_ADMIN
+  if (pathname.startsWith('/admin')) {
+    const userRole = req.auth?.user?.role
+    const userEmail = req.auth?.user?.email?.toLowerCase().trim()
+    const superAdminEmail = (process.env.SUPER_ADMIN_EMAIL || 'abdullahwebdev15@gmail.com').toLowerCase().trim()
+    const isAdmin = userRole === 'ADMIN' || userRole === 'SUPER_ADMIN' || userEmail === superAdminEmail
+
+    if (!isAdmin) {
+      return Response.redirect(new URL('/', req.nextUrl))
+    }
   }
 
   return null

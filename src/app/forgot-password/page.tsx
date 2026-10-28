@@ -11,13 +11,12 @@ import {
   CardFooter,
 } from '@/components/ui/card'
 import { requestPasswordReset } from '@/lib/auth-actions'
-import { Mail, ArrowLeft, Loader2, CheckCircle2, KeyRound } from 'lucide-react'
+import { Mail, ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [resetToken, setResetToken] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,17 +24,13 @@ export default function ForgotPasswordPage() {
     setIsLoading(true)
     setError(null)
     setSuccessMessage(null)
-    setResetToken(null)
 
     try {
       const res = await requestPasswordReset(email)
       if (res.error) {
         setError(res.error)
       } else {
-        setSuccessMessage(res.message || 'Password reset link generated.')
-        if (res.token) {
-          setResetToken(res.token)
-        }
+        setSuccessMessage(res.message || 'If an account exists with this email, a reset link has been sent.')
       }
     } catch {
       setError('An unexpected error occurred.')
@@ -57,32 +52,24 @@ export default function ForgotPasswordPage() {
           </Link>
           <CardTitle className="text-2xl font-extrabold tracking-tight">Forgot Password?</CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
-            Enter your account email to receive a password reset link
+            Enter your account email to receive a secure password reset link
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-4">
           {successMessage && (
-            <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 space-y-3">
-              <div className="flex items-center gap-2 font-medium">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 space-y-2">
+              <div className="flex items-start gap-2 font-medium">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <span>{successMessage}</span>
               </div>
-              {resetToken && (
-                <div className="pt-2 border-t border-emerald-200 dark:border-emerald-800">
-                  <p className="text-xs text-muted-foreground mb-2">Direct password reset link:</p>
-                  <Link
-                    href={`/reset-password?token=${resetToken}`}
-                    className="inline-block w-full py-2 px-3 text-center text-sm font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition"
-                  >
-                    Click to Reset Your Password Now &rarr;
-                  </Link>
-                </div>
-              )}
+              <p className="text-xs text-muted-foreground ml-7">
+                Please check your inbox (and spam folder) for instructions.
+              </p>
             </div>
           )}
 
-          {!resetToken && (
+          {!successMessage && (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-sm font-semibold flex items-center gap-1.5" htmlFor="email">

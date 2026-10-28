@@ -21,7 +21,9 @@ import {
   GraduationCap,
 } from 'lucide-react'
 
-const SUPER_ADMIN_EMAILS = ['abdullahwebdev15@gmail.com', 'abdullahwebdev15@gamil.com']
+const SUPER_ADMIN_EMAILS = [
+  (process.env.SUPER_ADMIN_EMAIL || 'abdullahwebdev15@gmail.com').toLowerCase().trim(),
+]
 
 export default async function StudyDashboardPage() {
   const user = await getCurrentUser()

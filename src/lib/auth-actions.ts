@@ -5,19 +5,40 @@ import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import { AuthError } from 'next-auth'
+import { z } from 'zod'
+import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/email'
 
-const SUPER_ADMIN_EMAILS = ['abdullahwebdev15@gmail.com', 'abdullahwebdev15@gamil.com']
+const SUPER_ADMIN_EMAILS = [
+  (process.env.SUPER_ADMIN_EMAIL || 'abdullahwebdev15@gmail.com').toLowerCase().trim(),
+]
+
+const registerSchema = z.object({
+  name: z.string().trim().min(2, 'Name must be at least 2 characters long').max(100),
+  email: z.string().trim().toLowerCase().email('Please provide a valid email address').max(255),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters long')
+    .regex(/[A-Za-z]/, 'Password must include at least one letter')
+    .regex(/[0-9]/, 'Password must include at least one number'),
+})
 
 export async function register(formData: FormData) {
-  const rawEmail = formData.get('email') as string
-  const password = formData.get('password') as string
-  const name = formData.get('name') as string
+  const rawEmail = (formData.get('email') as string) || ''
+  const rawPassword = (formData.get('password') as string) || ''
+  const rawName = (formData.get('name') as string) || ''
 
-  if (!rawEmail || !password || !name) {
-    return { error: 'Please provide all required fields.' }
+  const validation = registerSchema.safeParse({
+    name: rawName,
+    email: rawEmail,
+    password: rawPassword,
+  })
+
+  if (!validation.success) {
+    const firstError = validation.error.issues[0]?.message || 'Invalid registration details.'
+    return { error: firstError }
   }
 
-  const email = rawEmail.toLowerCase().trim()
+  const { name, email, password } = validation.data
 
   try {
     const existingUser = await prisma.user.findUnique({
@@ -29,8 +50,8 @@ export async function register(formData: FormData) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
-    // Check if registering email belongs to super admin
     const isSuperAdmin = SUPER_ADMIN_EMAILS.includes(email)
+    const verificationToken = crypto.randomBytes(32).toString('hex')
 
     await (prisma.user as any).create({
       data: {
@@ -38,13 +59,50 @@ export async function register(formData: FormData) {
         email,
         password: hashedPassword,
         role: isSuperAdmin ? 'SUPER_ADMIN' : 'USER',
+        verificationToken,
+        emailVerified: null,
       },
     })
 
-    return { success: true }
+    // Send verification email
+    await sendVerificationEmail(email, verificationToken)
+
+    return {
+      success: true,
+      message: 'Account created! Please check your email to verify your address.',
+    }
   } catch (error) {
     console.error('Registration error:', error)
     return { error: 'Failed to create account. Please try again.' }
+  }
+}
+
+export async function verifyEmail(token: string) {
+  if (!token) {
+    return { error: 'Verification token is required.' }
+  }
+
+  try {
+    const user = await (prisma.user as any).findFirst({
+      where: { verificationToken: token },
+    })
+
+    if (!user) {
+      return { error: 'Invalid or expired verification token.' }
+    }
+
+    await (prisma.user as any).update({
+      where: { id: user.id },
+      data: {
+        emailVerified: new Date(),
+        verificationToken: null,
+      },
+    })
+
+    return { success: true, message: 'Email successfully verified! You can now sign in.' }
+  } catch (error) {
+    console.error('Email verification error:', error)
+    return { error: 'Failed to verify email.' }
   }
 }
 
@@ -77,7 +135,7 @@ export async function handleSignOut() {
 }
 
 /**
- * Request Password Reset Token
+ * Request Password Reset Token (Dispatches secure reset email)
  */
 export async function requestPasswordReset(email: string) {
   if (!email) {
@@ -85,6 +143,10 @@ export async function requestPasswordReset(email: string) {
   }
 
   const normalizedEmail = email.toLowerCase().trim()
+  const emailValidation = z.string().email().safeParse(normalizedEmail)
+  if (!emailValidation.success) {
+    return { error: 'Please enter a valid email address.' }
+  }
 
   try {
     const user = await prisma.user.findUnique({
@@ -92,10 +154,10 @@ export async function requestPasswordReset(email: string) {
     })
 
     if (!user) {
-      // Return success message to avoid email enumeration
+      // Return generic success message to prevent user enumeration
       return {
         success: true,
-        message: 'If an account exists with this email, a reset link has been generated.',
+        message: 'If an account exists with this email, a reset link has been dispatched.',
       }
     }
 
@@ -110,17 +172,24 @@ export async function requestPasswordReset(email: string) {
       },
     })
 
-    // Return reset link for direct UI access
+    // Send reset email via email service (Never return resetToken in API response!)
+    await sendPasswordResetEmail(normalizedEmail, resetToken)
+
     return {
       success: true,
-      token: resetToken,
-      message: 'Reset link generated successfully.',
+      message: 'If an account exists with this email, a reset link has been dispatched to your email.',
     }
   } catch (error) {
     console.error('Password reset request error:', error)
     return { error: 'Could not process password reset request.' }
   }
 }
+
+const resetPasswordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters long')
+  .regex(/[A-Za-z]/, 'Password must contain at least one letter')
+  .regex(/[0-9]/, 'Password must contain at least one number')
 
 /**
  * Confirm and Reset Password with Token
@@ -130,8 +199,9 @@ export async function resetPasswordWithToken(token: string, newPassword: string)
     return { error: 'Token and new password are required.' }
   }
 
-  if (newPassword.length < 6) {
-    return { error: 'Password must be at least 6 characters long.' }
+  const passwordValidation = resetPasswordSchema.safeParse(newPassword)
+  if (!passwordValidation.success) {
+    return { error: passwordValidation.error.issues[0]?.message || 'Password does not meet complexity requirements.' }
   }
 
   try {
@@ -175,8 +245,9 @@ export async function changePassword(currentPassword: string, newPassword: strin
     return { error: 'You must be logged in to change your password.' }
   }
 
-  if (!newPassword || newPassword.length < 6) {
-    return { error: 'New password must be at least 6 characters long.' }
+  const passwordValidation = resetPasswordSchema.safeParse(newPassword)
+  if (!passwordValidation.success) {
+    return { error: passwordValidation.error.issues[0]?.message || 'Password must be at least 8 characters with a letter and a number.' }
   }
 
   try {

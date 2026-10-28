@@ -4,7 +4,9 @@ import { auth } from '@/auth'
 import prisma from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 
-const SUPER_ADMIN_EMAILS = ['abdullahwebdev15@gmail.com', 'abdullahwebdev15@gamil.com']
+const SUPER_ADMIN_EMAILS = [
+  (process.env.SUPER_ADMIN_EMAIL || 'abdullahwebdev15@gmail.com').toLowerCase().trim(),
+]
 
 /**
  * Fetch all statistics, visitor chart data, and user list for Admin Dashboard

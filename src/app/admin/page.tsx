@@ -11,7 +11,9 @@ export const metadata: Metadata = {
   description: 'Role management and daily traffic analytics',
 }
 
-const SUPER_ADMIN_EMAILS = ['abdullahwebdev15@gmail.com', 'abdullahwebdev15@gamil.com']
+const SUPER_ADMIN_EMAILS = [
+  (process.env.SUPER_ADMIN_EMAIL || 'abdullahwebdev15@gmail.com').toLowerCase().trim(),
+]
 
 async function AdminContent() {
   const session = await auth()

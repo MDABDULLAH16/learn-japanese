@@ -50,24 +50,27 @@ export const requireCurrentUser = async () => {
   return user
 }
 
-export const getUserProgress = async (userId: string) => {
+export const getUserProgress = async (_userId?: string) => {
+  const user = await getCurrentUser()
+  if (!user) return []
   return await prisma.userProgress.findMany({
-    where: { user_id: userId },
+    where: { user_id: user.id },
   })
 }
 
-export const markItemLearned = async (userId: string, itemId: string, itemType: string) => {
+export const markItemLearned = async (_userId: string, itemId: string, itemType: string) => {
   try {
+    const user = await requireCurrentUser()
     await prisma.userProgress.upsert({
       where: {
         user_id_item_id: {
-          user_id: userId,
+          user_id: user.id,
           item_id: itemId,
         },
       },
       update: {},
       create: {
-        user_id: userId,
+        user_id: user.id,
         item_id: itemId,
         item_type: itemType,
       },
@@ -75,14 +78,15 @@ export const markItemLearned = async (userId: string, itemId: string, itemType: 
     revalidatePath('/alphabet')
     revalidatePath('/')
   } catch (error) {
-    console.error(error)
+    console.error('Failed to mark item learned:', error)
   }
 }
 
-export const markAllLearned = async (userId: string, itemIds: string[], itemType: string) => {
+export const markAllLearned = async (_userId: string, itemIds: string[], itemType: string) => {
   try {
+    const user = await requireCurrentUser()
     const records = itemIds.map((id) => ({
-      user_id: userId,
+      user_id: user.id,
       item_id: id,
       item_type: itemType,
     }))
@@ -96,16 +100,21 @@ export const markAllLearned = async (userId: string, itemIds: string[], itemType
     revalidatePath('/alphabet')
     revalidatePath('/')
   } catch (error) {
-    console.error(error)
+    console.error('Failed to mark all learned:', error)
   }
 }
 
-export const saveQuizScore = async (userId: string, newScore: number) => {
+export const saveQuizScore = async (_userId: string, newScore: number) => {
+  const user = await requireCurrentUser()
+  // Validate score: positive number with reasonable upper limit per quiz
+  const safeScore = Math.max(0, Math.min(Math.floor(newScore), 500))
+  if (safeScore <= 0) return
+
   await prisma.user.update({
-    where: { id: userId },
+    where: { id: user.id },
     data: {
       totalScore: {
-        increment: newScore,
+        increment: safeScore,
       },
     },
   })
@@ -115,16 +124,12 @@ export const saveQuizScore = async (userId: string, newScore: number) => {
 
 import type { VocabularyItem, WhitelistLevel } from './vocabularyData'
 
-export const getUserRecapItems = async (userId?: string): Promise<VocabularyItem[]> => {
+export const getUserRecapItems = async (_userId?: string): Promise<VocabularyItem[]> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
     const items = await prisma.recapItem.findMany({
       where: {
-        user_id: targetUserId,
+        user_id: user.id,
         NOT: { nihongo: { startsWith: '[KANJI]' } },
       },
       orderBy: { createdAt: 'desc' },
@@ -149,14 +154,11 @@ export const getUserRecapItems = async (userId?: string): Promise<VocabularyItem
 export const setRecapItemLevelAction = async (
   vocab: VocabularyItem,
   targetLevel: WhitelistLevel,
-  userId?: string
+  _userId?: string
 ): Promise<{ success: boolean; activeLevel: WhitelistLevel | null }> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
     const nihongo = vocab.nihongo.trim()
     const bangla = vocab.bangla.trim()
 
@@ -213,19 +215,16 @@ export const setRecapItemLevelAction = async (
   }
 }
 
-export const toggleRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
+export const toggleRecapItemAction = async (vocab: VocabularyItem, _userId?: string) => {
   const targetLevel = vocab.level || 'normal'
-  const res = await setRecapItemLevelAction(vocab, targetLevel, userId)
+  const res = await setRecapItemLevelAction(vocab, targetLevel)
   return { success: res.success, added: res.activeLevel !== null }
 }
 
-export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
+export const addRecapItemAction = async (vocab: VocabularyItem, _userId?: string) => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
     const nihongo = vocab.nihongo.trim()
     const bangla = vocab.bangla.trim()
     const level = vocab.level || 'normal'
@@ -265,13 +264,10 @@ export const addRecapItemAction = async (vocab: VocabularyItem, userId?: string)
   }
 }
 
-export const removeRecapItemAction = async (vocab: VocabularyItem, userId?: string) => {
+export const removeRecapItemAction = async (vocab: VocabularyItem, _userId?: string) => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
     await prisma.recapItem.deleteMany({
       where: {
         user_id: targetUserId,
@@ -288,13 +284,10 @@ export const removeRecapItemAction = async (vocab: VocabularyItem, userId?: stri
   }
 }
 
-export const clearRecapItemsAction = async (userId?: string, level?: WhitelistLevel) => {
+export const clearRecapItemsAction = async (_userId?: string, level?: WhitelistLevel) => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
     await prisma.recapItem.deleteMany({
       where: {
         user_id: targetUserId,
@@ -312,14 +305,11 @@ export const clearRecapItemsAction = async (userId?: string, level?: WhitelistLe
 
 export const syncRecapItemsAction = async (
   localItems: VocabularyItem[],
-  userId?: string
+  _userId?: string
 ): Promise<VocabularyItem[]> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
 
     if (localItems && localItems.length > 0) {
       const validItems = localItems.filter((item) =>
@@ -422,13 +412,10 @@ export type KanjiRecapItem = {
   kanjiLevel: 'N5' | 'N4'
 }
 
-export const getUserKanjiRecapItems = async (userId?: string): Promise<KanjiRecapItem[]> => {
+export const getUserKanjiRecapItems = async (_userId?: string): Promise<KanjiRecapItem[]> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
     const items = await prisma.recapItem.findMany({
       where: {
         user_id: targetUserId,
@@ -461,14 +448,11 @@ export const getUserKanjiRecapItems = async (userId?: string): Promise<KanjiReca
 export const setKanjiRecapLevelAction = async (
   kanji: KanjiItem,
   targetLevel: WhitelistLevel,
-  userId?: string
+  _userId?: string
 ): Promise<{ success: boolean; activeLevel: WhitelistLevel | null }> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
     const nihongoKey = `[KANJI]${kanji.id}`
     const banglaKey = kanji.meaning_bn.trim()
 
@@ -522,13 +506,10 @@ export const setKanjiRecapLevelAction = async (
   }
 }
 
-export const clearKanjiRecapsAction = async (userId?: string): Promise<{ success: boolean }> => {
+export const clearKanjiRecapsAction = async (_userId?: string): Promise<{ success: boolean }> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await requireCurrentUser()
-      targetUserId = user.id
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
     await prisma.recapItem.deleteMany({
       where: {
         user_id: targetUserId,
@@ -546,17 +527,11 @@ export const clearKanjiRecapsAction = async (userId?: string): Promise<{ success
 export const saveKanjiCustomMnemonicAction = async (
   kanjiId: string,
   customMnemonic: string,
-  userId?: string
+  _userId?: string
 ): Promise<{ success: boolean; mnemonic: string }> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await getCurrentUser()
-      targetUserId = user ? user.id : ''
-    }
-    if (!targetUserId) {
-      return { success: false, mnemonic: customMnemonic }
-    }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
 
     const trimmed = customMnemonic.trim()
     const existing = await prisma.recapItem.findFirst({
@@ -593,15 +568,11 @@ export const saveKanjiCustomMnemonicAction = async (
 
 export const getKanjiCustomMnemonicAction = async (
   kanjiId: string,
-  userId?: string
+  _userId?: string
 ): Promise<string | null> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await getCurrentUser()
-      targetUserId = user ? user.id : ''
-    }
-    if (!targetUserId) return null
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
 
     const existing = await prisma.recapItem.findFirst({
       where: {
@@ -620,15 +591,11 @@ export const getKanjiCustomMnemonicAction = async (
 
 export const deleteKanjiCustomMnemonicAction = async (
   kanjiId: string,
-  userId?: string
+  _userId?: string
 ): Promise<{ success: boolean }> => {
   try {
-    let targetUserId = userId
-    if (!targetUserId) {
-      const user = await getCurrentUser()
-      targetUserId = user ? user.id : ''
-    }
-    if (!targetUserId) return { success: false }
+    const user = await requireCurrentUser()
+    const targetUserId = user.id
 
     await prisma.recapItem.deleteMany({
       where: {

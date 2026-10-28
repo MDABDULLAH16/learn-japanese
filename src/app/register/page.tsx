@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Card,
@@ -12,26 +11,31 @@ import {
   CardFooter,
 } from '@/components/ui/card'
 import { register, loginWithGoogle } from '@/lib/auth-actions'
-import { User, Mail, KeyRound, Loader2, UserPlus } from 'lucide-react'
+import { User, Mail, KeyRound, Loader2, UserPlus, CheckCircle2, ArrowRight } from 'lucide-react'
 
 export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [registeredEmail, setRegisteredEmail] = useState<string>('')
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
-  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
 
-    const formData = new FormData(e.currentTarget)
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const submittedEmail = (formData.get('email') as string) || ''
+
     try {
       const res = await register(formData)
       if (res.error) {
         setError(res.error)
       } else {
-        router.push('/login?registered=true')
+        setRegisteredEmail(submittedEmail)
+        setSuccessMessage(res.message || 'Account created! Please check your email to verify your account.')
       }
     } catch {
       setError('An unexpected error occurred.')
@@ -63,20 +67,44 @@ export default function RegisterPage() {
             />
           </Link>
           <CardTitle className="text-3xl font-extrabold tracking-tight">
-            Create an Account
+            {successMessage ? 'Verify Your Email' : 'Create an Account'}
           </CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
-            Start mastering Japanese characters, vocabulary, and grammar
+            {successMessage
+              ? 'Check your inbox to activate your account'
+              : 'Start mastering Japanese characters, vocabulary, and grammar'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
-          {/* Google Sign Up Button */}
-          <button
-            type="button"
-            onClick={handleGoogleSignIn}
-            disabled={isGoogleLoading || isLoading}
-            className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-border bg-card hover:bg-accent/60 text-foreground font-medium transition-all duration-200 shadow-sm hover:shadow active:scale-[0.99] disabled:opacity-50 cursor-pointer"
-          >
+          {successMessage ? (
+            <div className="py-4 space-y-4 text-center">
+              <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-semibold text-lg text-emerald-600 dark:text-emerald-400">Account Created!</h3>
+                <p className="text-sm text-muted-foreground">
+                  We have sent a verification link to <strong className="text-foreground">{registeredEmail}</strong>.
+                  Please verify your email address before logging in.
+                </p>
+              </div>
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition shadow-sm mt-4"
+              >
+                <span>Proceed to Sign In</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          ) : (
+            <>
+              {/* Google Sign Up Button */}
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={isGoogleLoading || isLoading}
+                className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-border bg-card hover:bg-accent/60 text-foreground font-medium transition-all duration-200 shadow-sm hover:shadow active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+              >
             {isGoogleLoading ? (
               <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
             ) : (
@@ -150,8 +178,8 @@ export default function RegisterPage() {
                 id="password"
                 name="password"
                 type="password"
-                placeholder="Minimum 6 characters"
-                minLength={6}
+                placeholder="At least 8 characters (letters & numbers)"
+                minLength={8}
                 required
                 className="w-full px-3.5 py-2.5 border rounded-xl bg-background border-input focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"
               />
@@ -181,6 +209,8 @@ export default function RegisterPage() {
               )}
             </button>
           </form>
+          </>
+        )}
         </CardContent>
 
         <CardFooter className="flex justify-center border-t border-border/50 pt-4 text-center">

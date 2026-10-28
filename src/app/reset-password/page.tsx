@@ -31,8 +31,13 @@ function ResetPasswordForm() {
     setError(null)
     setSuccess(null)
 
-    if (newPassword.length < 6) {
-      setError('Password must be at least 6 characters long.')
+    if (newPassword.length < 8) {
+      setError('Password must be at least 8 characters long.')
+      return
+    }
+
+    if (!/[A-Za-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      setError('Password must contain at least one letter and one number.')
       return
     }
 

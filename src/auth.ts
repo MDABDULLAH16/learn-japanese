@@ -4,7 +4,9 @@ import Google from 'next-auth/providers/google'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 
-const SUPER_ADMIN_EMAILS = ['abdullahwebdev15@gmail.com', 'abdullahwebdev15@gamil.com']
+const SUPER_ADMIN_EMAILS = [
+  (process.env.SUPER_ADMIN_EMAIL || 'abdullahwebdev15@gmail.com').toLowerCase().trim(),
+]
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -65,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/login',
   },
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
       if (!user.email) return false
 
       const normalizedEmail = user.email.toLowerCase().trim()
@@ -78,23 +80,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         })
 
         if (!existingUser) {
-          const newUser = await prisma.user.create({
+          const isGoogleAuth = account?.provider === 'google'
+          const newUser = await (prisma.user as any).create({
             data: {
               email: normalizedEmail,
               name: user.name || normalizedEmail.split('@')[0],
               image: user.image || null,
               role: initialRole,
+              emailVerified: isGoogleAuth ? new Date() : null,
               lastLoginAt: new Date(),
             },
           })
           user.id = newUser.id
           user.role = newUser.role
         } else {
+          const isGoogleAuth = account?.provider === 'google'
           const shouldUpgradeToSuperAdmin = isSuperAdmin && existingUser.role !== 'SUPER_ADMIN'
-          const updatedUser = await prisma.user.update({
+          const updatedUser = await (prisma.user as any).update({
             where: { id: existingUser.id },
             data: {
               lastLoginAt: new Date(),
+              ...(isGoogleAuth && !(existingUser as any).emailVerified ? { emailVerified: new Date() } : {}),
               ...(shouldUpgradeToSuperAdmin ? { role: 'SUPER_ADMIN' } : {}),
               ...(user.image && !existingUser.image ? { image: user.image } : {}),
             },
