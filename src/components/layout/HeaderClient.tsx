@@ -372,19 +372,19 @@ export function HeaderClient({ session }: { session: Session | null }) {
             <Search className="h-4 w-4 text-primary" />
           </Button>
 
-          {/* Unauthenticated: Login Button */}
+          {/* Unauthenticated: Login Button (Desktop only - mobile is at bottom of drawer) */}
           {!user ? (
             <Link
               href="/login"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs sm:text-sm font-bold hover:bg-primary/90 transition shadow-sm active:scale-95"
+              className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs sm:text-sm font-bold hover:bg-primary/90 transition shadow-sm active:scale-95"
             >
               <LogIn className="h-4 w-4" />
               <span>Login</span>
             </Link>
           ) : (
-            /* Authenticated: User name + Sign Out */
-            <div className="flex items-center gap-2 pl-2">
-              <div className="hidden sm:block text-right">
+            /* Authenticated: User name + Sign Out (Desktop only - mobile is at bottom of drawer) */
+            <div className="hidden md:flex items-center gap-2 pl-2">
+              <div className="text-right">
                 <div className="text-xs font-bold leading-tight text-foreground truncate max-w-[120px]">
                   {user.name || user.email?.split('@')[0]}
                 </div>
