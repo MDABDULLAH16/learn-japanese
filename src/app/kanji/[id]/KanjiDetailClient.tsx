@@ -297,11 +297,10 @@ export function KanjiDetailClient({
     message: '',
   })
 
-  // Strict drawing lock: locked when target strokes are reached, or on success, or on warning
+  // Strict drawing lock: locked when target strokes are reached, or on success
   const isDrawingLocked = Boolean(
     (selectedKanji.stroke_count && currentStrokeCount >= selectedKanji.stroke_count) ||
-    validationResult.status === 'success' ||
-    validationResult.status === 'warning'
+    validationResult.status === 'success'
   )
 
   // Precompiled vector strokes for active kanji
@@ -309,7 +308,7 @@ export function KanjiDetailClient({
     return kanjiStrokesMap[selectedKanji.kanji] || []
   }, [selectedKanji.kanji])
 
-  // Animated stroke demo player
+  // Animated stroke demo player (Human-like slow calligraphy pace)
   const playStrokeDemo = useCallback(() => {
     if (isDemoPlaying) {
       setIsDemoPlaying(false)
@@ -332,9 +331,9 @@ export function KanjiDetailClient({
         setTimeout(() => {
           setIsDemoPlaying(false)
           setActiveDemoStroke(-1)
-        }, 900)
+        }, 1200)
       }
-    }, 800)
+    }, 1500)
   }, [isDemoPlaying, currentKanjiStrokes])
 
   const validateDrawing = useCallback(
@@ -1299,16 +1298,26 @@ export function KanjiDetailClient({
 
                           return (
                             <path
-                              key={`path-${idx}`}
+                              key={`path-${idx}-${isDemoActive ? 'active' : 'idle'}`}
                               d={s.path}
                               fill="none"
                               stroke="currentColor"
                               strokeWidth={isDemoActive ? '6' : isNext ? '4.5' : '3.5'}
                               strokeLinecap="round"
                               strokeLinejoin="round"
+                              style={
+                                isDemoActive
+                                  ? {
+                                      strokeDasharray: 200,
+                                      strokeDashoffset: 0,
+                                      animation:
+                                        'drawStrokeHuman 1.25s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards',
+                                    }
+                                  : undefined
+                              }
                               className={
                                 isDemoActive
-                                  ? 'text-rose-600 dark:text-rose-400 opacity-100 transition-all duration-300'
+                                  ? 'text-rose-600 dark:text-rose-400 opacity-100'
                                   : isNext
                                   ? 'text-rose-500/60 dark:text-rose-400/60'
                                   : isDrawn
@@ -1889,8 +1898,8 @@ export function KanjiDetailClient({
         </div>
       )}
 
-      {/* Navigation Buttons (Desktop & Mobile) */}
-      <div className="flex items-center justify-between gap-3 pt-4">
+      {/* Navigation Buttons (Desktop & Tablet: hidden on mobile to avoid duplication with sticky bottom bar) */}
+      <div className="hidden sm:flex items-center justify-between gap-3 pt-4">
         <Button
           variant="outline"
           size="lg"

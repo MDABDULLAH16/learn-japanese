@@ -67,10 +67,14 @@ function ResetPasswordForm() {
 
   return (
     <Card className="w-full max-w-md shadow-xl border-border/60 backdrop-blur-sm">
-      <CardHeader className="space-y-1 text-center">
-        <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-          <Lock className="w-6 h-6 text-primary" />
-        </div>
+      <CardHeader className="space-y-2 text-center flex flex-col items-center">
+        <Link href="/" className="inline-block hover:opacity-90 transition">
+          <img
+            src="/learn-japnese.svg"
+            alt="Learn Japanese Logo"
+            className="w-14 h-14 rounded-full shadow-md object-contain mx-auto mb-1"
+          />
+        </Link>
         <CardTitle className="text-2xl font-extrabold tracking-tight">Set New Password</CardTitle>
         <CardDescription className="text-sm text-muted-foreground">
           Enter your new password below to secure your account

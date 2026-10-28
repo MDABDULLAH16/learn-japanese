@@ -47,10 +47,14 @@ export default function ForgotPasswordPage() {
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] p-4 bg-gradient-to-b from-background to-muted/20">
       <Card className="w-full max-w-md shadow-xl border-border/60 backdrop-blur-sm">
-        <CardHeader className="space-y-1 text-center">
-          <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-            <KeyRound className="w-6 h-6 text-primary" />
-          </div>
+        <CardHeader className="space-y-2 text-center flex flex-col items-center">
+          <Link href="/" className="inline-block hover:opacity-90 transition">
+            <img
+              src="/learn-japnese.svg"
+              alt="Learn Japanese Logo"
+              className="w-14 h-14 rounded-full shadow-md object-contain mx-auto mb-1"
+            />
+          </Link>
           <CardTitle className="text-2xl font-extrabold tracking-tight">Forgot Password?</CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
             Enter your account email to receive a password reset link

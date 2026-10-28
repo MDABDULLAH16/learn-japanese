@@ -32,6 +32,11 @@ export const metadata: Metadata = {
   title: 'Learn Japanese - By A R S ABDULLAH',
   description: 'Interactive Japanese learning application',
   manifest: '/site.webmanifest',
+  icons: {
+    icon: '/learn-japnese.svg',
+    shortcut: '/learn-japnese.svg',
+    apple: '/learn-japnese.svg',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',

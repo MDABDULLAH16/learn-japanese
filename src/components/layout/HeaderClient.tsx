@@ -25,8 +25,6 @@ import {
   PlayCircle,
   Lock,
   Heart,
-  Keyboard,
-  FileText,
   Search,
 } from 'lucide-react'
 import { SearchModal } from '@/components/search/SearchModal'
@@ -79,19 +77,11 @@ const LEARN_SECTIONS: LearnSection[] = [
     isPublic: true,
   },
   {
-    title: 'Romaji Converter',
-    description: 'Instant Romaji to Kana typist',
-    href: '/converter',
-    icon: Keyboard,
-    badge: 'Free',
-    isPublic: true,
-  },
-  {
-    title: 'Printable Cheat Sheets',
-    description: 'Printable PDF charts for wall/study',
-    href: '/cheat-sheets',
-    icon: FileText,
-    badge: 'Free',
+    title: 'Kanji & Vocab Search',
+    description: 'Multi-script search across Romaji, Kana & Kanji',
+    href: '/search',
+    icon: Search,
+    badge: 'New',
     isPublic: true,
   },
   {
@@ -231,9 +221,11 @@ export function HeaderClient({ session }: { session: Session | null }) {
             href="/"
             className="flex items-center gap-2.5 font-extrabold text-lg sm:text-xl text-foreground hover:opacity-90 transition shrink-0"
           >
-            <div className="w-9 h-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
-              日
-            </div>
+            <img
+              src="/learn-japnese.svg"
+              alt="Learn Japanese Logo"
+              className="w-9 h-9 rounded-full shadow-sm shrink-0 object-contain"
+            />
             <div className="flex flex-col">
               <span className="tracking-tight leading-tight font-black">Learn Japanese</span>
               <span className="text-[10px] text-muted-foreground font-medium leading-none">
@@ -463,6 +455,24 @@ export function HeaderClient({ session }: { session: Session | null }) {
               <LayoutDashboard className="w-4 h-4 text-indigo-500" />
               <span>Dashboard</span>
             </Link>
+
+            {/* Smart Search (Mobile - Placed right below Dashboard) */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false)
+                setSearchModalOpen(true)
+              }}
+              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-primary/10 border border-primary/25 text-foreground hover:bg-primary/15 transition cursor-pointer font-semibold text-sm group"
+            >
+              <div className="flex items-center gap-2.5">
+                <Search className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+                <span className="text-primary font-bold">Smart Search (সার্চ করুন)</span>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-primary/20 text-primary">
+                Search
+              </span>
+            </button>
           </div>
 
           {/* Learn Subsections */}

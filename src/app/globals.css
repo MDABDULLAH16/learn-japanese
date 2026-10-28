@@ -145,3 +145,12 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes drawStrokeHuman {
+  0% {
+    stroke-dashoffset: 200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}

@@ -20,6 +20,7 @@ import {
   Heart,
   Star,
   Sparkle,
+  Search,
 } from 'lucide-react'
 import { InteractiveHeroExplorer } from '@/components/home/InteractiveHeroExplorer'
 import { KanaMiniQuiz } from '@/components/home/KanaMiniQuiz'
@@ -340,12 +341,11 @@ export default function HomePage() {
               Powerful Free Tools for Every Learner
             </h2>
             <p className="text-muted-foreground text-sm sm:text-base">
-              No account required. Practice your handwriting, learn anime phrases, type in kana, or
-              print reference charts.
+              No account required. Practice your handwriting, learn essential phrases, or instantly search vocabularies & kanji.
             </p>
           </div>
 
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
             {/* 1. Handwriting Practice */}
             <Link href="/practice-writing" className="block group">
               <div className="h-full p-6 rounded-3xl bg-card border border-border/80 hover:border-primary/50 hover:shadow-lg transition-all duration-300 space-y-3">
@@ -386,41 +386,20 @@ export default function HomePage() {
               </div>
             </Link>
 
-            {/* 3. Romaji Converter */}
-            <Link href="/converter" className="block group">
+            {/* 3. Global Kanji & Vocab Search */}
+            <Link href="/search" className="block group">
               <div className="h-full p-6 rounded-3xl bg-card border border-border/80 hover:border-primary/50 hover:shadow-lg transition-all duration-300 space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <BookA className="w-6 h-6" />
+                  <Search className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                  Romaji to Kana
+                  Kanji & Vocab Search
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Real-time converter. Type English letters like &quot;arigatou&quot; and watch it
-                  turn into Hiragana and Katakana.
+                  Multi-script search across Romaji, Kana, Kanji, and Bengali pronunciations with instant audio & filters.
                 </p>
                 <div className="inline-flex items-center gap-1 text-xs font-bold text-cyan-600 dark:text-cyan-400 pt-2">
-                  <span>Launch Converter</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </div>
-              </div>
-            </Link>
-
-            {/* 4. Printable Cheat Sheets */}
-            <Link href="/cheat-sheets" className="block group">
-              <div className="h-full p-6 rounded-3xl bg-card border border-border/80 hover:border-primary/50 hover:shadow-lg transition-all duration-300 space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <GraduationCap className="w-6 h-6" />
-                </div>
-                <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                  Printable Charts
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  High-res Hiragana, Katakana, and JLPT N5 Kanji charts formatted for 1-click
-                  printing or saving to PDF.
-                </p>
-                <div className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 pt-2">
-                  <span>Download / Print</span>
+                  <span>Explore Search</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>
               </div>
@@ -546,8 +525,12 @@ export default function HomePage() {
       {/* 7. FOOTER */}
       <footer className="border-t border-border/60 py-10 bg-background text-sm text-muted-foreground">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-bold text-foreground">
-            <BookA className="w-5 h-5 text-primary" />
+          <div className="flex items-center gap-2.5 font-bold text-foreground">
+            <img
+              src="/learn-japnese.svg"
+              alt="Learn Japanese Logo"
+              className="w-5 h-5 rounded-full object-contain"
+            />
             <span>Learn Japanese (日本語)</span>
           </div>
 

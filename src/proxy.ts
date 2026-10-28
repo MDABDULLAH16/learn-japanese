@@ -17,20 +17,18 @@ export default auth((req) => {
 
   // Public Routes:
   // - Home (/)
+  // - Global Search (/search)
   // - Alphabet (/alphabet, /alphabet-speech)
   // - Essential Phrases (/phrases)
-  // - Romaji to Kana Converter (/converter)
   // - Handwriting Practice Canvas (/practice-writing)
-  // - Printable Cheat Sheets (/cheat-sheets)
   // - Freemium Previews (/kanji, /vocabulary, /quiz)
   // - Auth Pages (/login, /register, etc.)
   const isPublicRoute =
     pathname === '/' ||
+    pathname.startsWith('/search') ||
     pathname.startsWith('/alphabet') ||
     pathname.startsWith('/phrases') ||
-    pathname.startsWith('/converter') ||
     pathname.startsWith('/practice-writing') ||
-    pathname.startsWith('/cheat-sheets') ||
     pathname.startsWith('/kanji') ||
     pathname.startsWith('/vocabulary') ||
     pathname.startsWith('/quiz') ||
