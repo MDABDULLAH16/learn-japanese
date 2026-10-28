@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useRef, useEffect } from 'react'
-import { KANJI_DATA, KanjiItem } from '@/lib/kanjiData'
+import { KANJI_DATA, KanjiItem, LESSON_TITLES } from '@/lib/kanjiData'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -466,6 +466,7 @@ export function KanjiClient({
                   size="sm"
                   data-active={isActive}
                   onClick={() => handleSelectLesson(lessonNum)}
+                  title={LESSON_TITLES[lessonNum]?.bn}
                   className={`rounded-full shrink-0 transition-all font-semibold ${
                     isActive ? 'font-bold shadow-xs ring-2 ring-primary/30' : ''
                   }`}
@@ -696,7 +697,31 @@ export function KanjiClient({
 
         {/* Kanji Cards Grid */}
         {displayedKanjiList.length > 0 && (
-          <div className="mt-4">
+          <div className="mt-4 space-y-4">
+            {selectedLesson !== 'recap' && (
+              <div className="p-4 rounded-2xl bg-secondary/35 border border-border/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Badge variant="default" className="font-bold text-xs bg-primary text-primary-foreground">
+                      Lesson {selectedLesson}
+                    </Badge>
+                    <h2 className="text-base sm:text-lg font-black text-foreground">
+                      {LESSON_TITLES[selectedLesson as number]?.bn || `Lesson ${selectedLesson}`}
+                    </h2>
+                    <span className="text-xs sm:text-sm font-semibold text-muted-foreground hidden md:inline">
+                      ({LESSON_TITLES[selectedLesson as number]?.en})
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    পরস্পর সম্পর্কিত ১০টি কানজি একসাথে সহজে আয়ত্ত করুন
+                  </p>
+                </div>
+                <Badge variant="outline" className="text-xs font-bold border-primary/30 text-primary shrink-0 bg-background/80">
+                  {displayedKanjiList.length}টি কানজি
+                </Badge>
+              </div>
+            )}
+
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {displayedKanjiList.map((kanji) => {
                 const isReadingShown = shownReadings.has(kanji.id)

@@ -542,3 +542,106 @@ export const clearKanjiRecapsAction = async (userId?: string): Promise<{ success
     return { success: false }
   }
 }
+
+export const saveKanjiCustomMnemonicAction = async (
+  kanjiId: string,
+  customMnemonic: string,
+  userId?: string
+): Promise<{ success: boolean; mnemonic: string }> => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user ? user.id : ''
+    }
+    if (!targetUserId) {
+      return { success: false, mnemonic: customMnemonic }
+    }
+
+    const trimmed = customMnemonic.trim()
+    const existing = await prisma.recapItem.findFirst({
+      where: {
+        user_id: targetUserId,
+        nihongo: '[CUSTOM_MNEMONIC]',
+        kanji: kanjiId,
+      },
+    })
+
+    if (existing) {
+      await prisma.recapItem.update({
+        where: { id: existing.id },
+        data: { bangla: trimmed },
+      })
+    } else {
+      await prisma.recapItem.create({
+        data: {
+          user_id: targetUserId,
+          nihongo: '[CUSTOM_MNEMONIC]',
+          kanji: kanjiId,
+          bangla: trimmed,
+          level: 'custom_mnemonic',
+        },
+      })
+    }
+
+    return { success: true, mnemonic: trimmed }
+  } catch (error) {
+    console.error('Failed to save custom mnemonic:', error)
+    return { success: false, mnemonic: customMnemonic }
+  }
+}
+
+export const getKanjiCustomMnemonicAction = async (
+  kanjiId: string,
+  userId?: string
+): Promise<string | null> => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user ? user.id : ''
+    }
+    if (!targetUserId) return null
+
+    const existing = await prisma.recapItem.findFirst({
+      where: {
+        user_id: targetUserId,
+        nihongo: '[CUSTOM_MNEMONIC]',
+        kanji: kanjiId,
+      },
+    })
+
+    return existing ? existing.bangla : null
+  } catch (error) {
+    console.error('Failed to get custom mnemonic:', error)
+    return null
+  }
+}
+
+export const deleteKanjiCustomMnemonicAction = async (
+  kanjiId: string,
+  userId?: string
+): Promise<{ success: boolean }> => {
+  try {
+    let targetUserId = userId
+    if (!targetUserId) {
+      const user = await getCurrentUser()
+      targetUserId = user ? user.id : ''
+    }
+    if (!targetUserId) return { success: false }
+
+    await prisma.recapItem.deleteMany({
+      where: {
+        user_id: targetUserId,
+        nihongo: '[CUSTOM_MNEMONIC]',
+        kanji: kanjiId,
+      },
+    })
+
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to delete custom mnemonic:', error)
+    return { success: false }
+  }
+}
+
