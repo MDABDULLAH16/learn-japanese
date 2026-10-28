@@ -12,6 +12,7 @@ import {
   ChevronRight,
   ChevronLeft,
   ChevronDown,
+  ChevronUp,
   BookOpen,
   Volume2,
   Lightbulb,
@@ -286,6 +287,8 @@ export function KanjiDetailClient({
   const [guideMode, setGuideMode] = useState<'numbered' | 'ghost' | 'off'>('numbered')
   const [isDemoPlaying, setIsDemoPlaying] = useState(false)
   const [activeDemoStroke, setActiveDemoStroke] = useState<number>(-1)
+  const [isPracticeActive, setIsPracticeActive] = useState<boolean>(false)
+  const [isTouchpadCollapsed, setIsTouchpadCollapsed] = useState<boolean>(false)
   const [validationResult, setValidationResult] = useState<KanjiValidationResult>({
     status: 'idle',
     score: 0,
@@ -471,17 +474,19 @@ export function KanjiDetailClient({
     })
   }, [])
 
-  // Clear canvas whenever active kanji changes
+  // Clear canvas whenever active kanji changes & reset practice active state
   useEffect(() => {
     clearCanvas()
+    setIsPracticeActive(false)
   }, [selectedKanji.id, clearCanvas])
 
-  // Non-passive native touch event listeners on canvas to block mobile gestures/scrolling directly on touch pad
+  // Non-passive native touch event listeners on canvas to block mobile gestures/scrolling ONLY when practice is active
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
     const handleCanvasTouch = (e: TouchEvent) => {
+      if (!isPracticeActive) return
       if (e.cancelable) {
         e.preventDefault()
       }
@@ -496,7 +501,7 @@ export function KanjiDetailClient({
       canvas.removeEventListener('touchmove', handleCanvasTouch)
       canvas.removeEventListener('touchend', handleCanvasTouch)
     }
-  }, [])
+  }, [isPracticeActive])
 
   const getCoordinates = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current
@@ -512,6 +517,7 @@ export function KanjiDetailClient({
   }
 
   const startDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isPracticeActive) return
     if (isDrawingLocked) return
     if (isDemoPlaying) return
     if (e.button !== 0 && e.pointerType === 'mouse') return
@@ -1037,315 +1043,14 @@ export function KanjiDetailClient({
             </div>
           </div>
 
-          {/* Box 3: Touch Pad for Stroke Order & Writing Practice with Smart Hybrid Validation */}
-          <div className="col-span-1 md:col-span-6 lg:col-span-3 p-4 sm:p-5 bg-card flex flex-col items-center justify-between space-y-2.5">
-            <div className="w-full flex items-center justify-between">
-              <span className="text-xs font-extrabold text-foreground tracking-wide flex items-center gap-1.5">
-                <PenTool className="w-3.5 h-3.5 text-primary" />
-                <span>ড্রয়িং টাচপ্যাড</span>
-              </span>
-              {validationResult.status === 'success' ? (
-                <Badge
-                  variant="outline"
-                  className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 border-emerald-500/40 bg-emerald-500/15 gap-1 animate-in zoom-in-50"
-                >
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                  <span>নিখুঁত ({toBengaliDigits(validationResult.score)}%)</span>
-                </Badge>
-              ) : validationResult.status === 'warning' ? (
-                <Badge
-                  variant="outline"
-                  className="text-[10px] font-bold text-rose-600 dark:text-rose-400 border-rose-500/40 bg-rose-500/15 gap-1"
-                >
-                  <AlertCircle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
-                  <span>অতিরিক্ত ({toBengaliDigits(currentStrokeCount)}/{toBengaliDigits(selectedKanji.stroke_count)})</span>
-                </Badge>
-              ) : validationResult.status === 'needs_practice' ? (
-                <Badge
-                  variant="outline"
-                  className="text-[10px] font-bold text-amber-700 dark:text-amber-400 border-amber-500/40 bg-amber-500/15 gap-1"
-                >
-                  <span>গঠন ({toBengaliDigits(validationResult.score)}%)</span>
-                </Badge>
-              ) : currentStrokeCount > 0 ? (
-                <Badge
-                  variant="outline"
-                  className="text-[10px] font-bold text-primary border-primary/40 bg-primary/10 gap-1"
-                >
-                  <span>{toBengaliDigits(currentStrokeCount)} / {toBengaliDigits(selectedKanji.stroke_count)} স্ট্রোক</span>
-                </Badge>
-              ) : (
-                <Badge
-                  variant="outline"
-                  className="text-[10px] font-bold text-rose-600 dark:text-rose-400 border-rose-500/30 bg-rose-500/10"
-                >
-                  {selectedKanji.stroke_count
-                    ? `${toBengaliDigits(selectedKanji.stroke_count)} স্ট্রোক`
-                    : 'টেনে লিখুন'}
-                </Badge>
-              )}
-            </div>
-
-            {/* Kanji Canvas Square with Grid, Stroke Numbers & Vector Guide */}
-            <div
-              className={`relative w-[185px] h-[185px] sm:w-[195px] sm:h-[195px] shrink-0 rounded-xl border-2 transition-all duration-300 flex items-center justify-center overflow-hidden shadow-inner select-none touch-none ${
-                validationResult.status === 'success'
-                  ? 'border-emerald-500 ring-4 ring-emerald-500/25 shadow-emerald-500/20 bg-emerald-50/20 dark:bg-emerald-950/20'
-                  : validationResult.status === 'warning'
-                  ? 'border-rose-500/80 ring-2 ring-rose-500/20 bg-rose-50/20 dark:bg-rose-950/20'
-                  : validationResult.status === 'needs_practice'
-                  ? 'border-amber-500/80 ring-2 ring-amber-500/20 bg-amber-50/20 dark:bg-amber-950/20'
-                  : 'border-amber-600/40 dark:border-amber-500/30 bg-amber-50/25 dark:bg-zinc-950'
-              }`}
-            >
-              {/* Floating lock / celebration status tag */}
-              {validationResult.status === 'success' ? (
-                <div className="absolute top-2 right-2 z-20 px-2 py-0.5 rounded-md bg-emerald-600 text-white text-[10px] font-black shadow-md flex items-center gap-1 animate-in zoom-in-50">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>পাস (লকড)</span>
-                </div>
-              ) : isDrawingLocked ? (
-                <div className="absolute top-2 right-2 z-20 px-2 py-0.5 rounded-md bg-amber-600/90 text-white text-[10px] font-bold shadow-md flex items-center gap-1 animate-in zoom-in-50">
-                  <Lock className="w-3 h-3" />
-                  <span>লকড (আনডু করুন)</span>
-                </div>
-              ) : null}
-
-              {/* Dotted Center Cross Grid Lines */}
-              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 border-b-2 border-dashed border-amber-500/35 pointer-events-none" />
-              <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 border-r-2 border-dashed border-amber-500/35 pointer-events-none" />
-
-              {/* Numbered Vector Stroke Order Guide */}
-              {guideMode === 'numbered' && currentKanjiStrokes.length > 0 && (
-                <svg
-                  viewBox="0 0 109 109"
-                  className="absolute inset-0 w-full h-full pointer-events-none select-none z-0"
-                >
-                  {/* Stroke Paths */}
-                  <g>
-                    {currentKanjiStrokes.map((s, idx) => {
-                      const isDemoActive = isDemoPlaying && activeDemoStroke === idx
-                      const isDrawn = isDemoPlaying ? idx <= activeDemoStroke : currentStrokeCount > idx
-                      const isNext = currentStrokeCount === idx && !isDemoPlaying
-
-                      return (
-                        <path
-                          key={`path-${idx}`}
-                          d={s.path}
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={isDemoActive ? '6' : isNext ? '4.5' : '3.5'}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className={
-                            isDemoActive
-                              ? 'text-rose-600 dark:text-rose-400 opacity-100 transition-all duration-300'
-                              : isNext
-                              ? 'text-rose-500/60 dark:text-rose-400/60'
-                              : isDrawn
-                              ? 'text-emerald-600/30 dark:text-emerald-400/30'
-                              : 'text-foreground/20 dark:text-foreground/25'
-                          }
-                        />
-                      )
-                    })}
-                  </g>
-
-                  {/* Numbered Sequence Badges (১, ২, ৩, ৪...) at exact start coordinates */}
-                  <g>
-                    {currentKanjiStrokes.map((s, idx) => {
-                      const isNext = currentStrokeCount === idx && !isDemoPlaying
-                      const isDone = currentStrokeCount > idx && !isDemoPlaying
-                      const isDemoActive = isDemoPlaying && activeDemoStroke === idx
-
-                      return (
-                        <g key={`num-${idx}`} className="select-none transition-all">
-                          {/* Outer pulse ring for next stroke */}
-                          {(isNext || isDemoActive) && (
-                            <circle
-                              cx={s.numX}
-                              cy={s.numY - 2}
-                              r="8"
-                              className="fill-none stroke-rose-500 stroke-1 animate-ping opacity-75 origin-center"
-                            />
-                          )}
-                          {/* Number circle badge */}
-                          <circle
-                            cx={s.numX}
-                            cy={s.numY - 2}
-                            r="5.5"
-                            className={
-                              isNext || isDemoActive
-                                ? 'fill-rose-600 stroke-2 stroke-white dark:stroke-zinc-950 shadow-md'
-                                : isDone
-                                ? 'fill-emerald-600/80 stroke-1 stroke-white dark:stroke-zinc-950'
-                                : 'fill-zinc-500/70 dark:fill-zinc-600/70 stroke-1 stroke-white dark:stroke-zinc-900'
-                            }
-                          />
-                          {/* Bengali digit */}
-                          <text
-                            x={s.numX}
-                            y={s.numY - 0.2}
-                            textAnchor="middle"
-                            fontSize="5.2"
-                            fontWeight="900"
-                            className="fill-white pointer-events-none font-bold"
-                          >
-                            {toBengaliDigits(s.index)}
-                          </text>
-                        </g>
-                      )
-                    })}
-                  </g>
-                </svg>
-              )}
-
-              {/* Ghost Character Fallback Mode */}
-              {guideMode === 'ghost' && (
-                <span className="absolute inset-0 flex items-center justify-center font-japanese text-8xl font-black text-foreground/15 dark:text-foreground/20 pointer-events-none select-none z-0">
-                  {selectedKanji.kanji}
-                </span>
-              )}
-
-              {/* Interactive Unified Pointer Canvas (Single-stream events, no touch duplication) */}
-              <canvas
-                ref={canvasRef}
-                width={260}
-                height={260}
-                onPointerDown={startDrawing}
-                onPointerMove={draw}
-                onPointerUp={stopDrawing}
-                onPointerLeave={stopDrawing}
-                onPointerCancel={stopDrawing}
-                style={{ touchAction: 'none' }}
-                className={`w-full h-full z-10 touch-none select-none outline-none ${
-                  isDrawingLocked ? 'cursor-not-allowed' : 'cursor-crosshair'
-                }`}
-              />
-            </div>
-
-            {/* Canvas Actions */}
-            <div className="w-full space-y-2">
-              <div className="grid grid-cols-5 gap-1 w-full">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={undoLastStroke}
-                  disabled={strokeHistory.length === 0}
-                  className="h-7 px-1 text-[10px] font-bold rounded-lg gap-0.5 cursor-pointer"
-                  title="Undo Stroke"
-                >
-                  <Undo2 className="w-3 h-3" />
-                  <span>আনডু</span>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={clearCanvas}
-                  disabled={strokeHistory.length === 0}
-                  className="h-7 px-1 text-[10px] font-bold rounded-lg gap-0.5 hover:text-rose-600 cursor-pointer"
-                  title="Clear Canvas"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>মুছুন</span>
-                </Button>
-                <Button
-                  variant={guideMode !== 'off' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => {
-                    setGuideMode((prev) =>
-                      prev === 'numbered' ? 'ghost' : prev === 'ghost' ? 'off' : 'numbered'
-                    )
-                  }}
-                  className="h-7 px-1 text-[10px] font-bold rounded-lg gap-0.5 cursor-pointer"
-                  title="Toggle: Numbered -> Ghost -> Off"
-                >
-                  {guideMode !== 'off' ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-                  <span>{guideMode === 'numbered' ? 'নম্বর' : guideMode === 'ghost' ? 'ঘোস্ট' : 'অফ'}</span>
-                </Button>
-                <Button
-                  variant={isDemoPlaying ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={playStrokeDemo}
-                  disabled={currentKanjiStrokes.length === 0}
-                  className={`h-7 px-1 text-[10px] font-bold rounded-lg gap-0.5 cursor-pointer ${
-                    isDemoPlaying ? 'bg-amber-600 text-white animate-pulse' : 'text-amber-800 dark:text-amber-400'
-                  }`}
-                  title="Play Stroke Order Animation"
-                >
-                  {isDemoPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-                  <span>{isDemoPlaying ? 'চলছে' : 'ডেমো'}</span>
-                </Button>
-                <Button
-                  variant="default"
-                  size="sm"
-                  onClick={() => validateDrawing()}
-                  disabled={strokeHistory.length === 0}
-                  className="h-7 px-1 text-[10px] font-bold rounded-lg gap-0.5 bg-gradient-to-r from-amber-600 to-primary text-white cursor-pointer shadow-2xs hover:opacity-90"
-                  title="Check Kanji Accuracy"
-                >
-                  <Sparkles className="w-3 h-3" />
-                  <span>যাচাই</span>
-                </Button>
-              </div>
-
-              {/* Dynamic Stroke & Shape Feedback Banner or Next Stroke Tip (Anchored BELOW canvas) */}
-              {validationResult.message ? (
-                <div
-                  className={`w-full px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 animate-in fade-in-50 ${
-                    validationResult.status === 'success'
-                      ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30'
-                      : validationResult.status === 'warning'
-                      ? 'bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-500/30'
-                      : validationResult.status === 'needs_practice'
-                      ? 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30'
-                      : 'bg-secondary/60 text-foreground/80 border border-border/50'
-                  }`}
-                >
-                  {validationResult.status === 'success' && (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  )}
-                  {validationResult.status === 'warning' && (
-                    <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                  )}
-                  {validationResult.status === 'needs_practice' && (
-                    <Info className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                  )}
-                  {validationResult.status === 'in_progress' && (
-                    <PenTool className="w-3.5 h-3.5 text-primary shrink-0 animate-pulse" />
-                  )}
-                  <span className="leading-tight text-[11px]">
-                    {validationResult.message}
-                  </span>
-                </div>
-              ) : selectedKanji.stroke_count && currentStrokeCount < selectedKanji.stroke_count ? (
-                <div className="w-full px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] font-bold text-amber-900 dark:text-amber-300 flex items-center justify-between shadow-2xs animate-in fade-in-50">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping inline-block shrink-0" />
-                    <span>
-                      {currentStrokeCount === 0 ? 'শুরু করুন: ' : 'পরবর্তী: '}
-                      <strong>{toBengaliDigits(currentStrokeCount + 1)}নং স্ট্রোক</strong> (লাল বৃত্ত {toBengaliDigits(currentStrokeCount + 1)} থেকে টানুন)
-                    </span>
-                  </span>
-                  <span className="text-[10px] text-muted-foreground font-semibold shrink-0">
-                    {toBengaliDigits(selectedKanji.stroke_count - currentStrokeCount)}টি বাকি
-                  </span>
-                </div>
-              ) : null}
-
-              <div className="text-center pt-0.5">
-                <p className="text-[11px] font-bold text-amber-800 dark:text-amber-400">
-                  স্ট্রো ক অর্ডার (লাল বৃত্ত = ক্রম ও শুরুর স্থান)
-                </p>
-                <p className="text-[10px] text-muted-foreground font-semibold">
-                  Meguro Basic Kanji 120
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Box 4: Origin & Visual Mnemonic ("ছবি থেকে কানজি") with Custom Text Edit */}
-          <div className="col-span-1 md:col-span-6 lg:col-span-3 p-4 sm:p-5 bg-secondary/15 flex flex-col justify-between space-y-3">
+          {/* Box 3: Origin & Visual Mnemonic ("ছবি থেকে কানজি") with Custom Text Edit */}
+          <div
+            className={`col-span-1 p-4 sm:p-5 bg-secondary/15 flex flex-col justify-between space-y-3 transition-all duration-300 ${
+              isTouchpadCollapsed
+                ? 'md:col-span-12 lg:col-span-5'
+                : 'md:col-span-6 lg:col-span-3'
+            }`}
+          >
             <div>
               <div className="flex items-center justify-between gap-1.5 pb-2">
                 <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-400 font-extrabold text-xs uppercase tracking-wide">
@@ -1452,6 +1157,368 @@ export function KanjiDetailClient({
               <span>ব্যক্তিগত মেমোনিক নোট</span>
               <span className="font-semibold text-amber-700 dark:text-amber-400">অ্যাকাউন্টে সেভড</span>
             </div>
+          </div>
+
+          {/* Box 4: Touch Pad for Stroke Order & Writing Practice (Placed on the Right Side, Collapsible & Icon-first) */}
+          <div
+            className={`col-span-1 bg-card transition-all duration-300 flex flex-col justify-between ${
+              isTouchpadCollapsed
+                ? 'md:col-span-12 lg:col-span-1 p-2 sm:p-2.5 items-center'
+                : 'md:col-span-6 lg:col-span-3 p-3.5 sm:p-4 items-center space-y-2'
+            }`}
+          >
+            {isTouchpadCollapsed ? (
+              <>
+                {/* Collapsed View for Desktop (lg:col-span-1 on the Right Edge) */}
+                <div
+                  onClick={() => setIsTouchpadCollapsed(false)}
+                  className="hidden lg:flex w-full h-full min-h-[260px] flex-col items-center justify-center p-2 text-center cursor-pointer group bg-muted/20 hover:bg-primary/5 transition-all rounded-xl select-none"
+                  title="টাচপ্যাড খুলুন"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all shadow-2xs">
+                    <PenTool className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs font-bold text-foreground mt-2 tracking-tight">
+                    টাচপ্যাড
+                  </span>
+                  <span className="text-[10px] text-muted-foreground font-semibold">
+                    {selectedKanji.stroke_count ? `${toBengaliDigits(selectedKanji.stroke_count)} স্ট্রোক` : ''}
+                  </span>
+                  <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full group-hover:bg-primary group-hover:text-white transition shadow-2xs">
+                    <span>খুলুন</span>
+                    <ChevronLeft className="w-3 h-3 group-hover:-translate-x-0.5 transition-transform" />
+                  </div>
+                </div>
+
+                {/* Collapsed View for Mobile & Tablet (< lg) */}
+                <div
+                  onClick={() => setIsTouchpadCollapsed(false)}
+                  className="flex lg:hidden w-full items-center justify-between p-3.5 cursor-pointer rounded-xl border border-dashed border-primary/30 bg-primary/5 hover:bg-primary/10 transition group"
+                  title="টাচপ্যাড খুলুন"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition">
+                      <PenTool className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="text-left">
+                      <span className="text-xs font-bold text-foreground block">
+                        ড্রয়িং টাচপ্যাড (ঐচ্ছিক)
+                      </span>
+                      <span className="text-[10px] text-muted-foreground font-semibold">
+                        {selectedKanji.stroke_count ? `${toBengaliDigits(selectedKanji.stroke_count)} স্ট্রোক হ্যান্ডরাইটিং` : ''}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-bold text-primary flex items-center gap-1 bg-primary/10 px-2.5 py-1 rounded-full group-hover:bg-primary group-hover:text-white transition">
+                    <span>খুলুন</span>
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Header: Title, Stroke Count & Controls */}
+                <div className="w-full flex items-center justify-between pb-0.5">
+                  <span className="text-xs font-extrabold text-foreground tracking-wide flex items-center gap-1.5">
+                    <PenTool className="w-3.5 h-3.5 text-primary" />
+                    <span>টাচপ্যাড</span>
+                    <span className="text-[10px] text-muted-foreground font-semibold">
+                      ({selectedKanji.stroke_count ? `${toBengaliDigits(selectedKanji.stroke_count)} স্ট্রোক` : ''})
+                    </span>
+                  </span>
+
+                  <div className="flex items-center gap-1">
+                    {isPracticeActive && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsPracticeActive(false)
+                          clearCanvas()
+                        }}
+                        className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition cursor-pointer"
+                        title="লক করুন"
+                      >
+                        <Lock className="w-3 h-3" />
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => setIsTouchpadCollapsed(true)}
+                      className="px-1.5 py-0.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition cursor-pointer flex items-center gap-0.5 text-[10px] font-bold"
+                      title="লুকান"
+                    >
+                      <span className="text-[10px] text-muted-foreground hover:text-foreground">লুকান</span>
+                      <ChevronRight className="hidden lg:block w-3.5 h-3.5 text-muted-foreground" />
+                      <ChevronUp className="lg:hidden w-3.5 h-3.5 text-muted-foreground" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Kanji Canvas Square with Grid, Stroke Numbers & Vector Guide */}
+                <div
+                  className={`relative w-[185px] h-[185px] sm:w-[195px] sm:h-[195px] shrink-0 rounded-xl border-2 transition-all duration-300 flex items-center justify-center overflow-hidden shadow-inner select-none touch-none ${
+                    validationResult.status === 'success'
+                      ? 'border-emerald-500 ring-4 ring-emerald-500/25 shadow-emerald-500/20 bg-emerald-50/20 dark:bg-emerald-950/20'
+                      : validationResult.status === 'warning'
+                      ? 'border-rose-500/80 ring-2 ring-rose-500/20 bg-rose-50/20 dark:bg-rose-950/20'
+                      : validationResult.status === 'needs_practice'
+                      ? 'border-amber-500/80 ring-2 ring-amber-500/20 bg-amber-50/20 dark:bg-amber-950/20'
+                      : 'border-amber-600/40 dark:border-amber-500/30 bg-amber-50/25 dark:bg-zinc-950'
+                  }`}
+                >
+                  {/* Floating lock / celebration status tag */}
+                  {validationResult.status === 'success' ? (
+                    <div className="absolute top-2 right-2 z-20 px-2 py-0.5 rounded-md bg-emerald-600 text-white text-[10px] font-black shadow-md flex items-center gap-1 animate-in zoom-in-50">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>পাস</span>
+                    </div>
+                  ) : isDrawingLocked ? (
+                    <div className="absolute top-2 right-2 z-20 px-2 py-0.5 rounded-md bg-amber-600/90 text-white text-[10px] font-bold shadow-md flex items-center gap-1 animate-in zoom-in-50">
+                      <Lock className="w-3 h-3" />
+                      <span>লকড</span>
+                    </div>
+                  ) : null}
+
+                  {/* Dotted Center Cross Grid Lines */}
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 border-b-2 border-dashed border-amber-500/35 pointer-events-none" />
+                  <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 border-r-2 border-dashed border-amber-500/35 pointer-events-none" />
+
+                  {/* Numbered Vector Stroke Order Guide */}
+                  {guideMode === 'numbered' && currentKanjiStrokes.length > 0 && (
+                    <svg
+                      viewBox="0 0 109 109"
+                      className="absolute inset-0 w-full h-full pointer-events-none select-none z-0"
+                    >
+                      {/* Stroke Paths */}
+                      <g>
+                        {currentKanjiStrokes.map((s, idx) => {
+                          const isDemoActive = isDemoPlaying && activeDemoStroke === idx
+                          const isDrawn = isDemoPlaying ? idx <= activeDemoStroke : currentStrokeCount > idx
+                          const isNext = currentStrokeCount === idx && !isDemoPlaying
+
+                          return (
+                            <path
+                              key={`path-${idx}`}
+                              d={s.path}
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={isDemoActive ? '6' : isNext ? '4.5' : '3.5'}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className={
+                                isDemoActive
+                                  ? 'text-rose-600 dark:text-rose-400 opacity-100 transition-all duration-300'
+                                  : isNext
+                                  ? 'text-rose-500/60 dark:text-rose-400/60'
+                                  : isDrawn
+                                  ? 'text-emerald-600/30 dark:text-emerald-400/30'
+                                  : 'text-foreground/20 dark:text-foreground/25'
+                              }
+                            />
+                          )
+                        })}
+                      </g>
+
+                      {/* Numbered Sequence Badges (১, ২, ৩, ৪...) at exact start coordinates */}
+                      <g>
+                        {currentKanjiStrokes.map((s, idx) => {
+                          const isNext = currentStrokeCount === idx && !isDemoPlaying
+                          const isDone = currentStrokeCount > idx && !isDemoPlaying
+                          const isDemoActive = isDemoPlaying && activeDemoStroke === idx
+
+                          return (
+                            <g key={`num-${idx}`} className="select-none transition-all">
+                              {(isNext || isDemoActive) && (
+                                <circle
+                                  cx={s.numX}
+                                  cy={s.numY - 2}
+                                  r="8"
+                                  className="fill-none stroke-rose-500 stroke-1 animate-ping opacity-75 origin-center"
+                                />
+                              )}
+                              <circle
+                                cx={s.numX}
+                                cy={s.numY - 2}
+                                r="5.5"
+                                className={
+                                  isNext || isDemoActive
+                                    ? 'fill-rose-600 stroke-2 stroke-white dark:stroke-zinc-950 shadow-md'
+                                    : isDone
+                                    ? 'fill-emerald-600/80 stroke-1 stroke-white dark:stroke-zinc-950'
+                                    : 'fill-zinc-500/70 dark:fill-zinc-600/70 stroke-1 stroke-white dark:stroke-zinc-900'
+                                }
+                              />
+                              <text
+                                x={s.numX}
+                                y={s.numY - 0.2}
+                                textAnchor="middle"
+                                fontSize="5.2"
+                                fontWeight="900"
+                                className="fill-white pointer-events-none font-bold"
+                              >
+                                {toBengaliDigits(s.index)}
+                              </text>
+                            </g>
+                          )
+                        })}
+                      </g>
+                    </svg>
+                  )}
+
+                  {/* Ghost Character Fallback Mode */}
+                  {guideMode === 'ghost' && (
+                    <span className="absolute inset-0 flex items-center justify-center font-japanese text-8xl font-black text-foreground/15 dark:text-foreground/20 pointer-events-none select-none z-0">
+                      {selectedKanji.kanji}
+                    </span>
+                  )}
+
+                  {/* Inactive Practice Overlay: Clean Icon Button (No verbose paragraphs) */}
+                  {!isPracticeActive && (
+                    <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-3 text-center bg-background/80 dark:bg-zinc-950/80 backdrop-blur-[2px] transition-all duration-200 select-none">
+                      <Button
+                        size="sm"
+                        onClick={() => setIsPracticeActive(true)}
+                        className="h-8 px-4 text-xs font-bold rounded-xl gap-1.5 bg-primary text-primary-foreground shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                      >
+                        <PenTool className="w-3.5 h-3.5" />
+                        <span>প্র্যাকটিস শুরু</span>
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Interactive Unified Pointer Canvas */}
+                  <canvas
+                    ref={canvasRef}
+                    width={260}
+                    height={260}
+                    onPointerDown={startDrawing}
+                    onPointerMove={draw}
+                    onPointerUp={stopDrawing}
+                    onPointerLeave={stopDrawing}
+                    onPointerCancel={stopDrawing}
+                    style={{ touchAction: isPracticeActive ? 'none' : 'auto' }}
+                    className={`w-full h-full z-10 select-none outline-none ${
+                      !isPracticeActive
+                        ? 'pointer-events-none'
+                        : isDrawingLocked
+                        ? 'cursor-not-allowed touch-none'
+                        : 'cursor-crosshair touch-none'
+                    }`}
+                  />
+                </div>
+
+                {/* Canvas Actions: Clean Icon-Only Row with Tooltips */}
+                <div className="w-full space-y-2">
+                  <div className="grid grid-cols-5 gap-1.5 w-full">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={undoLastStroke}
+                      disabled={strokeHistory.length === 0}
+                      className="h-7.5 p-0 flex items-center justify-center rounded-lg cursor-pointer"
+                      title="আনডু (Undo)"
+                    >
+                      <Undo2 className="w-3.5 h-3.5" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={clearCanvas}
+                      disabled={strokeHistory.length === 0}
+                      className="h-7.5 p-0 flex items-center justify-center rounded-lg hover:text-rose-600 cursor-pointer"
+                      title="মুছুন (Clear)"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    </Button>
+                    <Button
+                      variant={guideMode !== 'off' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => {
+                        setGuideMode((prev) =>
+                          prev === 'numbered' ? 'ghost' : prev === 'ghost' ? 'off' : 'numbered'
+                        )
+                      }}
+                      className="h-7.5 p-0 flex items-center justify-center rounded-lg cursor-pointer"
+                      title={
+                        guideMode === 'numbered'
+                          ? 'গাইড: নম্বর'
+                          : guideMode === 'ghost'
+                          ? 'গাইড: ঘোস্ট'
+                          : 'গাইড: অফ'
+                      }
+                    >
+                      {guideMode !== 'off' ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                    </Button>
+                    <Button
+                      variant={isDemoPlaying ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={playStrokeDemo}
+                      disabled={currentKanjiStrokes.length === 0}
+                      className={`h-7.5 p-0 flex items-center justify-center rounded-lg cursor-pointer ${
+                        isDemoPlaying ? 'bg-amber-600 text-white animate-pulse' : 'text-amber-800 dark:text-amber-400'
+                      }`}
+                      title={isDemoPlaying ? 'অ্যানিমেশন থামান' : 'স্ট্রোক অ্যানিমেশন ডেমো'}
+                    >
+                      {isDemoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                    </Button>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => validateDrawing()}
+                      disabled={strokeHistory.length === 0}
+                      className="h-7.5 p-0 flex items-center justify-center rounded-lg bg-gradient-to-r from-amber-600 to-primary text-white cursor-pointer shadow-2xs hover:opacity-90"
+                      title="যাচাই করুন (Validate accuracy)"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+
+                  {/* Compact Status Indicator (No redundant verbose sentences) */}
+                  {validationResult.message ? (
+                    <div
+                      className={`w-full px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 animate-in fade-in-50 ${
+                        validationResult.status === 'success'
+                          ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30'
+                          : validationResult.status === 'warning'
+                          ? 'bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-500/30'
+                          : validationResult.status === 'needs_practice'
+                          ? 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30'
+                          : 'bg-secondary/60 text-foreground/80 border border-border/50'
+                      }`}
+                    >
+                      {validationResult.status === 'success' && (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      )}
+                      {validationResult.status === 'warning' && (
+                        <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                      )}
+                      {validationResult.status === 'needs_practice' && (
+                        <Info className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                      )}
+                      {validationResult.status === 'in_progress' && (
+                        <PenTool className="w-3.5 h-3.5 text-primary shrink-0 animate-pulse" />
+                      )}
+                      <span className="leading-tight text-[11px] truncate">
+                        {validationResult.message}
+                      </span>
+                    </div>
+                  ) : selectedKanji.stroke_count && currentStrokeCount < selectedKanji.stroke_count ? (
+                    <div className="w-full px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[11px] font-bold text-amber-900 dark:text-amber-300 flex items-center justify-between shadow-2xs">
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping inline-block shrink-0" />
+                        <span>
+                          স্ট্রোক {toBengaliDigits(currentStrokeCount + 1)} / {toBengaliDigits(selectedKanji.stroke_count)}
+                        </span>
+                      </span>
+                      <span className="text-[10px] text-muted-foreground font-semibold">
+                        {toBengaliDigits(selectedKanji.stroke_count - currentStrokeCount)}টি বাকি
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
+              </>
+            )}
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { VOCABULARY_DATA, Lesson, VocabularyItem, WhitelistLevel } from '@/lib/vocabularyData'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -24,25 +25,64 @@ import {
   Clock,
   Flame,
   ListFilter,
+  Search,
 } from 'lucide-react'
 import { useRecapVocabularies } from '@/lib/recapStorage'
 
 export function VocabularyClient({
   userId,
   initialRecapList,
+  initialLesson = 1,
+  targetWord = '',
 }: {
   userId: string
   initialRecapList?: VocabularyItem[]
+  initialLesson?: number | 'recap'
+  targetWord?: string
 }) {
-  const [selectedLesson, setSelectedLesson] = useState<number | 'recap'>(
-    VOCABULARY_DATA.lessons[0].lesson_number
-  )
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const [selectedLesson, setSelectedLesson] = useState<number | 'recap'>(initialLesson)
+  const [highlightedWord, setHighlightedWord] = useState<string>(targetWord)
   const [recapCategory, setRecapCategory] = useState<'all' | WhitelistLevel>('all')
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [showScrollLessonBar, setShowScrollLessonBar] = useState(false)
   const lastScrollY = useRef(0)
   const stickyLessonsRef = useRef<HTMLDivElement>(null)
   const mainLessonsRef = useRef<HTMLDivElement>(null)
+
+  // Listen to searchParams changes (e.g. from SearchModal redirect)
+  useEffect(() => {
+    const lessonParam = searchParams.get('lesson')
+    const wordParam = searchParams.get('word')
+    if (lessonParam) {
+      if (lessonParam === 'recap') {
+        setSelectedLesson('recap')
+      } else {
+        const num = parseInt(lessonParam, 10)
+        if (!isNaN(num)) setSelectedLesson(num)
+      }
+    }
+    if (wordParam) {
+      setHighlightedWord(decodeURIComponent(wordParam))
+    }
+  }, [searchParams])
+
+  // Auto-scroll to highlighted card
+  useEffect(() => {
+    if (!highlightedWord) return
+
+    const timer = setTimeout(() => {
+      const safeId = `vocab-card-${encodeURIComponent(highlightedWord)}`
+      const elem = document.getElementById(safeId)
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }, 250)
+
+    return () => clearTimeout(timer)
+  }, [highlightedWord, selectedLesson])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -286,6 +326,11 @@ export function VocabularyClient({
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
+            <Link href="/search?tab=vocabulary">
+              <Button variant="outline" className="gap-2 shadow-sm font-semibold">
+                <Search className="w-4 h-4 text-primary" /> Search Vocab
+              </Button>
+            </Link>
             {recapList.length >= 4 && (
               <Link href="/vocabulary-quiz?lesson=recap">
                 <Button
@@ -694,6 +739,11 @@ export function VocabularyClient({
                       total={displayedRecapList.length}
                       currentLevel={getItemLevel(vocab)}
                       onSetLevel={setLevel}
+                      isTarget={Boolean(
+                        highlightedWord &&
+                          (highlightedWord === vocab.nihongo ||
+                            highlightedWord.toLowerCase() === vocab.romaji.toLowerCase())
+                      )}
                     />
                   ))}
                 </div>
@@ -705,6 +755,7 @@ export function VocabularyClient({
                 lesson={currentLesson!}
                 getItemLevel={getItemLevel}
                 onSetLevel={setLevel}
+                highlightedWord={highlightedWord}
               />
 
               {/* Bottom Lesson Navigation Card */}
@@ -796,23 +847,33 @@ function LearnSection({
   lesson,
   getItemLevel,
   onSetLevel,
+  highlightedWord,
 }: {
   lesson: Lesson
   getItemLevel: (vocab: VocabularyItem) => WhitelistLevel | null
   onSetLevel: (vocab: VocabularyItem, level: WhitelistLevel) => void
+  highlightedWord?: string
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {lesson.vocabularies.map((vocab, index) => (
-        <LearnCard
-          key={`${vocab.nihongo}_${vocab.bangla}_${index}`}
-          vocab={vocab}
-          index={index}
-          total={lesson.vocabularies.length}
-          currentLevel={getItemLevel(vocab)}
-          onSetLevel={onSetLevel}
-        />
-      ))}
+      {lesson.vocabularies.map((vocab, index) => {
+        const isTarget = Boolean(
+          highlightedWord &&
+            (highlightedWord === vocab.nihongo ||
+              highlightedWord.toLowerCase() === vocab.romaji.toLowerCase())
+        )
+        return (
+          <LearnCard
+            key={`${vocab.nihongo}_${vocab.bangla}_${index}`}
+            vocab={vocab}
+            index={index}
+            total={lesson.vocabularies.length}
+            currentLevel={getItemLevel(vocab)}
+            onSetLevel={onSetLevel}
+            isTarget={isTarget}
+          />
+        )
+      })}
     </div>
   )
 }
@@ -823,17 +884,27 @@ function LearnCard({
   total,
   currentLevel,
   onSetLevel,
+  isTarget = false,
 }: {
   vocab: VocabularyItem
   index: number
   total: number
   currentLevel: WhitelistLevel | null
   onSetLevel: (vocab: VocabularyItem, level: WhitelistLevel) => void
+  isTarget?: boolean
 }) {
-  const [showMeaning, setShowMeaning] = useState(false)
-  const [showPronunciation, setShowPronunciation] = useState(false)
+  const [showMeaning, setShowMeaning] = useState(isTarget)
+  const [showPronunciation, setShowPronunciation] = useState(isTarget)
   const [showKanjiModal, setShowKanjiModal] = useState(false)
   const [showModalRomaji, setShowModalRomaji] = useState(false)
+
+  // When card is targeted by search, auto-reveal pronunciation & meaning
+  useEffect(() => {
+    if (isTarget) {
+      setShowMeaning(true)
+      setShowPronunciation(true)
+    }
+  }, [isTarget])
 
   const speakJapanese = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -844,7 +915,23 @@ function LearnCard({
 
   return (
     <>
-      <Card className="p-0 py-0 pt-0 gap-0 overflow-hidden rounded-2xl border transition-all duration-200 hover:shadow-md hover:border-primary/50 group flex flex-col w-full relative [--card-spacing:0px]">
+      <Card
+        id={`vocab-card-${encodeURIComponent(vocab.nihongo)}`}
+        className={`p-0 py-0 pt-0 gap-0 overflow-hidden rounded-2xl border transition-all duration-300 group flex flex-col w-full relative [--card-spacing:0px] ${
+          isTarget
+            ? 'ring-4 ring-primary ring-offset-4 ring-offset-background border-primary shadow-2xl scale-[1.02] bg-primary/5'
+            : 'hover:shadow-md hover:border-primary/50'
+        }`}
+      >
+        {isTarget && (
+          <div className="bg-primary text-primary-foreground px-3.5 py-1 text-xs font-black flex items-center justify-between tracking-wide shadow-sm animate-pulse">
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              Selected from Search (খোঁজা শব্দ)
+            </span>
+            <span className="text-[10px] font-mono opacity-80">#{index + 1}</span>
+          </div>
+        )}
         <CardContent className="p-0 flex-1 flex flex-col w-full">
           <div className="pt-2.5 px-3.5 sm:px-4 pb-4 sm:pb-5 flex flex-col justify-between min-h-[140px] bg-gradient-to-br from-secondary/30 to-secondary/10 relative border-b w-full">
             {/* Top Row: Kanji on Left, Action Pill on Right (Natural flow - Never overlaps text!) */}

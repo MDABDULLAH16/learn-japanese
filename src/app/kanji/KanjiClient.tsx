@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   ArrowLeft,
   PenTool,
@@ -21,6 +21,7 @@ import {
   Flame,
   ListFilter,
   Sparkles,
+  Search,
 } from 'lucide-react'
 import { useRecapKanji } from '@/lib/kanjiRecapStorage'
 import { KanjiRecapItem } from '@/lib/actions'
@@ -30,20 +31,70 @@ export function KanjiClient({
   userId,
   initialLevel = 'N5',
   initialLesson = 1,
+  targetKanji = '',
   initialRecapList,
 }: {
   userId: string
   initialLevel?: 'N5' | 'N4'
   initialLesson?: number | 'recap'
+  targetKanji?: string
   initialRecapList?: KanjiRecapItem[]
 }) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+
   const [selectedLevel, setSelectedLevel] = useState<'N5' | 'N4'>(initialLevel)
   const [selectedLesson, setSelectedLesson] = useState<number | 'recap'>(initialLesson)
+  const [highlightedKanji, setHighlightedKanji] = useState<string>(targetKanji)
   const [recapCategory, setRecapCategory] = useState<'all' | WhitelistLevel>('all')
   const [shownReadings, setShownReadings] = useState<Set<string>>(new Set())
   const [shownMeanings, setShownMeanings] = useState<Set<string>>(new Set())
   const [showScrollLessonBar, setShowScrollLessonBar] = useState(false)
+
+  // Listen for searchParams changes
+  useEffect(() => {
+    const levelParam = searchParams.get('level')
+    const lessonParam = searchParams.get('lesson')
+    const kanjiParam = searchParams.get('kanji')
+
+    if (levelParam === 'N5' || levelParam === 'N4') {
+      setSelectedLevel(levelParam)
+    }
+    if (lessonParam) {
+      if (lessonParam === 'recap') {
+        setSelectedLesson('recap')
+      } else {
+        const num = parseInt(lessonParam, 10)
+        if (!isNaN(num)) setSelectedLesson(num)
+      }
+    }
+    if (kanjiParam) {
+      setHighlightedKanji(decodeURIComponent(kanjiParam))
+    }
+  }, [searchParams])
+
+  // Auto-reveal reading & meaning, and scroll to highlighted Kanji
+  useEffect(() => {
+    if (!highlightedKanji) return
+
+    const targetItem = KANJI_DATA.find(
+      (k) => k.kanji === highlightedKanji || k.id === highlightedKanji
+    )
+    if (targetItem) {
+      setShownReadings((prev) => new Set(prev).add(targetItem.id))
+      setShownMeanings((prev) => new Set(prev).add(targetItem.id))
+    }
+
+    const timer = setTimeout(() => {
+      const safeId = `kanji-card-${encodeURIComponent(highlightedKanji)}`
+      const elem = document.getElementById(safeId)
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }, 250)
+
+    return () => clearTimeout(timer)
+  }, [highlightedKanji, selectedLesson, selectedLevel])
 
   const stickyLessonsRef = useRef<HTMLDivElement>(null)
   const mainLessonsRef = useRef<HTMLDivElement>(null)
@@ -368,6 +419,11 @@ export function KanjiClient({
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
+            <Link href="/search?tab=kanji">
+              <Button variant="outline" className="gap-2 shadow-sm font-semibold">
+                <Search className="w-4 h-4 text-primary" /> Search Kanji
+              </Button>
+            </Link>
             {recapList.length > 0 && (
               <Button
                 variant={selectedLesson === 'recap' ? 'default' : 'outline'}
@@ -724,6 +780,10 @@ export function KanjiClient({
 
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {displayedKanjiList.map((kanji) => {
+                const isTarget = Boolean(
+                  highlightedKanji &&
+                    (highlightedKanji === kanji.kanji || highlightedKanji === kanji.id)
+                )
                 const isReadingShown = shownReadings.has(kanji.id)
                 const isMeaningShown = shownMeanings.has(kanji.id)
                 const currentLevel = getItemLevel(kanji.id)
@@ -733,8 +793,13 @@ export function KanjiClient({
 
                 return (
                   <Card
+                    id={`kanji-card-${encodeURIComponent(kanji.kanji)}`}
                     key={kanji.id}
-                    className="overflow-hidden border border-border/70 transition-all duration-200 hover:shadow-lg hover:border-primary/50 hover:-translate-y-1 group cursor-pointer bg-card hover:bg-secondary/15 relative flex flex-col items-center justify-between p-3.5 min-h-[195px]"
+                    className={`overflow-hidden border transition-all duration-300 group cursor-pointer relative flex flex-col items-center justify-between p-3.5 min-h-[195px] ${
+                      isTarget
+                        ? 'ring-4 ring-primary ring-offset-4 ring-offset-background border-primary shadow-2xl scale-[1.03] bg-primary/10'
+                        : 'border-border/70 hover:shadow-lg hover:border-primary/50 hover:-translate-y-1 bg-card hover:bg-secondary/15'
+                    }`}
                     onClick={() =>
                       router.push(
                         `/kanji/${kanji.id}?level=${selectedLevel}&lesson=${
@@ -743,8 +808,14 @@ export function KanjiClient({
                       )
                     }
                   >
+                    {isTarget && (
+                      <div className="absolute top-0 inset-x-0 bg-primary text-primary-foreground text-[10px] font-black py-0.5 text-center flex items-center justify-center gap-1 shadow-xs animate-pulse z-20">
+                        <Sparkles className="w-3 h-3" />
+                        Selected from Search
+                      </div>
+                    )}
                     {/* Card Header: Lesson badge (if recap) + 3 Whitelist Level Pill Buttons */}
-                    <div className="w-full flex items-center justify-between gap-1 mb-1">
+                    <div className={`w-full flex items-center justify-between gap-1 mb-1 ${isTarget ? 'mt-3' : ''}`}>
                       {selectedLesson === 'recap' ? (
                         <Badge
                           variant="secondary"

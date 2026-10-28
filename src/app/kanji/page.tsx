@@ -7,7 +7,7 @@ export const instant = false
 export default async function KanjiPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ level?: string; lesson?: string }>
+  searchParams?: Promise<{ level?: string; lesson?: string; kanji?: string }>
 }) {
   await connection()
   const user = await getCurrentUser()
@@ -20,6 +20,7 @@ export default async function KanjiPage({
       : resolvedParams.lesson
         ? parseInt(resolvedParams.lesson, 10)
         : 1
+  const targetKanji = resolvedParams.kanji ? decodeURIComponent(resolvedParams.kanji) : ''
 
   const initialKanjiRecaps = user ? await getUserKanjiRecapItems(user.id) : []
 
@@ -28,6 +29,7 @@ export default async function KanjiPage({
       userId={user ? user.id : ''}
       initialLevel={initialLevel}
       initialLesson={initialLesson}
+      targetKanji={targetKanji}
       initialRecapList={initialKanjiRecaps}
     />
   )

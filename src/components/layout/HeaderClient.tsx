@@ -27,7 +27,9 @@ import {
   Heart,
   Keyboard,
   FileText,
+  Search,
 } from 'lucide-react'
+import { SearchModal } from '@/components/search/SearchModal'
 import { Button } from '@/components/ui/button'
 import { handleSignOut, recordVisit } from '@/lib/auth-actions'
 import type { Session } from 'next-auth'
@@ -134,6 +136,14 @@ const LEARN_SECTIONS: LearnSection[] = [
     badge: 'Free',
     isPublic: true,
   },
+  {
+    title: 'Smart Search',
+    description: 'Find words & Kanji with Romaji/Bangla',
+    href: '/search',
+    icon: Search,
+    badge: 'New',
+    isPublic: true,
+  },
 ]
 
 export function HeaderClient({ session }: { session: Session | null }) {
@@ -141,7 +151,26 @@ export function HeaderClient({ session }: { session: Session | null }) {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [learnDropdownOpen, setLearnDropdownOpen] = useState(false)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Listen for Ctrl+K / Cmd+K and custom event
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchModalOpen((prev) => !prev)
+      }
+    }
+    const handleOpenModal = () => setSearchModalOpen(true)
+
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('open_search_modal', handleOpenModal)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('open_search_modal', handleOpenModal)
+    }
+  }, [])
 
   // Record site visit once per day/session
   useEffect(() => {
@@ -323,8 +352,34 @@ export function HeaderClient({ session }: { session: Session | null }) {
           </nav>
         </div>
 
-        {/* Right Section: Login / User info, Dark Mode toggle, Mobile Menu Toggle */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Right Section: Quick Search, Login / User info, Dark Mode toggle, Mobile Menu Toggle */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Quick Search Button (Desktop) */}
+          <button
+            type="button"
+            onClick={() => setSearchModalOpen(true)}
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border/80 bg-muted/40 hover:bg-muted/80 text-muted-foreground hover:text-foreground text-xs font-medium transition cursor-pointer shadow-2xs group"
+            title="Search Vocabulary & Kanji (Ctrl+K)"
+          >
+            <Search className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition" />
+            <span className="hidden lg:inline text-xs">Search vocab & kanji...</span>
+            <span className="inline lg:hidden text-xs">Search</span>
+            <kbd className="inline-flex items-center gap-0.5 rounded border border-border/60 bg-background/80 px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground shadow-2xs">
+              ⌘K
+            </kbd>
+          </button>
+
+          {/* Quick Search Icon (Mobile) */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSearchModalOpen(true)}
+            className="sm:hidden rounded-xl shrink-0 h-9 w-9 text-muted-foreground hover:text-foreground"
+            aria-label="Open search"
+          >
+            <Search className="h-4 w-4 text-primary" />
+          </Button>
+
           {/* Unauthenticated: Login Button */}
           {!user ? (
             <Link
@@ -480,6 +535,12 @@ export function HeaderClient({ session }: { session: Session | null }) {
           </div>
         </div>
       )}
+
+      {/* Global Spotlight Search Modal */}
+      <SearchModal
+        isOpen={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
+      />
     </header>
   )
 }
